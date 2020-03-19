@@ -1,0 +1,87 @@
+.form-field-title{
+    margin: 10px 0 20px 0;
+    font-size: 16px;
+    font-weight: 600;
+}
+.icon-save{
+    width: 12px;
+    height: 12px;
+    background: url(../icons/save.png) no-repeat;
+    background-size: cover;
+}
+th.action-three, td.action-three{
+    width: 130px !important;
+}
+.hidden{
+    display: none;
+}
+
+.display-none{display: none;}
+
+.references-card{
+	position: relative;
+	padding: 15px;
+	border: 1px solid #ddd;
+	margin-top: 20px;
+}
+.references-card .title{
+	position: absolute;
+	font-size: 14px;
+	font-weight: 500;
+	top: -8px;
+	left: 20px;
+	background: #fff;
+	padding: 0 10px;
+}
+
+.img-thumb
+{
+	width: 80px !important;
+	height: : 80px;
+}
+
+.img-preview
+{
+	width: 150px;
+	height: : 150px;
+}
+.variation-product{
+	position: relative;
+}
+.variation-product .icon-moon.close{
+	font-size: 6px;
+	transform: rotate(-90deg);    
+    position: absolute;
+    right: 0;
+    top: 5px;
+    cursor: pointer;
+}
+.variation-product .icon-moon.open{
+	font-size: 6px;
+	transform: rotate(0deg);    
+    position: absolute;
+    right: 0;
+    top: 5px;
+    cursor: pointer;
+}
+.other_image_div{
+	position: relative;
+	margin-right: 10px;
+	display: inline-block;
+}
+.other_image_div .btn-remove-img{
+    position: absolute;
+    top: 0;
+    right: 0;
+	background: red;
+    border: none;
+    color: #fff;
+    padding: 0;
+    font-size: 18px;
+    height: 16px;
+    width: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}

@@ -1,0 +1,119 @@
+[29-Nov-2019 09:42:52 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 09:42:52 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 09:42:56 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 09:42:56 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 09:59:56 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 09:59:56 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 10:00:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 10:00:16 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 10:06:21 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 10:06:21 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[29-Nov-2019 15:22:16 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Events/Dispatcher.php on line 186
+[29-Nov-2019 15:22:16 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 65536 bytes) in /home/topscoin/public_html/app/poundshop/vendor/composer/ClassLoader.php on line 444
+[29-Nov-2019 15:22:16 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 65536 bytes) in Unknown on line 0
+[29-Nov-2019 15:22:30 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 20480 bytes) in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Events/Dispatcher.php on line 186
+[29-Nov-2019 15:22:31 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 65536 bytes) in /home/topscoin/public_html/app/poundshop/vendor/composer/ClassLoader.php on line 444
+[29-Nov-2019 15:22:31 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 65536 bytes) in Unknown on line 0
+[29-Nov-2019 15:24:06 UTC] PHP Fatal error:  Allowed memory size of 33554432 bytes exhausted (tried to allocate 1323008 bytes) in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Http/JsonResponse.php on line 71
+[04-Dec-2019 12:48:19 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[04-Dec-2019 12:48:19 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[04-Dec-2019 12:48:34 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806
+[04-Dec-2019 12:48:34 UTC] PHP Fatal error:  Uncaught ReflectionException: Class view does not exist in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php:804
+Stack trace:
+#0 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(804): ReflectionClass->__construct('view')
+#1 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(682): Illuminate\Container\Container->build('view')
+#2 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(630): Illuminate\Container\Container->resolve('view', Array)
+#3 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Foundation/Application.php(768): Illuminate\Container\Container->make('view', Array)
+#4 /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php(1246): Illuminate\Foundation\Application->make('view')
+#5 /home/topscoin/public_html/a in /home/topscoin/public_html/app/poundshop/vendor/laravel/framework/src/Illuminate/Container/Container.php on line 806

@@ -1,0 +1,598 @@
+@font-face {
+  font-family: 'PoundShopttf';
+  src:  url('../fonts/PoundShop.eot?5jwxds');
+  src:  url('../fonts/PoundShop.eot?5jwxds#iefix') format('embedded-opentype'),
+    url('../fonts/PoundShop.ttf?5jwxds') format('truetype'),
+    url('../fonts/PoundShop.woff?5jwxds') format('woff'),
+    url('../fonts/PoundShop.svg?5jwxds#PoundShop') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'PoundShopttf' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.size-sm{ font-size: 10px; }
+.size-md{ font-size: 13px; }
+.size-lg{ font-size: 16px; }
+
+.icon-General-Info-1:before {
+  content: "\e900";
+}
+.icon-Contact-Info-2:before {
+  content: "\e901";
+}
+.icon-Payment-3:before {
+  content: "\e902";
+}
+.icon-Reference:before {
+  content: "\e903";
+}
+.icon-Terms--Conditions:before {
+  content: "\e904";
+}
+.icon-Stock:before {
+  content: "\e905";
+}
+.icon-Sale:before {
+  content: "\e906";
+}
+.icon-Supplier:before {
+  content: "\e907";
+}
+.icon-Purchse-Order:before {
+  content: "\e908";
+}
+.icon-Budget:before {
+  content: "\e909";
+}
+.icon-Stock1:before {
+  content: "\e90a";
+}
+.icon-Order:before {
+  content: "\e90b";
+}
+.icon-Product:before {
+  content: "\e90c";
+}
+.icon-Brand:before {
+  content: "\e90d";
+}
+.icon-Product-Status:before {
+  content: "\e90e";
+}
+.icon-Margin-Rate-of-Sale:before {
+  content: "\e90f";
+}
+.icon-Barcode:before {
+  content: "\e910";
+}
+.icon-Filter:before {
+  content: "\e911";
+}
+.icon-Add-PO:before {
+  content: "\e912";
+}
+.icon-Search:before {
+  content: "\e913";
+}
+.icon-Refresh:before {
+  content: "\e914";
+}
+.icon-Edit:before {
+  content: "\e915";
+}
+.icon-Delete:before {
+  content: "\e916";
+}
+.icon-Drop-Down-1:before {
+  content: "\e917";
+}
+.icon-Drop-Down2:before {
+  content: "\e918";
+}
+.icon-Drop-Down2-copy:before {
+  content: "\e919";
+}
+.icon-Drop-Down2-copy-2:before {
+  content: "\e91a";
+}
+.icon-Dashboard:before {
+  content: "\e91b";
+}
+.icon-Buyers-Inquiry-2:before {
+  content: "\e91c";
+}
+.icon-Book-In-Request:before {
+  content: "\e91d";
+}
+.icon-Goods-In:before {
+  content: "\e91e";
+}
+.icon-Storage:before {
+  content: "\e91f";
+}
+.icon-Customers:before {
+  content: "\e920";
+}
+.icon-Drop-Shipping:before {
+  content: "\e921";
+}
+.icon-Pick-Pack-Shipping:before {
+  content: "\e922";
+}
+.icon-Spot-Check:before {
+  content: "\e923";
+}
+.icon-Stock-Control:before {
+  content: "\e924";
+}
+.icon-Invoice-Matching .path1:before {
+  content: "\e925";
+  color: rgb(0, 0, 0);
+}
+.icon-Invoice-Matching .path2:before {
+  content: "\e926";
+  margin-left: -0.841796875em;
+  color: rgb(0, 0, 0);
+}
+.icon-Invoice-Matching .path3:before {
+  content: "\e927";
+  margin-left: -0.841796875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Invoice-Matching .path4:before {
+  content: "\e928";
+  margin-left: -0.841796875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Invoice-Matching .path5:before {
+  content: "\e929";
+  margin-left: -0.841796875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Invoice-Matching .path6:before {
+  content: "\e92a";
+  margin-left: -0.841796875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Invoice-Matching .path7:before {
+  content: "\e92b";
+  margin-left: -0.841796875em;
+  color: rgb(255, 255, 255);
+}
+.icon-Setting:before {
+  content: "\e92c";
+}
+.icon-Mail:before {
+  content: "\e92d";
+}
+.icon-Add-Suplier:before {
+  content: "\e92e";
+}
+.icon-Profile:before {
+  content: "\e92f";
+}
+.icon-Logout:before {
+  content: "\e930";
+}
+.icon-Dispatch:before {
+  content: "\e931";
+}
+.icon-Menu:before {
+  content: "\e932";
+}
+.icon-Order-Processing:before {
+  content: "\e933";
+}
+.icon-Order-Management:before {
+  content: "\e934";
+}
+.icon-Reporting:before {
+  content: "\e935";
+}
+.icon-Spot-Check-2:before {
+  content: "\e936";
+}
+.icon-Invoice-Matching-2:before {
+  content: "\e937";
+}
+.icon-Review:before {
+  content: "\e938";
+}
+.icon-Reporting1 .path1:before {
+  content: "\e939";
+  color: rgb(0, 0, 0);
+}
+.icon-Reporting1 .path2:before {
+  content: "\e93a";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Reporting1 .path3:before {
+  content: "\e93b";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Reporting1 .path4:before {
+  content: "\e93c";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Reporting1 .path5:before {
+  content: "\e93d";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Reporting1 .path6:before {
+  content: "\e93e";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Reporting1 .path7:before {
+  content: "\e93f";
+  margin-left: -1em;
+  color: rgb(255, 255, 255);
+}
+.icon-Reporting1 .path8:before {
+  content: "\e940";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Pick-Pack-Shipping- .path1:before {
+  content: "\e941";
+  color: rgb(0, 0, 0);
+}
+.icon-Pick-Pack-Shipping- .path2:before {
+  content: "\e942";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Pick-Pack-Shipping- .path3:before {
+  content: "\e943";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Pick-Pack-Shipping- .path4:before {
+  content: "\e944";
+  margin-left: -1em;
+  color: rgb(0, 0, 0);
+}
+.icon-Pick-Pack-Shipping- .path5:before {
+  content: "\e945";
+  margin-left: -1em;
+  color: rgb(255, 253, 253);
+}
+.icon-Pick-Pack-Shipping- .path6:before {
+  content: "\e946";
+  margin-left: -1em;
+  color: rgb(255, 253, 253);
+}
+.icon-Pick-Pack-Shipping- .path7:before {
+  content: "\e947";
+  margin-left: -1em;
+  color: rgb(255, 253, 253);
+}
+.icon-Reporting- .path1:before {
+  content: "\e948";
+  color: rgb(0, 0, 0);
+}
+.icon-Reporting- .path2:before {
+  content: "\e949";
+  margin-left: -0.8134765625em;
+  color: rgb(0, 0, 0);
+}
+.icon-Reporting- .path3:before {
+  content: "\e94a";
+  margin-left: -0.8134765625em;
+  color: rgb(255, 255, 255);
+}
+.icon-Reporting- .path4:before {
+  content: "\e94b";
+  margin-left: -0.8134765625em;
+  color: rgb(255, 255, 255);
+}
+.icon-Reporting- .path5:before {
+  content: "\e94c";
+  margin-left: -0.8134765625em;
+  color: rgb(255, 255, 255);
+}
+.icon-Reporting- .path6:before {
+  content: "\e94d";
+  margin-left: -0.8134765625em;
+  color: rgb(255, 255, 255);
+}
+.icon-Reporting- .path7:before {
+  content: "\e94e";
+  margin-left: -0.8134765625em;
+  color: rgb(255, 255, 255);
+}
+.icon-Reporting- .path8:before {
+  content: "\e94f";
+  margin-left: -0.8134765625em;
+  color: rgb(255, 255, 255);
+}
+.icon-Reporting2:before {
+  content: "\e950";
+}
+.icon-BreakLink:before {
+  content: "\e951";
+}
+.icon-Download:before {
+  content: "\e952";
+}
+.icon-Menu1:before {
+  content: "\e953";
+}
+.icon-Add:before {
+  content: "\e954";
+}
+.icon-Reverse-Purchse-Order-copy .path1:before {
+  content: "\e955";
+  color: rgb(3, 1, 4);
+}
+.icon-Reverse-Purchse-Order-copy .path2:before {
+  content: "\e956";
+  margin-left: -1.0068359375em;
+  color: rgb(3, 1, 4);
+}
+.icon-Reverse-Purchse-Order-copy .path3:before {
+  content: "\e957";
+  margin-left: -1.0068359375em;
+  color: rgb(3, 1, 4);
+}
+.icon-Reverse-Purchse-Order-copy .path4:before {
+  content: "\e958";
+  margin-left: -1.0068359375em;
+  color: rgb(3, 1, 4);
+}
+.icon-Reverse-Purchse-Order-copy .path5:before {
+  content: "\e959";
+  margin-left: -1.0068359375em;
+  color: rgb(3, 1, 4);
+}
+.icon-Reverse-Purchse-Order-copy .path6:before {
+  content: "\e95a";
+  margin-left: -1.0068359375em;
+  color: rgb(3, 1, 4);
+}
+.icon-Reverse-Purchse-Order-copy .path7:before {
+  content: "\e95b";
+  margin-left: -1.0068359375em;
+  color: rgb(3, 1, 4);
+}
+.icon-Reverse-Purchse-Order-copy .path8:before {
+  content: "\e95c";
+  margin-left: -1.0068359375em;
+  color: rgb(255, 255, 255);
+}
+.icon-Reverse-Purchse-Order-copy .path9:before {
+  content: "\e95d";
+  margin-left: -1.0068359375em;
+  color: rgb(0, 0, 0);
+}
+.icon-Purchase-Order:before {
+  content: "\e95e";
+}
+.icon-Reverse-Purchse-Order:before {
+  content: "\e95f";
+}
+.icon-Arrow-Down:before {
+  content: "\e960";
+}
+.icon-Arrow-up:before {
+  content: "\e961";
+}
+.icon-close:before {
+  content: "\e962";
+}
+.icon-Link:before {
+  content: "\e963";
+}
+.icon-Close:before {
+  content: "\e964";
+}
+.icon-Select:before {
+  content: "\e965";
+}
+.icon-Right-Arrow:before {
+  content: "\e966";
+}
+.icon-Inventory:before {
+  content: "\e967";
+}
+.icon-Inventory-:before {
+  content: "\e968";
+}
+.icon-Inventory-Manager:before {
+  content: "\e969";
+}
+.icon-Listing-Manager-:before {
+  content: "\e96a";
+}
+.icon-Listing-Manager-2 .path1:before {
+  content: "\e96b";
+  color: rgb(3, 1, 4);
+}
+.icon-Listing-Manager-2 .path2:before {
+  content: "\e96c";
+  margin-left: -0.783203125em;
+  color: rgb(3, 1, 4);
+}
+.icon-Listing-Manager-2 .path3:before {
+  content: "\e96d";
+  margin-left: -0.783203125em;
+  color: rgb(3, 1, 4);
+}
+.icon-Listing-Manager-2 .path4:before {
+  content: "\e96e";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Listing-Manager-2 .path5:before {
+  content: "\e96f";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Listing-Manager-2 .path6:before {
+  content: "\e970";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Listing-Manager-2 .path7:before {
+  content: "\e971";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Listing-Manager-2 .path8:before {
+  content: "\e972";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Listing-Manager-2 .path9:before {
+  content: "\e973";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Listing-Manager-2 .path10:before {
+  content: "\e974";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Listing-Manager-2 .path11:before {
+  content: "\e975";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Listing-Manager-2 .path12:before {
+  content: "\e976";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Listing-Manager-2 .path13:before {
+  content: "\e977";
+  margin-left: -0.783203125em;
+  color: rgb(0, 0, 0);
+}
+.icon-Stock-Management:before {
+  content: "\e978";
+}
+.icon-Put-Away .path1:before {
+  content: "\e979";
+  color: rgb(0, 0, 0);
+}
+.icon-Put-Away .path2:before {
+  content: "\e97a";
+  margin-left: -0.90625em;
+  color: rgb(0, 0, 0);
+}
+.icon-Put-Away .path3:before {
+  content: "\e97b";
+  margin-left: -0.90625em;
+  color: rgb(255, 255, 255);
+}
+.icon-Put-Away .path4:before {
+  content: "\e97c";
+  margin-left: -0.90625em;
+  color: rgb(255, 255, 255);
+}
+.icon-Buying:before {
+  content: "\e97d";
+}
+.icon-Buying1:before {
+  content: "\e97e";
+}
+.icon-Role-Management:before {
+  content: "\e97f";
+}
+.icon-User-Management:before {
+  content: "\e980";
+}
+.icon-Site-Master:before {
+  content: "\e981";
+}
+.icon-Location-Active:before {
+  content: "\e982";
+}
+.icon-Location-inctive-copy:before {
+  content: "\e983";
+}
+.icon-Terms--Condiions:before {
+  content: "\e984";
+  color: rgb(255, 255, 255);
+}
+.icon-Terms--Condiions .path2:before {
+  content: "\e985";
+  margin-left: -1.0234375em;
+  color: rgb(255, 255, 255);
+}
+.icon-Terms--Condiions .path3:before {
+  content: "\e986";
+  margin-left: -1.0234375em;
+  color: rgb(255, 255, 255);
+}
+.icon-Terms--Condiions .path4:before {
+  content: "\e987";
+  margin-left: -1.0234375em;
+  color: rgb(0, 0, 0);
+}
+.icon-Terms--Condiions .path5:before {
+  content: "\e988";
+  margin-left: -1.0234375em;
+  color: rgb(0, 0, 0);
+}
+.icon-Terms--Condiions .path6:before {
+  content: "\e989";
+  margin-left: -1.0234375em;
+  color: rgb(255, 255, 255);
+}
+.icon-Terms--Condiions .path7:before {
+  content: "\e98a";
+  margin-left: -1.0234375em;
+  color: rgb(255, 255, 255);
+}
+.icon-Terms--Condiions .path8:before {
+  content: "\e98b";
+  margin-left: -1.0234375em;
+  color: rgb(255, 255, 255);
+}
+.icon-References:before {
+  content: "\e98c";
+}
+.icon-Warehouse-Setting:before {
+  content: "\e98d";
+}
+.icon-Copy:before {
+  content: "\e98e";
+}
+.icon-Tax-Setting:before {
+  content: "\e98f";
+}
+.icon-Finance:before {
+  content: "\e990";
+}
+.icon-Replen:before {
+  content: "\e991";
+}
+.icon-Stock_movement:before {
+  content: "\e992";
+}
+.icon-Active:before {
+  content: "\e993";
+}
+.icon-Inactive:before {
+  content: "\e994";
+}

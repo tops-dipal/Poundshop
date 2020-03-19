@@ -1,0 +1,1 @@
+<a title="@lang('messages.purchase_order.revision.view')" class="btn-view" target="_blank" href="{{URL::signedRoute('purchase-order.revision-view', ['id' => $object->id])}}" ><span class="icon-Active"></span></a>

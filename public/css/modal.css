@@ -1,0 +1,55 @@
+.bootbox.modal .modal-dialog{
+    height: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+.bootbox.modal  .modal-content{
+	border: none;
+	border-radius: 6px;
+}
+.bootbox.modal  .modal-content .modal-header{
+	padding: 20px;
+	border-bottom: none;
+}
+.bootbox.modal  .modal-content .modal-header .modal-title{
+  font-size: 14px;
+  color: rgb(51, 51, 51);
+  font-weight: bold;
+  text-transform: uppercase;
+  line-height: 1;
+}
+.bootbox.modal  .modal-content .modal-header .close{display: none;}
+.bootbox.modal  .modal-content .modal-body{
+	padding: 10px 20px;
+	min-height: 60px;
+}
+.bootbox.modal  .modal-content .modal-body .bootbox-body{
+  font-size: 14px;
+  color: rgb(51, 51, 51);
+  line-height: 1.2;
+}
+.bootbox.modal  .modal-content .modal-footer{
+	border-top: none;
+}
+.bootbox.modal  .modal-content .modal-footer .btn{
+  font-size: 12px;  
+  color: rgb(255, 255, 255);
+  line-height: 1.2;
+  padding: 6px 20px;
+}
+.custom-modal .modal-content{
+  border-radius: 6px;
+  border: none;
+}
+.custom-modal .modal-header{
+  border-bottom: 2px solid #e6e6e6;
+}
+.custom-modal .modal-title{
+  font-size: 14px;  
+  font-weight: 600;
+  color: rgb(54, 23, 85);
+  text-transform: uppercase;
+  line-height: 1.2;
+}
