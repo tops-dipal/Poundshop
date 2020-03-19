@@ -9,10 +9,10 @@
 
 ## Poundshop project installation Steps
 ```
-git clone http://192.168.4.40:88/shubham/poundshop.git
+git clone https://github.com/dipal-tops/Poundshop.git
 ```
 ```
-cd poundshop
+cd Poundshop
 ```
 ```
 composer update
