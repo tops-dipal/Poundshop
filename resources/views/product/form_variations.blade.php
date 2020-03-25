@@ -35,7 +35,7 @@
 			<h4 id="edit_variation_title" class="display-none">
 				@lang('messages.inventory.edit_variations')
 				<button type="button" class="btn btn-blue display-none ml-5 px-4" id="edit_variation_button">
-					@lang('messages.common.edit')
+					@lang('messages.common.add')
 				</button>
 			</h4>
 			<div class="row" id="theme_values">
@@ -67,10 +67,10 @@
 <div class="row">
 	<div class="col-lg-12">
 	<div class="table-responsive">
-		<table class="table display border-less variation-table">
+		<table class="table display border-less variation-table table-striped custom-table">
 			<thead>
 				<tr>
-				<th>
+				<th class="checkbox-container">
 					<div class="d-flex">
 						<label class="fancy-checkbox">
 							<input type="checkbox" class="master-checkbox">
@@ -98,7 +98,7 @@
 					<th class="variation-color-header display-none" width="200"><span>Color</span>
 						<input type="text" id="color_required" name="color_required" style="display:none;"  class="display-none"/>
 					</th>
-					<th width="300">@lang('messages.inventory.title')</th>
+					<th class="m-w-200">@lang('messages.inventory.title')</th>
 					<th>@lang('messages.common.sku')</th>
 					<th>@lang('messages.inventory.product_barcode')</th>
 					<th>@lang('messages.common.action')</th>
@@ -177,7 +177,7 @@
 									$ext = pathinfo($variation->main_image_internal, PATHINFO_EXTENSION);
 			                    @endphp
 			                    @if($ext!="mp4")
-									<img style="width:80px; height:80px;" src="{{url('/img/img-loading.gif') }}" data-original="{{$variation->main_image_internal}}" class="img-thumb" >
+									<img style="width:80px; height:80px;" src="{{ $variation->main_image_internal }}" class="img-thumb" >
 									<video style="max-width:150px; max-height:150px;" controls="controls" preload="metadata" class="magentoVideoPreview hidden">
 				                        <source src="" type="video/mp4" >
 				                    </video>

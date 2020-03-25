@@ -23,7 +23,23 @@
     c._initialize = function ()
     {
         c._listingView();
+
+        var date = new Date();
+        
+        date.setDate(date.getDate());
+        
+        var current_val = $('.date_to_go_live').val();
+        
+        $('body .date_to_go_live').datetimepicker({
+            format   : 'D-MMM-YYYY HH:mm',
+            minDate  : date,
+            ignoreReadonly: true,
+            useCurrent: false,
+            sideBySide: true,
+            // inline: true,
+        }); 
     };
+
     if(activeTab=='already-listed')
     {
         c._listingView = function(){
@@ -230,6 +246,28 @@
                 return false;
         }
     });
+
+    $(document).on('click', '.live-on-magento', function (event) {
+        var allVals = [];  
+        $("input[name='ids[]']:checked").each(function() {  
+            allVals.push($(this).attr('value'));
+        }); 
+
+        if (typeof allVals !== 'undefined' && allVals.length > 0) 
+        {
+            $('#dateToGoLiveModal').modal('show');
+        }
+        else
+        {
+             bootbox.alert({
+                    title: "Alert",
+                    message: "Please select atleast one record to delist.",
+                    size: 'small'
+                });
+                return false;
+        }
+    });
+
      $(document).on('click', '.list-many', function (event) {
         var allVals = [];  
         $("input[name='ids[]']:checked").each(function() {  
@@ -377,10 +415,67 @@
         }
     }) ;  
 
-window.PoundShopApp = window.PoundShopApp || {}
-window.PoundShopApp.poundShopTotes = new poundShopTotes();
-
+    window.PoundShopApp = window.PoundShopApp || {}
+    window.PoundShopApp.poundShopTotes = new poundShopTotes();
 })(jQuery);
+
+function bulkDateToGoLive(me)
+{
+    var date_to_go_live = $('#dateToGoLiveModal').find('input[name="date_to_go_live"]').val();
+    $('#dateToGoLiveModal').modal('hide');
+
+    var allVals = [];  
+    
+    $("input[name='ids[]']:checked").each(function() {  
+        allVals.push($(this).attr('value'));
+    }); 
+
+    /*remove undefined value from array*/
+    allVals = allVals.filter(function( element ) {
+       return element !== undefined;
+    });
+    /*end remove undefined value from array*/
+    if (typeof allVals !== 'undefined' && allVals.length > 0) 
+    {
+        $.ajax({
+                url: BASE_URL + 'api-listing-manager-magento-set-date-to-go-live',
+                type: "post",
+                data: {
+                        'ids':allVals,
+                        'store_id':$('#store_id').val(),
+                        'date_to_go_live':date_to_go_live,
+                    },
+                headers: {
+                        'Authorization': 'Bearer ' + API_TOKEN,
+                    },
+                beforeSend: function () {
+                    $("#page-loader").show();
+                },
+                success: function (response) {
+                        $("#page-loader").hide();
+                        if (response.status == 1) {
+                            PoundShopApp.commonClass._displaySuccessMessage(response.message);
+                            PoundShopApp.commonClass.table.draw();
+                        }
+                },
+                error: function (xhr, err) {
+                   $("#page-loader").hide();
+                   PoundShopApp.commonClass._commonFormErrorShow(xhr, err);
+                }
+
+            });   
+    }
+    else
+    {
+         bootbox.alert({
+                title: "Alert",
+                message: "Please select atleast one record to delist.",
+                size: 'small'
+            });
+            return false;
+    }    
+}
+
 function isNumber(evt, element) {
 
 var charCode = (evt.which) ? evt.which : event.keyCode

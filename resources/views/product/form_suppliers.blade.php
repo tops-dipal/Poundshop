@@ -3,7 +3,7 @@
 <input type="hidden" name="id" value="{{!empty($result->id) ? $result->id : '' }}">
 <div class="row">
     <div class="col-lg-6 row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 col-8">
             <select id="supplier_id" class="form-control">
                 <option value="">@lang('messages.common.select') @lang('messages.common.supplier')</option>
                 @foreach($suppliers as $supplier)
@@ -14,7 +14,7 @@
             </select>
             <span id="invalid-supplier" class="invalid-feedback" style="display: none;">This field is required.</span>
         </div>
-        <div class="col-lg-6">            
+        <div class="col-lg-6 col-4">            
             <button type="button" id="addSupplierId" class="btn btn-add btn-blue btn-h-32" onclick="addSupplier(this)">
             @lang('messages.common.add')
             </button>
@@ -34,10 +34,10 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="table-responsive mt-3">
-            <table id="supplier_contact_person" class="table border-less display">
+            <table id="supplier_contact_person" class="table border-less display table-striped custom-table">
                 <thead>
                     <tr>
-                        <th>
+                        <th class="checkbox-container">
                             <div class="d-flex">
                                 <label class="fancy-checkbox">
                                     <input type="checkbox" class="master-checkbox" child-checkbox-class = "child-checkbox-supplier">
@@ -64,7 +64,7 @@
                             <th>@lang('messages.inventory.supplier_qty_per_case')</th>
                             <th>@lang('messages.inventory.supplier_min_order_qty')</th>
                             <th>@lang('messages.inventory.supplier_default')</th>
-                            <th>@lang('messages.inventory.supplier_note')</th>
+                            <th class="m-w-200">@lang('messages.inventory.supplier_note')</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -81,7 +81,7 @@
                                 <input type="hidden" name="product_supplier_id[]" value="{{$product_supplier->id}}">
                             </td>
                             <td>
-                                {{$product_supplier->supplier->name}}
+                                {{ucwords($product_supplier->supplier->name)}}
                             </td>
                             <td>
                                 <input type="text" class="form-control w-100" name="supplier_sku[{{$product_supplier->id}}]" value="{{$product_supplier->supplier_sku}}">

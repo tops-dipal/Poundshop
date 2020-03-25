@@ -389,12 +389,12 @@ class ProductMergeController extends Controller
         
         if (count($product_exists_arr) > 0 && isset($product_exists[0]->id) && $product_exists[0]->id != '') 
         {
-//            $product_id = $product_exists[0]->id;
-//            $update_data[]=array('id'=>$product_id,
-//            	//'is_quantity_updated'=>'1'
-//        	);
-//            $products_mod= new Products;
-//            Batch::update($products_mod, $update_data, 'id');	
+           	$product_id = $product_exists[0]->id;
+           	//$update_data[]=array('id'=>$product_id,
+           	//'is_quantity_updated'=>'1'
+       		//);
+           //$products_mod= new Products;
+           //Batch::update($products_mod, $update_data, 'id');	
             
         } 
         elseif (empty($mp_selling_status) || in_array($mp_selling_status, array('Active'))) 
@@ -510,5 +510,4 @@ class ProductMergeController extends Controller
 			return $this->sendError($ex->getMessage(), 400);
 		}    	
     }
-
 }

@@ -12,7 +12,8 @@ use Batch;
 use App\Events\SendMail;
 use App\References;
 use App\SupplierReferences;
-
+use Lang;
+    
 class SupplierController extends Controller
 {
 
@@ -142,7 +143,7 @@ class SupplierController extends Controller
                         }   
                         $tempArray[] = $name;
                         $tempArray[] = !empty($result->account_no) ? $result->account_no : '-';
-                        $tempArray[] = !empty($result->credit_limit_allowed) ? $result->credit_limit_allowed : '-';
+                        $tempArray[] = !empty($result->credit_limit_allowed) ? '<span class="pound-sign">'.Lang::get('messages.common.pound_sign').'</span>'.$result->credit_limit_allowed : '-';
                         $tempArray[] = !empty($result->prime_contact) ? ucwords($result->prime_contact) : '-';
                         $tempArray[] = !empty($result->prime_email) ? $result->prime_email : '-';
                         $tempArray[] = !empty($result->prime_phone) ? $result->prime_phone : '-';
@@ -232,6 +233,19 @@ class SupplierController extends Controller
             {
                 // Create new supplier 
                 $db_array['created_by'] = $request->user()->id;
+
+                $db_array['bene_address1'] = !empty($request->address_line1) ? $request->address_line1 : NULL;
+                $db_array['bene_address2'] = !empty($request->address_line2) ? $request->address_line2 : NULL;
+
+                $db_array['bene_country'] = !empty($request->country_id) ? $request->country_id : NULL;
+
+                $db_array['bene_state']=isset($db_array['state_id']) ?  $db_array['state_id'] : NULL;
+
+                $db_array['bene_city']=isset($db_array['city_id']) ?  $db_array['city_id'] : NULL;
+
+                $db_array['bene_zipcode'] = !empty($request->zipcode) ? $request->zipcode : NULL;
+
+                $db_array['bank_country']=230;
                 
                 $supplier_id = SupplierMaster::create($db_array)->id;
             }
@@ -284,6 +298,8 @@ class SupplierController extends Controller
             $db_array['retro_from_date'] = !empty($request->retro_from_date) ? $request->retro_from_date : NULL;
             $db_array['retro_to_date'] = !empty($request->retro_to_date) ? $request->retro_to_date : NULL;
             $db_array['retro_percent_discount'] = !empty($request->retro_percent_discount) ? $request->retro_percent_discount : NULL;
+            $db_array['retro_type'] = !empty($request->retro_type) ? $request->retro_type : NULL;
+            $db_array['pay_on_date_every_month'] = !empty($request->pay_on_date_every_month) ? $request->pay_on_date_every_month : NULL;
             $db_array['allow_overall_discount'] = !empty($request->allow_overall_discount) ? $request->allow_overall_discount : 0;
             $db_array['overall_percent_discount'] = !empty($request->overall_percent_discount) ? $request->overall_percent_discount : NULL;
             $db_array['allow_period_discount'] = !empty($request->allow_period_discount) ? $request->allow_period_discount : 0;
@@ -306,6 +322,7 @@ class SupplierController extends Controller
             $db_array['bank_zipcode'] = !empty($request->bank_zipcode) ? $request->bank_zipcode : NULL;
             $db_array['bank_swift_code'] = !empty($request->bank_swift_code) ? $request->bank_swift_code : NULL;
             $db_array['bank_iban_no'] = !empty($request->bank_iban_no) ? $request->bank_iban_no : NULL;
+            $db_array['bank_iban_no'] = !empty($request->bank_iban_no) ? $request->bank_iban_no : NULL;
 
             // if payment_term  != X days after devlivery date, set values to blank
             if($db_array['payment_term'] != '3')
@@ -322,6 +339,7 @@ class SupplierController extends Controller
                 $db_array['retro_from_date'] = NULL;
                 $db_array['retro_to_date'] = NULL;
                 $db_array['retro_percent_discount'] = NULL;
+                $db_array['retro_type'] = NULL;
             }    
             else
             {
@@ -700,36 +718,48 @@ class SupplierController extends Controller
             //get supplier primary contact data
             $supplier_contact_data=SupplierContact::whereIn('supplier_id', $request->id)->where('is_primary','1')->get(); 
             
-            //get reference data           
-            $reference_data = References::orderBy('id', 'desc')->take(3)->get();            
-            foreach($supplier_contact_data as $supplier_data)
+            if(empty($supplier_contact_data) || empty($supplier_contact_data->toArray()))
             {
-                $supplier_name=$supplier_data->name; 
-                $supplier_email=$supplier_data->email;  
-                $emailData=array('toName'=>$supplier_name,'toEmail'=>$supplier_email,'subject'=>'Welcome To Poundshop','template'=>'emails.welcome_supplier','reference_data'=>$reference_data);
-                $result=event(new SendMail($emailData)); // send mail to user for welcome
+                $supplier_contact_data=SupplierContact::where('deleted_at',NULL)->whereIn('supplier_id', $request->id)->orderBy('id', 'asc')->take(1)->get();     
                 
-                //store in supplier reference welcome send mail
-                $final_data=array();
-                foreach($reference_data as $row)
+            }
+
+            if(!empty($supplier_contact_data) && !empty($supplier_contact_data->toArray()))
+            {
+                //get reference data           
+                $reference_data = References::orderBy('id', 'desc')->take(3)->get();            
+                foreach($supplier_contact_data as $supplier_data)
                 {
-                    $final_data[]=array(
-                        'supplier_id'=>$supplier_data->supplier_id,
-                        'supplier_name'=>$row->supplier_name,
-                        'contact_person'=>$row->contact_person,
-                        'contact_no'=>$row->contact_no,
-                        'contact_email'=>$row->contact_email,
-                        'attachment_name'=>$row->attachment_name,
-                        'created_at'=>date('Y-m-d H:i:s'),
-                        'created_by'=>$request->user()->id
-                    );
+                    $supplier_name=$supplier_data->name; 
+                    $supplier_email=$supplier_data->email;  
+                    $emailData=array('toName'=>$supplier_name,'toEmail'=>$supplier_email,'subject'=>'Welcome To Poundshop','template'=>'emails.welcome_supplier','reference_data'=>$reference_data);
+                    $result=event(new SendMail($emailData)); // send mail to user for welcome
+                    
+                    //store in supplier reference welcome send mail
+                    $final_data=array();
+                    foreach($reference_data as $row)
+                    {
+                        $final_data[]=array(
+                            'supplier_id'=>$supplier_data->supplier_id,
+                            'supplier_name'=>$row->supplier_name,
+                            'contact_person'=>$row->contact_person,
+                            'contact_no'=>$row->contact_no,
+                            'contact_email'=>$row->contact_email,
+                            'attachment_name'=>$row->attachment_name,
+                            'created_at'=>date('Y-m-d H:i:s'),
+                            'created_by'=>$request->user()->id
+                        );
+                    }
+
+                    $supplier_ref_model=new SupplierReferences;
+                    $data=$supplier_ref_model->insert($final_data);
+                    return $this->sendResponse('Mail send successfully to supplier contact', 200);
+
                 }
-
-                $supplier_ref_model=new SupplierReferences;
-                $data=$supplier_ref_model->insert($final_data);
-
-                return $this->sendResponse('Mail send successfully to supplier contact', 200);
-
+            }
+            else
+            {
+                return $this->sendError('Mail send failed, please add primary contact and try again', 422);       
             }
         }
         else

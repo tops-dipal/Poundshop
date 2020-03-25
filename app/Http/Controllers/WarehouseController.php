@@ -8,6 +8,7 @@ use App\City;
 use Illuminate\Http\Request;
 use Route;
 use Lang;
+use App\WarehouseLocTypePrefix;
 
 class WarehouseController extends Controller
 {
@@ -48,9 +49,14 @@ class WarehouseController extends Controller
         $countries = Country::get();
 
         $page_title = $prefix_title = Lang::get('messages.modules.warehouse_add');
+
         $state_name="";
+        
         $city_name="";
-        return view('warehouse.form',compact('page_title','prefix_title','countries', 'result', 'country_states', 'state_cities','state_name','city_name'));
+
+        $location_type=LocationType();        
+
+        return view('warehouse.form',compact('page_title','prefix_title','countries', 'result', 'country_states', 'state_cities','state_name','city_name','location_type'));
     }
 
     /**
@@ -114,12 +120,26 @@ class WarehouseController extends Controller
             $state_cities = json_decode(json_encode($state_cities), TRUE);
             
             $state_cities = helper_array_column_multiple_key($state_cities, array('state_id'), TRUE);
-             $state_name=($result->state!=0)?\App\State::find($result->state)->name:'';
+            
+            $state_name=($result->state!=0)?\App\State::find($result->state)->name:'';
+            
             $city_name=($result->city!=0)?\App\City::find($result->city)->name:'';
             
             $page_title = $prefix_title = Lang::get('messages.modules.warehouse_edit');
 
-            return view('warehouse.form',compact('page_title', 'prefix_title', 'countries', 'result', 'country_states', 'state_cities','state_name','city_name'));
+            $location_type=LocationType();
+
+            $warehouse_location_trans_array=WarehouseLocTypePrefix::select('location_type','prefix')->where('warehouse_id',$id)->get();
+            $warehouse_location_trans_data=array();
+            if(!empty($warehouse_location_trans_array) && !empty($warehouse_location_trans_array->toArray()))
+            {
+                foreach($warehouse_location_trans_array as $row)
+                {
+                    $warehouse_location_trans_data[$row['location_type']]=$row['prefix'];       
+                }
+            }            
+
+            return view('warehouse.form',compact('page_title', 'prefix_title', 'countries', 'result', 'country_states', 'state_cities','state_name','city_name','location_type','warehouse_location_trans_data'));
         }
         else
         {

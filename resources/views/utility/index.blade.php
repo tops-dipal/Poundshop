@@ -183,6 +183,8 @@
                 </div>
             </div>
 
+            <a href="#" data-toggle="popover" data-placement="top" title="Popover Header" data-content="Some content inside the popover">Toggle popover</a>
+
 
             <!-- <h3 class="p-title mb-2 mt-4">Content Loader</h3>
             <div class="p-3 content-loader" style="width: 400px; border: 1px solid #888;">

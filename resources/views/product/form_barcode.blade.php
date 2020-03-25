@@ -5,10 +5,10 @@
 <div class="row">
     <div class="col-lg-12">
         <div class="table-responsive">
-            <table id="supplier_contact_person" class="table border-less display">
+            <table id="supplier_contact_person" class="table border-less display table-striped custom-table">
                 <thead>
                     <tr>
-                        <th>
+                        <th class="checkbox-container">
                             <div class="d-flex">
                                 <label class="fancy-checkbox">
                                     <input type="checkbox" class="master-checkbox" child-checkbox-class = "child-checkbox-barcode">
@@ -57,8 +57,12 @@
                                 </td>
                                 
                 				<td>
-                					{{$product_bardcode->case_quantity}}
-                				</td>
+                                    @if($product_bardcode->barcode_type == 1)
+                                        {{1}}
+                                    @else
+                                        {{$product_bardcode->case_quantity}}
+                				    @endif
+                                </td>
                 				<td>
                 					{{system_date($product_bardcode->created_at)}}
                 				</td>	
@@ -66,7 +70,7 @@
                 				<td>
                 					<ul class="action-btns">
                 						<li>
-                							<a class="btn-edit" href="javascript:;" onclick="editBarcode(this)" attr-id="{{$product_bardcode->id}}" attr-barcode="{{$product_bardcode->barcode}}" attr-barcode_type="{{$product_bardcode->barcode_type}}" attr-case_quantity="{{$product_bardcode->case_quantity}}"> 
+                							<a class="btn-edit" href="javascript:;" onclick="editBarcode(this)" attr-id="{{$product_bardcode->id}}" attr-barcode="{{$product_bardcode->barcode}}" attr-barcode_type="{{$product_bardcode->barcode_type}}" attr-case_quantity="{{$product_bardcode->case_quantity}}" attr-parent-id="{{ $product_bardcode->parent_id }}"> 
                 								<span class="icon-moon icon-Edit"></span></a></li><li>
 
                 							<a class="btn-delete" href="javascript:;" onclick="deleteBarcode(this)" attr-id="{{$product_bardcode->id}}"><span class="icon-moon icon-Delete"></span></a>

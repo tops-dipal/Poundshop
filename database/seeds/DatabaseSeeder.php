@@ -18,5 +18,7 @@ class DatabaseSeeder extends Seeder
         $this->call(PermissionTableSeeder::class);
         $this->call(TotesTableSeeder::class);
         $this->call(VariationThemeMaster::class);
+        $this->call(RolesTableSeeder::class);
+        $this->call(SettingSeeder::class);
     }
 }

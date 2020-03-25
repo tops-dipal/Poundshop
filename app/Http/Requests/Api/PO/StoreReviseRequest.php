@@ -8,20 +8,24 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Auth;
-class StoreReviseRequest extends FormRequest
-{ 
-     public $user;
+
+class StoreReviseRequest extends FormRequest {
+
+    public
+            $user;
+
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize()
-    {
-        if(Auth::check()){
+    public
+            function authorize() {
+        if (Auth::check()) {
             $this->user = Auth::user();
             return true;
-        }else{
+        }
+        else {
             return false;
         }
     }
@@ -31,36 +35,36 @@ class StoreReviseRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
-    {
+    public
+            function rules() {
         return [
-            'po_id'=>'required|exists:po_products,po_id'
+            'po_id' => 'required|exists:po_products,po_id'
         ];
     }
-    
-    
-    public function messages()
-    {
+
+    public
+            function messages() {
         return [
-            'po_id.exists' => 'Item not exist, please save the items.',
+            'po_id.exists' => 'Item does not exist.',
         ];
     }
-    
-    
-     /**
+
+    /**
      * Handle a failed validation attempt.
      *
      * @param  Validator  $validator
      *
      * @return void
      */
-    protected function failedValidation(Validator $validator) {
+    protected
+            function failedValidation(Validator $validator) {
 
         $errors = $validator->errors();
         throw new HttpResponseException(response()->json([
-            'errors' => $errors,
+            'errors'      => $errors,
             'status_code' => Response::HTTP_UNPROCESSABLE_ENTITY,
-            'status' => false
+            'status'      => false
                 ], Response::HTTP_UNPROCESSABLE_ENTITY));
     }
+
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\CategoryMapping;
 use Illuminate\Support\Facades\View;
 use App\Http\Requests\Api\Mapping\MappingRequest;
+use App\Http\Requests\Api\Mapping\UpdateRequest;
 
 class CategoryMappingController extends Controller
 {
@@ -23,8 +24,8 @@ class CategoryMappingController extends Controller
         
            $columns=[
                     0 => 'id',
-                    1 => 'range_id',
-                    2 => 'magento_category_id',
+                    1 => 'category_name',
+                    2 => 'name',
             ];
             $params  = array(
                  'order_column'    => $columns[$request->order[0]['column']],
@@ -64,14 +65,32 @@ class CategoryMappingController extends Controller
     public function store(MappingRequest $request)
     {
         try{
-
+         
            $map_model=new CategoryMapping;
            $map_model->range_id = $request->range_id;
-           $map_model->magento_category_id =\App\MagentoCategories::where('category_id',$request->magento_category_id)->first()->id;
+           $map_model->magento_category_id =$request->magento_category_id;
            $map_model->created_by = $request->user->id;
            $map_model->modified_by = $request->user->id;
            if($map_model->save()){
                return $this->sendResponse(trans('messages.api_responses.map_add_success'), 200);
+           }else{
+               return $this->sendError(trans('messages.api_responses.map_add_error'), 422);
+           }
+       } catch (Exception $ex) {
+            return $this->sendError($ex->getMessage(), 400);
+       }
+    }
+
+    public function update(UpdateRequest $request)
+    {
+        try{
+           
+           $map_model=CategoryMapping::find($request->id);
+           $map_model->range_id = $request->range_id;
+           $map_model->magento_category_id =$request->magento_category_id;
+           $map_model->modified_by = $request->user->id;
+           if($map_model->save()){
+               return $this->sendResponse(trans('messages.api_responses.map_update_success'), 200);
            }else{
                return $this->sendError(trans('messages.api_responses.map_add_error'), 422);
            }

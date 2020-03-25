@@ -15,6 +15,14 @@
 </div>    -->
 @endif
 <!--</div>  -->
+
+{{-- Start- Show Next Scan For Buy by Product If User Comes From Buy by Product Screen --}}
+@if($comesFromModule=='Buyer-Enquiry' && !(url()->previous()==route('purchase-orders.index') || url()->previous()==route('purchase-orders.edit',$purchaseOrder->id)))
+<a href="{{ route('buy-by-product.index') }}" class="btn btn-blue">Next Scan</a>
+@endif
+{{-- End Next Scan For Buy by Product --}}
+
+@include('purchase-orders._move-to-new-po-modal')
 <form class="save-po-form" id="save-po-form" method="post" >
     <fieldset id="field-set" @if($purchaseOrder->po_status > 5 ) disabled="disabled" @endif>
               @if($purchaseOrder->po_import_type == 1)
@@ -47,7 +55,7 @@
                         </div>
                     </div>
                 </div>
-                <table id="example" class="table border-less" style="width:100%">
+                <table id="example" class="table border-less table-striped" style="width:100%">
                     <thead>
                         <tr>
                             <th><div class="d-flex">
@@ -59,9 +67,9 @@
                             </th>
                             <th>@lang('messages.purchase_order.items.image')</th>
                             <th>@lang('messages.purchase_order.items.sku')</th>
-                            <th>@lang('messages.purchase_order.items.supplier_sku')</th>
-                            <th>@lang('messages.purchase_order.items.info')</th>
-                            <th>@lang('messages.purchase_order.items.tables.product_tille')</th>
+                            <th class="w-150">@lang('messages.purchase_order.items.supplier_sku')</th>
+                            <th class="w-130">@lang('messages.purchase_order.items.info')</th>
+                            <th class="m-w-200">@lang('messages.purchase_order.items.tables.product_tille')</th>
                         </tr>
                     </thead>
                     <tbody>

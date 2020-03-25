@@ -1,3 +1,4 @@
+@include('report-stock-control.index')
 <script src="{{ asset('js/jquery-2.2.4.min.js')}}" ></script>
 
 <script src="{{URL::asset('js/jQuery-validation-plugin/jquery.validate.js')}}"></script>
@@ -8,6 +9,8 @@
 @endif
 
 <script src="{{ asset('js/jquery.animsition.js')}}"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.9.0/moment.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js"></script>
 <script>
 //Animation Pre loader jQuery Code
 jQuery(".animsition").animsition({
@@ -64,4 +67,8 @@ jQuery(".animsition").animsition({
 <script src="https://cdn.ckeditor.com/4.10.0/standard/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/select2@4.0.12/dist/js/select2.min.js"></script>
 <script src="{{ asset('js/components/common.js?v='.CSS_JS_VERSION) }}"></script>
+<script src="{{ asset('js/report-stock-control/index.js')}}"></script>
+
+<!-- <script src="{{ asset('js/Moment.js?v='.CSS_JS_VERSION)}}"></script>
+<script src="{{ asset('js/timepicker.min.js?v='.CSS_JS_VERSION)}}"></script> -->
 @yield('script')

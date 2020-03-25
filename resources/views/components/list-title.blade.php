@@ -1,1 +1,1 @@
-<a href="{{ $edit_url }}" title="{{ $btn_title }}">{{ $title }}</a>
+<span class="pl-12"><a href="{{ $edit_url }}" title="{{ $btn_title }}">{!! $title !!}</a></span>

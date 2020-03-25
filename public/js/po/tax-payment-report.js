@@ -20,6 +20,10 @@
     c._initialize = function ()
     {
         c._listingView();
+        $('.custom-select-search').selectpicker({
+          liveSearch:true,
+          size:10
+        });
         /*$('.reset_search').click(function(){
             PoundShopApp.commonClass._reset_search(dataTableId);
         });*/
@@ -28,7 +32,7 @@
     
     c._listingView = function(){
         var field_coloumns = [
-            {"orderable": false, "searchable": false},
+            null,
             null,
             null,
             null,
@@ -47,22 +51,20 @@
         $('#tax-report-form').trigger("reset");
         $('#vat_types input:checked').removeAttr('checked');
         $('#po_types input:checked').removeAttr('checked');
-        var form_date=$('#from_date').val('');
-        var to_date=$('#to_date').val('');
-        var supplied_id=$('#supplier_id').val('');
-        var country_id=$('#country_id').val('');
-        var sku=$('#sku').val('');
+       $('.custom-select-search').val('').selectpicker("refresh");
+       $('#from_date').val('');
+       $('#to_date').val('');
+        //$('#supplier_id option:first').prop('selected',true);
+        
         $('#btnFilter').removeClass('open');
         $('.search-filter-dropdown').removeClass('open'); 
         $('.card-flex-container').removeClass('filter-open'); 
+        PoundShopApp.commonClass.table.draw();
         $('.filter_count').html('');
        
     })
 
-   $("#supplier_id").select2({
-        /*tags: true,
-        // tokenSeparators: [',', ' ']*/
-    })
+   
     $('#search_data').keyup(function()
     {
          var keycode = (event.keyCode ? event.keyCode : event.which);
@@ -79,6 +81,84 @@ window.PoundShopApp.poundShopTotes = new poundShopTotes();
 //for checkbox all and none case
  function advanceSearch()
 { 
+    var is_status_checked=0;
+    var date_filter=0;
+    var supplier_filter=0;
+    var sku_filter=0;
+    var country_filter=0;
+    var vat_type_filter=0;
+    var po_types_filter=0;
+    if ($('#from_date').val()=='') 
+    {
+       
+        is_status_checked=0;
+        date_filter=0;
+    }
+    else
+    {
+        if ($('#to_date').val()=='') 
+        {
+           
+            bootbox.alert({
+                title: "Alert",
+                message: "Please enter to date.",
+                size: 'small'
+             });
+            return false;
+        }
+        else{
+            is_status_checked++;
+            date_filter=1;
+
+        }
+    }
+     if ($('#supplier_id').val()!='') 
+   {
+       
+        is_status_checked++;
+        supplier_filter=1;
+    }
+
+     if ($('#sku').val()!='') 
+    {
+       
+        is_status_checked++;
+        sku_filter=1;
+    }
+
+     if ($('#country_id').val()!='') 
+    {
+       
+        is_status_checked++;
+        country_filter=1;
+    }
+    
+
+    $("#vat_types").find("input[type='checkbox']").each(function(){
+     
+        if ($(this).prop('checked')==true){ 
+           vat_type_filter=1;
+            is_status_checked++;
+        }
+    });
+
+     $("#po_types").find("input[type='checkbox']").each(function(){
+        
+        if ($(this).prop('checked')==true){ 
+           po_types_filter=1;
+            is_status_checked++;
+        }
+    });
+    if(vat_type_filter==0 && country_filter==0 && sku_filter==0 && supplier_filter==0 && date_filter==0 && po_types_filter==0)
+    {
+        bootbox.alert({
+                title: "Alert",
+                message: "Please select atleast one filter to search.",
+                size: 'small'
+        });
+          $('.filter_count').html('');
+        return false;
+    }
     var vat_type=[];
     var po_type=[];
     $('#vat_types input:checked').map(function(){
@@ -102,7 +182,7 @@ window.PoundShopApp.poundShopTotes = new poundShopTotes();
     {
         bootbox.alert({
                 title: "Alert",
-                message: "Please select atleast one filter to search.",
+                message: "Please select atleast one filter to search1.",
                 size: 'small'
         });
         return false;

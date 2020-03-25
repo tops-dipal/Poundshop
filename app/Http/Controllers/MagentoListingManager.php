@@ -61,6 +61,8 @@ class MagentoListingManager extends Controller
                     return (isset($magento_data) && !empty($magento_data) ? ($magento_data->$magento_key) : $product_data->$product_key);
                 };
 
+                $defaultStock=\App\LocationAssign::getProductStock($product_master_id);
+                
                 return view('listing-manager.magento.add', compact(
                                                     'page_title',
                                                     'prefix_title',
@@ -70,7 +72,7 @@ class MagentoListingManager extends Controller
                                                     'product_master_id',
                                                     'store_id',
                                                     'countries',
-                                                    'magentoCategories',
+                                                    'magentoCategories','defaultStock'
                                                 )
                             );
             }
@@ -122,6 +124,8 @@ class MagentoListingManager extends Controller
                         return (isset($magento_posting_data) && !empty($magento_posting_data) ? ($magento_posting_data->$magento_posting_key) : $magento_prod_data->$magento_prod_key);
                     };
 
+                    $defaultStock=\App\LocationAssign::getProductStock($magento_product_id);
+
                     return view('listing-manager.magento.edit', compact(
                                                         'page_title',
                                                         'prefix_title',
@@ -129,7 +133,7 @@ class MagentoListingManager extends Controller
                                                         'magento_posting_details',
                                                         'select_data',
                                                         'countries',
-                                                        'magentoCategories',
+                                                        'magentoCategories','defaultStock'
                                                     )
                                 );
                 }    

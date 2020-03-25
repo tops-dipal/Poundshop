@@ -81,6 +81,7 @@
         {
             if(val==1)
             {
+
                 $('body .seasonal_show').show();
             }
             else
@@ -103,7 +104,7 @@
             <label for="inputPassword" class="col-lg-4 col-form-label">`+POUNDSHOP_MESSAGES.range_management.cat_name+`<span class="asterisk">*</span></label>
             <div class="col-lg-8">
                 <div class="input-btn">
-                    <input type="text" class="form-control" id="" placeholder="" name="category_name[]">
+                    <input type="text" class="form-control" id="category_name_`+nextaddMoreCat+`" placeholder="Category Name" name="category_name[]">
                     <div class="btn-container addMoreCategory`+nextaddMoreCat+`">
                         <button type="button" class="btn btn-remove remove">-</button>
                     </div>
@@ -127,7 +128,7 @@
                         <label for="inputPassword" class="col-lg-4 col-form-label">From</label>
                         <div class="col-lg-8">
                             <div class="d-flex input-select-group">
-                                <input type="number" name="seasonal_range_fromdate[]" value="" class="form-control seasonal_show" min="1" max="31">
+                                <input type="number" name="seasonal_range_fromdate[]" id="seasonal_range_fromdate_`+nextaddMoreCat+`" value="" class="form-control seasonal_show" min="1" max="31">
                                 <select name="seasonal_range_frommonth[]" class="form-control seasonal_show">`;
                                    var i;
                                     for (i=0; i<12; i++) {
@@ -144,7 +145,7 @@
                         <label for="inputPassword" class="col-lg-4 col-form-label">To</label>
                         <div class="col-lg-8">
                             <div class="d-flex input-select-group">
-                                <input type="number" name="seasonal_range_todate[]" value="" class="form-control seasonal_show" min="1" max="31">
+                                <input type="number" name="seasonal_range_todate[]" id="seasonal_range_todate_`+nextaddMoreCat+`" value="" class="form-control seasonal_show" min="1" max="31">
                                 <select name="seasonal_range_tomonth[]" class="form-control seasonal_show">`;
                                    var j;
                                     for (j=0; j<12; j++) {
@@ -156,6 +157,10 @@
                         </div>
                     </div>
                 </div>
+            </div>
+             <label for="inputPassword" class="col-lg-4 col-form-label">`+POUNDSHOP_MESSAGES.range_management.day_stock+`<span class="asterisk">*</span></label>
+            <div class="col-lg-8">
+             <input type="text" class="form-control" id="stock_hold_days_`+nextaddMoreCat+`" placeholder="Stock Holding Days" name="stock_hold_days[]">
             </div>
         </div>`;
 
@@ -187,14 +192,17 @@
         var spitStr=str.split('[').pop();
         var splitStrNext=spitStr.split(']');
         var countNum=splitStrNext[0];
-        
+
         if($("input[name='seasonal_status["+countNum+"]']:checked").val()=="1")
         {
-           
+           $('#seasonal_range_fromdate_'+countNum).val('');
+            $('#seasonal_range_todate_'+countNum).val('');
             $('.seasonal_show'+countNum).removeClass('hidden');
         }
         else
         {
+            $('#seasonal_range_fromdate_'+countNum).val(1);
+            $('#seasonal_range_todate_'+countNum).val(1);
             $('.seasonal_show'+countNum).addClass('hidden');
         }
         
@@ -359,8 +367,6 @@ $(document.body).on('focusout', "input[name='category_name[]']", function(){
                    $('#process').val('edit');
                    var selectedParent=[];
                    selectedParent=$("body #parentIds").val().split(",");
-                   console.log(selectedParent);
-                   console.log(selecteParentIdArr);
                     //getParent("",selecteParentIdArr,levelcounter);
                     $.each(selectedParent, function( index, value ) {
                         if(value!=$('body #editId').val())
@@ -407,8 +413,18 @@ $(document.body).on('focusout', "input[name='category_name[]']", function(){
         });
  });
     $(document.body).on('click', '.btn-blue', function(){
-        
-     $("#create-range-form").validate({
+        var selectedParentId=$('#selected_parent').val();
+        var editId=$("input[name='id']").val();
+        if(selectedParentId==editId)
+        {
+            bootbox.alert({
+                title: "Alert",
+                message: "Please select another parent category.",
+                size: 'small'
+            });
+            return false;
+        }
+        $("#create-range-form").validate({
             focusInvalid: false, // do not focus the last invalid input
             invalidHandler: function(form, validator) {
 
@@ -434,12 +450,62 @@ $(document.body).on('focusout', "input[name='category_name[]']", function(){
                 maxlength: 40,
                 minlength: 3,
             },
+            "stock_hold_days[]":{
+                required: true,
+                number:true
+            },
+            "seasonal_range_fromdate[]":{
+             //  required:true,
+              /*  required:function(element){
+                    return $("input:radio.seasonal_status:checked").val()=="1";
+                }*/
+                 required:function(element){
+                    var str=element.id;
+                    var res = str.split("_");
+                    
+                   return $("input[name='seasonal_status["+res[res.length-1]+"]']:checked").val()=='1';
+                }
+            },
+            "seasonal_range_todate[]":{
+              //  required:true,
+                required:function(element){
+                    var str=element.id;
+                    var res = str.split("_");
+                    
+                   return $("input[name='seasonal_status["+res[res.length-1]+"]']:checked").val()=='1';
+                }
+               /* required:function(element){
+                    return $("input:radio.seasonal_status:checked");.val()=="1";
+                }*/
+              /* required:function(element){
+                    return $(".seasonal_status : checked").val()!="2";
+                }*/
+            },
+            "seasonal_range_fromdate":{
+                required:function(element){
+                    return $("input[name='seasonal_status']:checked").val()=="1";
+                }
+            },
+            "seasonal_range_todate":{
+                required:function(element){
+                    return $("input[name='seasonal_status']:checked").val()=="1";
+                }
+            }
             },
             messages: {
                 "category_name[].required": "Please select category",
             },
             errorPlacement: function (error, element) {
-                error.insertAfter(element);
+                
+                if(element.attr('name')=='seasonal_range_fromdate[]' || element.attr('name')=='seasonal_range_fromdate' || element.attr('name')=='seasonal_range_todate' || element.attr('name')=='seasonal_range_todate[]')
+                {
+                    error.insertAfter(element.closest('.input-select-group'));
+                }
+                else
+                {
+                    error.insertAfter(element);
+                }
+                
             },
             highlight: function (element) { // hightlight error inputs
                 $(element).closest('.form-group').addClass('has-error'); // set error class to the control group
@@ -622,16 +688,30 @@ $(document.body).on('focusout', "input[name='category_name[]']", function(){
                         str+=`<a id="expandParent_`+val.id+`" href="javascript:void(0);" class="expand" attr-child-nodes='`+child_nodesJson+`'>+</a>`;
                     }
                     var seasonal=(val.seasonal_status==1) ? 'Seasonal' : '';
+                    var days=val.stock_hold_days+' '+POUNDSHOP_MESSAGES.range_management.days;
+                    if(val.map_status=='Mapped')
+                    {
+                        var mapped_status=` <a href="`+WEB_BASE_URL+`/mapping-relation/`+val.id+`" data-toggle="tooltip" data-placement="left" title="Mapped">
+                                              <img src="`+WEB_BASE_URL+`/img/mapped.svg" alt="" width="14" height="14" />
+                                          </a>`;
+                    }
+                    else
+                    {
+                        var mapped_status=` <a href="`+WEB_BASE_URL+`/mapping-relation/`+val.id+`" data-toggle="tooltip" data-placement="left" title="Not Mapped">
+                                              <img src="`+WEB_BASE_URL+`/img/not-mapped.svg" alt="" width="14" height="14" />
+                                          </a>`;
+                    }
                     str+=`<span class="name"><a id="editParent_`+val.id+`"  class="edit-btn" title="Edit Category">`+val.category_name+`</a></span>`;
                     str+=` <div class="category-action">
-                        <span class="name">`+seasonal+`</span>
+                                <span class="name">`+seasonal+`</span>
+                                <span class="name">`+days+`</span>
                                 <input type="hidden" class="editParent_`+val.id+`" value="`+val.edit_url+`">
                                 <a  id="editParent_`+val.id+`"  class="btn btn-blue edit-btn" >
                                     `+POUNDSHOP_MESSAGES.range_management.edit+`
                                 </a>
                                 <a href="#" id="deleteParent_`+val.id+`" class="btn btn-red btn-delete">
                                 `+POUNDSHOP_MESSAGES.range_management.delete+`
-                                </a>
+                                </a> <span class="name"> `+mapped_status+` </span>
                             </div></div>
                                 <div class="expandChildList_`+val.id+`">
                                 </div>
@@ -810,3 +890,18 @@ function getParent(val,selecteParentIdArr,levelcounter)
 }
 
 
+$(document).on("keypress","input[name='stock_hold_days[]']",function(e){
+    return isNumber(event, this)
+});
+
+
+
+function isNumber(evt, element) {
+
+var charCode = (evt.which) ? evt.which : event.keyCode
+
+if ((charCode < 48 || charCode > 57))
+    return false;
+
+return true;
+}    

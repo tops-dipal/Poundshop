@@ -60,10 +60,10 @@ class TotesController extends Controller
                             $category="European";
                         }
                         $tempArray[] = $category;
-                        $tempArray[] = $result->length;
-                        $tempArray[] = $result->width;
-                        $tempArray[] = $result->height;
-                        $tempArray[] = $result->max_weight;
+                        $tempArray[] = apply_float_value($result->length);
+                        $tempArray[] = apply_float_value($result->width);
+                        $tempArray[] = apply_float_value($result->height);
+                        $tempArray[] = apply_float_value($result->max_weight);
                         $tempArray[] = $result->quantity;
                         $viewActionButton = View::make('totes.action-buttons', ['object' => $result]);
                         $tempArray[]      = $viewActionButton->render();

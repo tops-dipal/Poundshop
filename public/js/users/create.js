@@ -20,7 +20,10 @@
     
     c._initialize = function ()
     {
+        
         $('.country_id').select2().trigger('change');
+         
+         
         getGoogleAddress();
     };
     
@@ -130,6 +133,18 @@
             $('#state_id').val($('body').data("state_id")).trigger('change');
         });
     }
+    $('#user_role').change(function(){
+        var selected_string=$(this).find('option:selected').text();
+        if(selected_string.includes('Replen'))
+        {
+            $('.replen_team_option').css('display','block');
+        }
+        else
+        {
+            $('.replen_team_option').css('display','none');
+        }
+
+    });
 
     $('#profile_pic').change(function(){
         var size=(this.files[0].size);

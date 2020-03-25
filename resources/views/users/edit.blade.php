@@ -237,11 +237,12 @@ th, td {
                                         </div>
                                     </div>
                                 </div>
+                                @if(Auth::user()->id!=$user->id)
                                 <div class="col-lg-6">
                                     <div class="form-group row">
                                         <label for="inputPassword" class="col-lg-4 col-form-label">@lang("messages.user_management.user_role")</label>
                                         <div class="col-lg-8">
-                                            <select name="user_role" class="form-control">
+                                            <select name="user_role" class="form-control" id="user_role">
                                                
                                                 @forelse($roles as $roleKey=>$roleVal)
                                                     <option value="{{ $roleVal->id }}" @if(in_array($roleVal->name,json_decode(json_encode($user->getRoleNames())))) selected="selected" @endif>{{ $roleVal->name }} </option>
@@ -251,6 +252,60 @@ th, td {
                                         </div>
                                     </div>
                                 </div>
+                                @endif
+                                @if($user_role!='')
+                                    @if (strpos($user_role, 'Replen') !== false) 
+                                    <div class="col-lg-6 replen_team_option">
+                                        <div class="form-group row">
+                                            <label for="inputPassword" class="col-lg-4 col-form-label">Replen Job Access</label>
+                                            <div class="col-lg-8 mt-2">
+                                                <label class="fancy-radio mr-3">
+                                                    <input type="radio" name="replen_job_access" value="1" {{ ($user->replen_job_access=="1")  ? 'checked="checked"' : '' }}/>
+                                                    <span><i></i>All Jobs</span>
+                                                </label>
+                                                <label class="fancy-radio">
+                                                    <input type="radio" name="replen_job_access" value="2" {{ ($user->replen_job_access=="2")  ? 'checked="checked"' : '' }}/>
+                                                    <span><i></i>Jobs Assigned to me</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @else
+                                    <div class="col-lg-6 replen_team_option" style="display: none">
+                                        <div class="form-group row">
+                                            <label for="inputPassword" class="col-lg-4 col-form-label">Replen Job Access</label>
+                                            <div class="col-lg-8 mt-2">
+                                                <label class="fancy-radio mr-3">
+                                                    <input type="radio" name="replen_job_access" value="1"   checked="checked"/>
+                                                    <span><i></i>All Jobs</span>
+                                                </label>
+                                                <label class="fancy-radio">
+                                                    <input type="radio" name="replen_job_access" value="2" />
+                                                    <span><i></i>Jobs Assigned to me</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endif
+                                @else
+                                <div class="col-lg-6 replen_team_option" style="display: none">
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-lg-4 col-form-label">Replen Job Access</label>
+                                        <div class="col-lg-8 mt-2">
+                                            <label class="fancy-radio mr-3">
+                                                <input type="radio" name="replen_job_access" value="1"   checked="checked"/>
+                                                <span><i></i>All Jobs</span>
+                                            </label>
+                                            <label class="fancy-radio">
+                                                <input type="radio" name="replen_job_access" value="2" />
+                                                <span><i></i>Jobs Assigned to me</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                 
+                                @endif
+                               
                                  <div class="col-lg-6">
                                         <div class="form-group row">
                                             <label for="inputPassword" class="col-lg-4 col-form-label">@lang("messages.user_management.site")</label>
@@ -292,7 +347,10 @@ th, td {
                                           <span class="imageError invalid-feedback"></span>
                                           <div class="imageDiv"> 
                                               @if(!is_null($user->getOriginal('profile_pic')))
-                                              <img src="{{$user->profile_pic }}" alt="Smiley face" height="100" width="100">
+                                                <a href="{{ $user->profile_pic }}" data-rel="lightcase">
+
+                                                <img src="{{$user->profile_pic }}" alt="Smiley face" width="100">
+                                              </a>
                                               <button class="btn btn-danger remove-img" type="button" onclick="removeImage('{{ $user->id }}')">X</button>
                                           @endif
                                         </div>

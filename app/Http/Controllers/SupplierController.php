@@ -9,6 +9,7 @@ use App\State;
 use App\City;
 use App\SupplierMaster;
 use App\SupplierReferences;
+use DB;
 
 
 class SupplierController extends Controller
@@ -37,6 +38,7 @@ class SupplierController extends Controller
      */
     public function index()
     {
+        
         //dd(Env('mail_username'));
         $page_title = $prefix_title = Lang::get('messages.modules.supplier_list');
 
@@ -84,7 +86,7 @@ class SupplierController extends Controller
         $state_name="";
         $city_name="";
         $result = SupplierMaster::find($id);
-
+        $ratings='';
         if(!empty($result))
         {   
             // create country id , state id array to excute single query to retrive states, cities
@@ -143,9 +145,15 @@ class SupplierController extends Controller
             $state_name=($result->state_id!=0)?\App\State::find($result->state_id)->name:'';
             $city_name=($result->city_id!=0)?\App\City::find($result->city_id)->name:'';
             $page_title = $prefix_title = Lang::get('messages.modules.supplier_edit');
+            $ratings=SupplierMaster::supplierRatings($id);
+            
+           
+            
         }
-        
-        return view('supplier.form',compact('page_title', 'prefix_title', 'countries', 'result', 'country_states', 'state_cities','reference_data', 'id','state_name','city_name'));    
+         //$pallets=\App\Pallet::select('id','name')->get();
+         $pallets=SupplierMaster::getSummaryOfEmptyPallets($id);
+         $palletBookings=SupplierMaster::getEmptyPallets($id);
+        return view('supplier.form',compact('page_title', 'prefix_title', 'countries', 'result', 'country_states', 'state_cities','reference_data', 'id','state_name','city_name','pallets','ratings','palletBookings'));    
     }
 
     public function supplier_contacts($supplier_id = "")

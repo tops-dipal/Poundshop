@@ -4,7 +4,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link rel="shortcut icon" type="image/png" href="{{ asset('img/fevicon.png')}}"/>
 <!-- Bootstrap CSS -->
-<link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,500i,700,700i,900,900i&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800&display=swap" rel="stylesheet">
+
 
 
 
@@ -23,7 +25,7 @@
 <link rel="stylesheet" href="{{asset('css/perfect-scrollbar.css')}}">
 <link rel="stylesheet" href="{{ asset('css/icon.css')}}">
 <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css')}}">
-<link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-datepicker.css')}}">
+<!-- <link rel="stylesheet" type="text/css" href="{{asset('css/bootstrap-datepicker.css')}}"> -->
 <link rel="stylesheet" href="{{ asset('js/toastr/toastr.min.css')}}">
 <link rel="stylesheet" href="{{ asset('css/modal.css')}}">
 <link rel="stylesheet" href="{{ asset('css/slick.css')}}">
@@ -38,9 +40,10 @@
 <link rel="stylesheet" href="{{ asset('css/media.css')}}">
 <link rel="stylesheet" href="{{ asset('css/image-uploader.min.css')}}">
 
-<!-- commented -->
-
+<link href="{{ asset('css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
 <link rel="stylesheet" href="{{ asset('css/developer.css')}}">
+<link rel="stylesheet" href="{{ asset('css/glyphicons.css')}}">
+<link href="{{ asset('css/bootstrap-datetimepicker.min.css')}}" rel="stylesheet">
 <!-- <link rel="stylesheet" href="{{asset('css/poundshop.css')}}"> -->
 @yield('css')
 <script>
@@ -52,3 +55,11 @@
 <script type="text/javascript">
     var POUNDSHOP_MESSAGES = <?php echo json_encode(Lang::get('messages')); ?>
 </script>
+<div class="mobile-header">
+	<button class="btn btn-toggle_sidebar" id="toggle_sidebar_mobile">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+	<a href="javascript:void(0)" class="logo-a"><img src="{{asset('img/logo-new.png')}}" class="img-fluid" alt=""></a>
+</div>

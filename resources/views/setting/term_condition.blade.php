@@ -29,7 +29,7 @@
                                          <div class="col-lg-12">
                                             <div class="form-group row">
                                                 <label class="col-lg-2 col-form-label">
-                                                    @lang('messages.purchase_order.terms') @lang('messages.settings.for_uk_supp')
+                                                    @lang('messages.settings.uk_supplier_term')
                                                 </label>
                                                 <div class="col-lg-10">
                                                     <textarea name="terms_pound_uk" id="terms_pound_uk" class="form-control ckeditor">{{ (isset($data->terms)) ?  $data->terms->terms_pound_uk : ''}}</textarea>
@@ -42,9 +42,8 @@
                                          <div class="col-lg-12">
                                             <div class="form-group row">
                                                 <label class="col-lg-2 col-form-label">
-                                                    @lang('messages.purchase_order.terms')
-                                                    @lang('messages.settings.from_import')
-                                                    (@lang('messages.settings.non_uk_supp'))
+                                                    @lang('messages.settings.import_supplier_term')
+                                                    
                                                 </label>
                                                 <div class="col-lg-10">
                                                     <textarea name="terms_pound_non_uk" id="terms_pound_non_uk" class="form-control ckeditor">{{ (isset($data->terms)) ? $data->terms->terms_pound_non_uk : ''}}</textarea>

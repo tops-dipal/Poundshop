@@ -48,7 +48,7 @@
                             </div> 
                             <div class="form-group row">
                                 <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.range_management.cat_name')<span class="asterisk">*</span></label>
-
+                             
                                 <div class="col-lg-8">
                                     <input type="text" class="form-control" id="" placeholder="" name="category_name" value="{{ $editRange->category_name }}">
                                     <div class="row mt-3">

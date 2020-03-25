@@ -11,7 +11,7 @@
         </div>
         <div class="d-flex group-item">
             <span class="title w-60">@lang('messages.purchase_order.items.tables.status')</span>
-            <span class="desc">--</span>
+            <span class="desc">{{config('params.product_listed.'.$product['products']['is_listed_on_magento'])}}</span>
         </div>
         <div class="d-flex group-item">
             <span class="title w-60">@lang('messages.purchase_order.items.tables.supplier_sku')</span>
@@ -24,6 +24,11 @@
         <div class="d-flex group-item">
             <span class="desc">
                 <span class="desc">{{$product['barcode']}}</span>
+            </span>
+        </div>
+        <div class="d-flex group-item">
+            <span class="desc">
+                <span class="desc">Variant : @if($product['is_variant']) Yes @else No @endif</span>
             </span>
         </div>
     </td>
@@ -49,12 +54,12 @@
         <div class="d-flex group-item">
             <span class="title w-80">@lang('messages.purchase_order.items.tables.unit_price')</span>
             <span class="desc">
-                <span class="desc">{{$product['unit_price']}}</span>
+                <span class="desc">@lang('messages.common.pound_sign'){{priceFormate($product['unit_price'])}}</span>
             </span>
         </div>
     </td>
     <td>
-        <span class="title">{{$product['total_product_cost']}}</span>
+        <span class="title">@lang('messages.common.pound_sign'){{priceFormate($product['total_product_cost'])}}</span>
     </td>
     <td>
         <span class="title">{{$product['vat']}}%</span>
@@ -83,9 +88,9 @@
         <div class="d-flex group-item">
             <span class="title w-60">@lang('messages.purchase_order.items.tables.selling_price')</span>
             <span class="desc">
-                {{$product['sel_price']}}
+                @lang('messages.common.pound_sign'){{priceFormate($product['sel_price'])}}
             </span>
-        </div>       
-    </td>   
+        </div>
+    </td>
 </tr>
 @endforeach

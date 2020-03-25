@@ -80,6 +80,7 @@
                     if (response.status == 1) {
                         //$("#create-totes-form")[0].reset();
                          PoundShopApp.commonClass._displaySuccessMessage(response.message);
+                        location.reload(); 
                         
                     }
                 },

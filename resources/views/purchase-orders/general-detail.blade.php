@@ -1,8 +1,8 @@
 <form method="post" id="create-po-form" action="{{route('api-purchase-orders.update',$purchaseOrder->id)}}">
     @csrf
     @method('PUT')
-    <input type="hidden" id="id" value="{{$purchaseOrder->id}}" />
-    <input type="hidden" id="countries_commodities" value="{{isset($purchaseOrder->purchaseOrderCountry->commodityCodes) ? json_encode($purchaseOrder->purchaseOrderCountry->commodityCodes) : json_encode([])}}" />
+    <input type="hidden" id="id" name="id" value="{{$purchaseOrder->id}}" />
+    <input type="hidden" id="countries_commodities" name="countries_commodities" value="{{isset($purchaseOrder->purchaseOrderCountry->commodityCodes) ? json_encode($purchaseOrder->purchaseOrderCountry->commodityCodes) : json_encode([])}}" />
     <div class="row">
         <div class="col-lg-6">
             <div class="form-group row">
@@ -69,7 +69,7 @@
         </div>
         <div class="col-lg-6">
             <div class="form-group row">
-                <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.purchase_order.country')</label>
+                <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.purchase_order.country')<span class="asterisk">*</span></label>
                 <div class="col-lg-8">
                     <select @if($purchaseOrder->po_import_type == 1) disabled="disabled" @endif class="form-control" id="country_id" name="country_id" @if($purchaseOrder->po_status > 5) disabled="disabled" @endif>
                              <option value="">Select Country</option>
@@ -160,6 +160,21 @@
                 <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.purchase_order.form.supplier_comment')</label>
                 <div class="col-lg-8">
                     <textarea class="form-control" name="supplier_comment" id="supplier_comment" maxlength="500">{{$purchaseOrder->supplier_comment}}</textarea>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="form-group row">
+                <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.purchase_order.form.dropshipping')</label>
+                <div class="col-lg-8">
+                    <label class="fancy-radio">
+                        <input type="radio" name="is_drop_shipping" value="1" @if($purchaseOrder->is_drop_shipping == 1) checked="checked" @endif />
+                               <span><i></i>Yes</span>
+                    </label>
+                    <label class="fancy-radio">
+                        <input type="radio" name="is_drop_shipping" value="0" @if($purchaseOrder->is_drop_shipping == 0) checked="checked" @endif/>
+                               <span><i></i>No</span>
+                    </label>
                 </div>
             </div>
         </div>

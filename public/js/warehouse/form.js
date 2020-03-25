@@ -26,7 +26,6 @@
       {
         $('.country_id').select2();
       }
-
       getGoogleAddress();
     };
     function getGoogleAddress()
@@ -173,6 +172,10 @@
           "zipcode": {
               required: true,  
               //number:true              
+          }, 
+          "loc_prefix": {
+              required: true,  
+              maxlength: 5,
           },            
         },
         errorPlacement: function (error, element) {

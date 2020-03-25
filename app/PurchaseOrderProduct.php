@@ -7,7 +7,6 @@ use App\Products;
 
 class PurchaseOrderProduct extends Model {
 
-    //
     protected
             $table   = 'po_products';
     protected
@@ -16,6 +15,7 @@ class PurchaseOrderProduct extends Model {
             $dates   = ['best_before_date', 'created_at', 'updated_at', 'deleted_at'];
 
     /**
+
      * @author Hitesh Tank
      * @return type
      */
@@ -83,13 +83,13 @@ class PurchaseOrderProduct extends Model {
      * @return type
      */
     public
-            function getBestBeforeDateAttribute() {
-        return !empty($this->attributes['best_before_date']) ? date('d-M-Y', strtotime($this->attributes['best_before_date'])) : '';
+            function purchaseOrder() {
+        return $this->belongsTo(PurchaseOrder::class, 'po_id');
     }
 
     public
-            function purchaseOrder() {
-        return $this->belongsTo(PurchaseOrder::class, 'po_id');
+            function getBestBeforeDateAttribute() {
+        return !empty($this->attributes['best_before_date']) ? date('d-M-Y', strtotime($this->attributes['best_before_date'])) : '';
     }
 
     /**
@@ -108,17 +108,19 @@ class PurchaseOrderProduct extends Model {
      */
     public static
             function saveItemContent($data) {
-        $obj                                  = new self;
-        $obj->po_id                           = $data['po_id'];
-        $obj->product_id                      = $data['product_id'];
-        $obj->supplier_sku                    = $data['supplier_sku'];
+        $obj               = new self;
+        $obj->po_id        = $data['po_id'];
+        $obj->product_id   = $data['product_id'];
+        $obj->supplier_sku = $data['supplier_sku'];
+
         $obj->barcode                         = $data['new_barcode'];
+        $obj->is_variant                      = $data['variant'];
         $obj->qty_per_box                     = $data['qty_per_box'];
         $obj->total_box                       = $data['total_box'];
         $obj->total_quantity                  = $data['total_quantity'];
         $obj->unit_price                      = $data['unit_price'];
         $obj->total_product_cost              = $data['total_product_cost'];
-        $obj->vat                             = !empty($data['vat']) ? $data['vat'] : 0;
+        $obj->vat                             = !empty($data['vat']) ? str_replace('%', '', $data['vat']) : 0;
         $obj->vat_type                        = !empty($data['vat_type']) ? $data['vat_type'] : 0;
         $obj->standard_rate                   = !empty($data['standard_rate']) ? $data['standard_rate'] : 0;
         $obj->standard_rate_value             = !empty($data['standard_rate_value']) ? $data['standard_rate_value'] : 0;
@@ -146,6 +148,17 @@ class PurchaseOrderProduct extends Model {
             $obj->currency_exchange_rate = $data['currency_exchange_rate'];
             $obj->import_duty            = !empty($data['import_duty']) ? $data['import_duty'] : 0;
         }
+        else {
+            $vat                = !empty($data['vat']) ? str_replace('%', '', $data['vat']) : 0;
+            $obj->vat_in_amount = ($data['total_product_cost'] * $vat) / 100;
+        }
+        if ($data['is_listed_on_magento'] !== 0) { //update the inventory products
+            $obj->is_new_product           = $data['is_listed_on_magento'];
+            $product                       = Products::find($data['product_id']);
+            $product->is_listed_on_magento = $data['is_listed_on_magento'];
+            $product->save();
+        }
+
         $obj->save();
         return $obj;
     }
@@ -158,31 +171,32 @@ class PurchaseOrderProduct extends Model {
     public static
             function preparedUpdateItems($data) {
 
-        $dataArray = ['po_id' => $data['po_id'],
-            'product_id' => $data['product_id'],
-            'supplier_sku' => $data['supplier_sku'],
-            'barcode' => $data['new_barcode'],
-            'qty_per_box' => $data['qty_per_box'],
-            'total_box' => $data['total_box'],
-            'total_quantity' => $data['total_quantity'],
-            'unit_price' => $data['unit_price'],
-            'total_product_cost' => $data['total_product_cost'],
-            'vat' => !empty($data['vat']) ? $data['vat'] : 0,
-            'vat_type' => !empty($data['vat_type']) ? $data['vat_type'] : 0,
-            'standard_rate' => !empty($data['standard_rate']) ? $data['standard_rate'] : 0,
-            'standard_rate_value' => !empty($data['standard_rate_value']) ? $data['standard_rate_value'] : 0,
-            'zero_rate' => !empty($data['zero_rate']) ? $data['zero_rate'] : 0,
-            'zero_rate_value' => !empty($data['zero_rate_value']) ? $data['zero_rate_value'] : 0,
-            'best_before_date' => !empty($data['best_before_date']) ? date('Y-m-d', strtotime($data['best_before_date'])) : null,
+        $dataArray = ['po_id'                           => $data['po_id'],
+            'product_id'                      => $data['product_id'],
+            'supplier_sku'                    => $data['supplier_sku'],
+            'barcode'                         => $data['new_barcode'],
+            'is_variant'                      => $data['variant'],
+            'qty_per_box'                     => $data['qty_per_box'],
+            'total_box'                       => $data['total_box'],
+            'total_quantity'                  => $data['total_quantity'],
+            'unit_price'                      => $data['unit_price'],
+            'total_product_cost'              => $data['total_product_cost'],
+            'vat'                             => !empty($data['vat']) ? str_replace('%', '', $data['vat']) : 0,
+            'vat_type'                        => !empty($data['vat_type']) ? $data['vat_type'] : 0,
+            'standard_rate'                   => !empty($data['standard_rate']) ? $data['standard_rate'] : 0,
+            'standard_rate_value'             => !empty($data['standard_rate_value']) ? $data['standard_rate_value'] : 0,
+            'zero_rate'                       => !empty($data['zero_rate']) ? $data['zero_rate'] : 0,
+            'zero_rate_value'                 => !empty($data['zero_rate_value']) ? $data['zero_rate_value'] : 0,
+            'best_before_date'                => !empty($data['best_before_date']) ? date('Y-m-d', strtotime($data['best_before_date'])) : null,
             // 'expected_mros' => $data['expected_mros'],
-            'sel_qty' => $data['sel_qty'],
-            'sel_price' => $data['sel_price'],
-            'landed_product_cost' => $data['landed_product_cost']
+            'sel_qty'                         => $data['sel_qty'],
+            'sel_price'                       => $data['sel_price'],
+            'landed_product_cost'             => $data['landed_product_cost']
             , 'net_selling_price_excluding_vat' => $data['net_selling_price_excluding_vat']
-            , 'total_net_selling_price' => $data['total_net_selling_price']
-            , 'total_net_profit' => $data['total_net_profit']
-            , 'total_net_margin' => $data['total_net_margin']
-            , 'mros' => $data['mros']
+            , 'total_net_selling_price'         => $data['total_net_selling_price']
+            , 'total_net_profit'                => $data['total_net_profit']
+            , 'total_net_margin'                => $data['total_net_margin']
+            , 'mros'                            => $data['mros']
         ];
         if ($data['po_import_type'] == 2) {
             $dataArray['cube_per_box']                    = $data['cube_per_box'];
@@ -197,7 +211,11 @@ class PurchaseOrderProduct extends Model {
             $dataArray['net_selling_price_excluding_vat'] = $data['net_selling_price_excluding_vat'];
             $dataArray['import_duty']                     = !empty($data['import_duty']) ? $data['import_duty'] : 0;
         }
+        else {
+            $vat = !empty($data['vat']) ? str_replace('%', '', $data['vat']) : 0;
 
+            $dataArray['vat_in_amount'] = ($data['total_product_cost'] * $vat) / 100;
+        }
         return $dataArray;
     }
 
@@ -272,6 +290,11 @@ class PurchaseOrderProduct extends Model {
 //        cost_per_cube
 //        total_number_of_cubes
 //        remaining_space
+    }
+
+    public static
+            function isProductAdded($product_id) {
+        return self::where('product_id', $product_id)->first();
     }
 
 }

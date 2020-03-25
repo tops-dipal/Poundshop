@@ -54,10 +54,10 @@ class PalletsController extends Controller
               $tempArray   = array();
               $tempArray[] = View::make('components.list-checkbox',['object'=>$result])->render();
               $tempArray[] = View::make('components.list-title',['title'=>ucwords($result->name),'edit_url'=>route('pallets.edit',$result->id),'btn_title'=>trans('messages.modules.pallets_edit')])->render();
-              $tempArray[] = $result->length;
-              $tempArray[] = $result->width;
-              $tempArray[] = $result->height;
-              $tempArray[] = $result->max_weight;
+              $tempArray[] = apply_float_value($result->length);
+              $tempArray[] = apply_float_value($result->width);
+              $tempArray[] = apply_float_value($result->height);
+              $tempArray[] = apply_float_value($result->max_weight);
               $tempArray[] = ($result->returnable==0) ? 'No' :'Yes';
               $tempArray[] =  ($result->sellable==0) ? 'No' :'Yes';         
               $viewActionButton = View::make('pallets.action-buttons', ['object' => $result]);

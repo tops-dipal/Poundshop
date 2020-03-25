@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Lang;
 use App\Country;
 use App\Products;
+use App\ProductBarcode;
 use App\ProductImage;
 use App\CommodityCodes;
 use App\SupplierMaster;
@@ -49,11 +50,14 @@ class ProductsController extends Controller
      */
     public function form($id = "", Request $request)
     {   
+
         $page_title = $prefix_title = Lang::get('messages.inventory.product_add');
 
         $active_tab = !empty($request->active_tab) ? $request->active_tab : 'buying-range';
 
         $result = [];
+        
+        $outer_barcodes = [];
 
         $already_assigned_suppliers = [];
 
@@ -76,7 +80,8 @@ class ProductsController extends Controller
         $allRanges = Range::get()->makeHidden(['parent', 'children'])->toArray();
         
         $allRanges = $this->buildCategoryTree($allRanges);
-
+        $countArrOfWarehouse=array();
+        $warehouses=[];
         if(!empty($id))
         {    
             $result = Products::find($id);
@@ -85,7 +90,7 @@ class ProductsController extends Controller
             {
                 $countries = Country::get();
 
-                $tags = Tags::get();
+                $tags = Tags::orderBy('name','asc')->get();
 
                 $commodity_codes = CommodityCodes::get();
 
@@ -107,6 +112,31 @@ class ProductsController extends Controller
                 }     
 
                 $sel_buying_range_parent_ids = !empty($result->buying_range) ? $result->buying_range->getParentsNames() : '';
+
+                $outer_barcodes = $result->barCodes()->where('barcode_type',3)->get()->pluck('barcode', 'id')->toArray();
+
+                $warehouses=\App\Warehouse::select('id','name','is_default')->get();
+                $defaultWarehouse=\App\Warehouse::select('id','name','is_default')->where('is_default',1)->first();
+                if(!is_null($defaultWarehouse))
+                {
+                    $countArrOfWarehouse=$this->getCountsOfWarehouseTab($id,$defaultWarehouse->id);
+                }
+                else
+                {
+                    $defaultWarehouse=\App\Warehouse::select('id','name','is_default')->first();
+                    if(!is_null($defaultWarehouse))
+                    {
+                        $countArrOfWarehouse=$this->getCountsOfWarehouseTab($id,$defaultWarehouse->id);
+                    }
+                    else
+                    {
+                         $countArrOfWarehouse=$this->getCountsOfWarehouseTab($id,'');
+                    }
+                }
+
+                
+                
+
             }
             else
             {
@@ -135,6 +165,7 @@ class ProductsController extends Controller
                                             'tags',
                                             'allRanges',
                                             'sel_buying_range_parent_ids',
+                                            'outer_barcodes','countArrOfWarehouse','warehouses'
                                         )
                     );
     }
@@ -278,6 +309,29 @@ class ProductsController extends Controller
                 echo view('product.form_buying_range',compact('result', 'allRanges', 'sel_buying_range_parent_ids', 'sub_active_tab'));
             }
         }   
+    }
+
+    public function productOuterBarcode(Request $request)
+    {
+        if(!empty($request->product_id))
+        {
+            $where_array['product_id'] = $request->product_id;
+            $where_array['barcode_type'] = 3;
+            
+            $outer_barcodes = ProductBarcode::where($where_array)->pluck('barcode', 'id')->toArray();
+            
+            $options = '<option value="">'.trans('messages.inventory.select_outer_barcode').'</option>';
+
+            if(!empty($outer_barcodes))
+            {
+                foreach($outer_barcodes as $barcode_id => $barcode)
+                {
+                    $options .= '<option value="'.$barcode_id.'">'.$barcode.'</option>';
+                }    
+            }    
+
+            echo $options;
+        }    
     }
 
     // public function formBuyingRange($id = "")
@@ -525,5 +579,40 @@ class ProductsController extends Controller
     //         return back()->withInput();
     //     }    
     // }
+
+
+    //count of warehouse tab
+
+     public function getCountsOfWarehouseTab($productId,$warehouseId)
+    {
+        $countArr=array();
+        if(!empty($warehouseId))
+        {
+            $countArr['location_qty']=Products::getTotallocationQty($productId,$warehouseId);
+            $countArr['on_po_not_booked_in']=Products::getTotalOnPONotBookedIn($productId,$warehouseId);
+            $countArr['waiting_put_away']=Products::getTotalWaitingToBePutAway($productId,$warehouseId);
+            $countArr['not_arrived_qty']=Products::getTotalNotArrivedYetQty($productId,$warehouseId);
+        }
+        else
+        {
+             $countArr['location_qty']=0;
+            $countArr['on_po_not_booked_in']=Products::getTotalOnPONotBookedIn($productId,$warehouseId);
+            $countArr['waiting_put_away']=0;
+            $countArr['not_arrived_qty']=0;
+        }
+        return $countArr;
+    }
+
+    public function getSiteWiseWarehouseCount(Request $request)
+    {
+        $result=Products::find($request->product_id);
+        $countArrOfWarehouse=$this->getCountsOfWarehouseTab($request->product_id,$request->warehouse_id);
+        return response()->json(["view"=>view('product.warehouse-tab-count',compact('countArrOfWarehouse','result'))->render()]);
+    }
+
+    public function moveProducts(Request $request)
+    {
+        return view('product.move-product');
+    }
 
 }

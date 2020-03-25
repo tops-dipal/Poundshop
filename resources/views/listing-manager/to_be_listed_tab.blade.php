@@ -64,52 +64,87 @@
         </div>
          <div class="card-flex-container d-flex">
             <div class="d-flex-xs-block">
-                <table id="to_be_listed_table" class="display">
-                    <thead>
-                        <tr>
-                            <th class="remove_sort">
-                                <div class="d-flex">
-                                    <label class="fancy-checkbox">
-                                        <input name="ids[]" type="checkbox" class="master">
-                                        <span><i></i></span>
-                                    </label>
-                                    <div class="dropdown bulk-action-dropdown">
-                                        <button class="btn dropdown-toggle" type="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <span class="icon-moon icon-Drop-Down-1"/>
-                                        </button>
-                                        
-                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="">
-                                            <h4 class="title">@lang('messages.modules.bulk_action')</h4>
-                                            <button class="btn btn-add btn-light-green list-many">
-                                            <span class="icon-moon green icon-Add"></span>
-                                            @lang('messages.magento_listing.list')
+                <div class="table-responsive">
+                    <table id="to_be_listed_table" class="display">
+                        <thead>
+                            <tr>
+                                <th class="remove_sort">
+                                    <div class="d-flex">
+                                        <label class="fancy-checkbox">
+                                            <input name="ids[]" type="checkbox" class="master">
+                                            <span><i></i></span>
+                                        </label>
+                                        <div class="dropdown bulk-action-dropdown">
+                                            <button class="btn dropdown-toggle" type="button" id="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="icon-moon icon-Drop-Down-1"/>
                                             </button>
-                                            <!-- <button class="btn btn-add live-on-magento">
-                                            <span class="icon-moon red icon-Delete"></span>
-                                           @lang('messages.magento_listing.go_live_magento')
-                                            </button> -->
-                                          
+                                            
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="">
+                                                <h4 class="title">@lang('messages.modules.bulk_action')</h4>
+                                                <button class="btn btn-add btn-light-green list-many">
+                                                <span class="icon-moon green icon-Add"></span>
+                                                @lang('messages.magento_listing.list')
+                                                </button>
+                                                <button class="btn btn-add live-on-magento">
+                                                <span class="icon-moon red icon-Delete"></span>
+                                               @lang('messages.magento_listing.go_live_magento')
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </th>
-                            <th>@lang('messages.inventory.image')</th>
-                            <th>@lang('messages.inventory.title')</th>
-                            <th>@lang('messages.inventory.sku')</th>
-                            <th>@lang('messages.common.quantity')</th>
-                            <th>@lang('messages.common.price')</th>
-                            <th>@lang('messages.magento_listing.date_to_list')</th>
-                            <th data-class-name="action">@lang('messages.table_label.action')</th>              
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
+                                </th>
+                                <th>@lang('messages.inventory.image')</th>
+                                <th class="m-w-200">@lang('messages.inventory.title')</th>
+                                <th class="w-150">@lang('messages.inventory.sku')</th>
+                                <th class="w-130">@lang('messages.common.quantity')</th>
+                                <th class="w-130 dt-head-align-right">
+                                    <span class="dt-head-text">
+                                        @lang('messages.common.price')
+                                    </span>
+                                </th>
+                                <th class="w-130">@lang('messages.magento_listing.date_to_list')</th>
+                                <th data-class-name="action action-one">@lang('messages.table_label.action')</th>              
+                            </tr>
+                        </thead>
                         
-                    </tbody>
-                </table>  
-                   
+                        <tbody>
+                            
+                        </tbody>
+                    </table>     
+                </div>                
             </div>
         </div>  
+    </div>
+
+    <!-- Bulk action date to go live Modal -->
+    <div class="modal fade" id="dateToGoLiveModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg custom-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header align-items-center">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                        @lang('messages.magento_listing.go_live_magento')
+                    </h5>
+                    <div>
+                        <button type="button" class="btn btn-gray font-12 px-3" data-dismiss="modal" aria-label="Close">
+                        @lang('messages.common.cancel')
+                        </button>
+                        <button type="button" class="btn btn-green font-12 px-3 ml-3" onclick="bulkDateToGoLive(this)">@lang('messages.common.save')</button>
+                    </div>
+                </div>
+                <div class="modal-body p-4">
+                    <div class="col-lg-12">
+                        <div class="form-group row">
+                            <label class="col-lg-4 col-form-label">@lang('messages.magento_listing.date_to_go_live')
+                                <span class="asterisk">*</span>
+                            </label>
+                            <div class="col-lg-4">
+                                <input type="text" readonly="" class="form-control date_to_go_live" placeholder="" name="date_to_go_live" value="{{ date('d-M-Y h:i') }}">
+                            </div>
+                        </div>
+                    </div>       
+                </div>
+            </div>
+        </div>
     </div>
 @endsection
 @section('script')

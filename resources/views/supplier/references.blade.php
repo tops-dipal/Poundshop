@@ -52,16 +52,16 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="form-group row">
-                            <label for="inputPassword" class="col-lg-6 col-form-label">@lang('messages.supplier.last_email_sent'):</label>
-                            <div class="col-lg-6">
+                            <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.supplier.last_email_sent'):</label>
+                            <div class="col-lg-8">
                                 {{ isset($reference_data[0]->created_at)?system_date_time($reference_data[0]->created_at):'' }}
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-12">
                         <div class="form-group row">
-                            <label for="inputPassword" class="col-lg-6 col-form-label">@lang('messages.supplier.last_email_sent_by'):</label>
-                            <div class="col-lg-6">
+                            <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.supplier.last_email_sent_by'):</label>
+                            <div class="col-lg-8">
                                 {{ isset($reference_data[0]->email_send_user)?$reference_data[0]->email_send_user:'' }}
                             </div>
                         </div>

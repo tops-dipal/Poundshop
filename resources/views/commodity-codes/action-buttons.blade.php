@@ -1,8 +1,8 @@
 <ul class="action-btns">
         <li>
-            <a class="btn-edit" href="{{route('commodity-codes.edit',$object->id)}}"><span class="icon-moon icon-Edit"></span></a>
+            <a class="btn-edit" href="{{route('commodity-codes.edit',$object->id)}}" title="@lang('messages.common.edit')"><span class="icon-moon icon-Edit"></span></a>
         </li>
         <li>
-            <a class="btn-delete" href="javascript:;" id="{{$object->id}}"><span class="icon-moon icon-Delete"></span></a>
+            <a class="btn-delete" href="javascript:;" id="{{$object->id}}" title="@lang('messages.common.delete')"><span class="icon-moon icon-Delete"></span></a>
         </li>
 </ul>

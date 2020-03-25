@@ -58,8 +58,8 @@ class ProductsController extends Controller {
                         'sku'                     => 'required',
                         'title'                   => 'required',
                         // 'brand' => 'required',
-                        'single_selling_price' => 'required',
-                        // 'long_description' => 'required',
+                        'single_selling_price'    => 'required',
+                            // 'long_description' => 'required',
                     ];
                 }
 
@@ -102,6 +102,13 @@ class ProductsController extends Controller {
                         'var_sku.0.required' => 'Please add variation product.'
                     ];
                 }
+
+                if ($function_name == 'innerOuterDetails') {
+                    CreateRequest::$roles_array = [
+                        'product_id'    => 'required',
+                        'outer_barcode' => 'required',
+                    ];
+                }
             }
         }
     }
@@ -121,12 +128,14 @@ class ProductsController extends Controller {
             }
 
             $columns = [
-                0 => 'products.id',
-                2 => 'products.title',
-                3 => 'products.sku',
-                7 => 'products.product_identifier',
-                8 => 'products.last_cost_price',
-                9 => 'products.single_selling_price',
+                0  => 'products.id',
+                2  => 'products.title',
+                3  => 'products.sku',
+                7  => 'products.product_identifier',
+                8  => 'products.last_cost_price',
+                9  => 'products.single_selling_price',
+                11 => 'products.last_stock_receipt_date',
+                12 => 'products.is_listed_on_magento',
             ];
 
 
@@ -179,10 +188,10 @@ class ProductsController extends Controller {
                     $tempArray[]      = "-";
                     $tempArray[]      = "-";
                     $tempArray[]      = !empty($result->product_identifier) ? $result->product_identifier : '-';
-                    $tempArray[]      = !empty($result->last_cost_price) ? $result->last_cost_price : '0.00';
-                    $tempArray[]      = !empty($result->single_selling_price) ? $result->single_selling_price : '-';
+                    $tempArray[]      = !empty($result->last_cost_price) ? Lang::get('messages.common.pound_sign') . $result->last_cost_price : '-';
+                    $tempArray[]      = !empty($result->single_selling_price) ? Lang::get('messages.common.pound_sign') . $result->single_selling_price : '-';
                     $tempArray[]      = !empty($tags) ? implode(', ', $tags) : '-';
-                    $tempArray[]      = "-";
+                    $tempArray[]      = !empty($result->last_stock_receipt_date) || !empty($result->last_stock_receipt_qty) ? system_date($result->last_stock_receipt_date) . '<br>' . $result->last_stock_receipt_qty . ' ' . Lang::get('messages.common.quantity') : "-";
                     $tempArray[]      = ($result->is_listed_on_magento == 1) ? Lang::get('messages.inventory.magento_enabled') : Lang::get('messages.inventory.magento_disabled');
                     $viewActionButton = View::make('product.action-buttons', ['object' => $result]);
                     $tempArray[]      = $viewActionButton->render();
@@ -248,6 +257,14 @@ class ProductsController extends Controller {
 
                 $db_array['modified_by'] = $request->user()->id;
 
+                $productInfo = Products::find($db_array['id']);
+                if (!empty($productInfo)) {
+                    if ($productInfo->is_override == 1) {
+                        $db_array['stock_hold_days'] = (!empty($range_details)) ? $range_details->stock_hold_days : $productInfo->stock_hold_days;
+                    }
+                }
+
+
                 Products::where('id', $db_array['id'])->update($db_array);
 
                 $data['id'] = $db_array['id'];
@@ -256,6 +273,8 @@ class ProductsController extends Controller {
             }
             else {
                 $db_array['product_type'] = NULL;
+
+                $db_array['stock_hold_days'] = (!empty($range_details)) ? $range_details->stock_hold_days : 0;
 
                 $db_array['sku'] = $request->sku;
 
@@ -625,6 +644,10 @@ class ProductsController extends Controller {
                 $db_array['case_quantity'] = 1;
             }
 
+            if ($db_array['barcode_type'] == '2') {
+                $db_array['parent_id'] = $request->parent_id;
+            }
+
             if (empty($db_array['id'])) {
                 $db_array['created_by'] = $request->user()->id;
 
@@ -672,6 +695,9 @@ class ProductsController extends Controller {
                 foreach ($products as $product) {
                     $product->main_image_internal;
                     $product->commodity = $product->commmodity;
+                    if (@count(\App\PurchaseOrderProduct::isProductAdded($product->id)) > 0) {
+                        $product->is_listed_on_magento = 1;
+                    }
                 }
                 if (!empty($products) && @count($products) > 0) {
 
@@ -1148,6 +1174,7 @@ class ProductsController extends Controller {
     function saveVariations(CreateRequest $request) {
         try {
             if (!empty($request->id)) {
+
                 $product_exist = Products::find($request->id);
 
                 if (!empty($product_exist) && $product_exist->product_type != 'parent') {
@@ -1159,7 +1186,7 @@ class ProductsController extends Controller {
                 $variation_details = array();
 
                 if (!empty($request->var_id)) {
-                    $db_variation_details = Products::select('id', 'main_image_internal')->whereIn('id', $request->var_id)->get();
+                    $db_variation_details = Products::select('id', 'main_image_internal', 'variation_theme_value1', 'variation_theme_value2')->whereIn('id', $request->var_id)->get();
                 }
 
                 if (!empty($db_variation_details)) {
@@ -1168,6 +1195,11 @@ class ProductsController extends Controller {
                     }
                 }
 
+                $valid = $this->validateVariationData($request);
+
+                if ($valid['status'] == false) {
+                    return $this->sendValidation(array($valid['msg']), 422);
+                }
 
                 if (!empty($request->var_barcode)) {
                     $exclude_ids = !empty($request->var_id) ? $request->var_id : array();
@@ -1183,7 +1215,8 @@ class ProductsController extends Controller {
                     if (!empty($exclude_ids)) {
                         $barcode_query = $barcode_query->whereNotIn('product_id', $exclude_ids);
                     }
-                    $barcode_exist = $barcode_query->pluck('id')->toArray();
+
+                    $barcode_exist = $barcode_query->pluck('id', 'barcode')->toArray();
                 }
 
                 if (!empty($barcode_exist)) {
@@ -1210,6 +1243,8 @@ class ProductsController extends Controller {
                 unset($product_exist_array['sku']);
 
                 unset($product_exist_array['main_image_internal']);
+
+                unset($product_exist_array['main_image_internal_thumb']);
 
                 DB::beginTransaction();
 
@@ -1242,18 +1277,38 @@ class ProductsController extends Controller {
                         if (!empty($request->var_id[$key]) && !in_array($request->var_id[$key], $var_remove_product_ids)) {
                             $varProductImage = $variation_details[$request->var_id[$key]];
 
+                            $varProductImageArray = explode('/', $varProductImage);
+
+                            $varProductImageName = end($varProductImageArray);
+
+                            $varProductImageName = 'thumbnail/' . $varProductImageName;
+
+                            array_pop($varProductImageArray);
+
+                            array_push($varProductImageArray, $varProductImageName);
+
+                            $varProductImageThumPath = implode('/', $varProductImageArray);
+
                             if (!empty($request->var_remove_product_image)) {
                                 if (in_array($varProductImage, $request->var_remove_product_image)) {
-                                    $db_post['main_image_internal'] = NULL;
+                                    Storage::delete($varProductImage);
+                                    Storage::delete($varProductImageThumPath);
+                                    $db_post['main_image_internal']       = NULL;
+                                    $db_post['main_image_internal_thumb'] = NULL;
                                 }
                             }
 
                             if (!empty($request->var_img[$key])) {
                                 if (!empty($varProductImage)) {
                                     Storage::delete($varProductImage);
+                                    Storage::delete($varProductImageThumPath);
                                 }
 
-                                $db_post['main_image_internal'] = $this->upload_product_img($request->var_img[$key], $parent_product_id);
+                                $upload_details = $this->upload_product_img($request->var_img[$key], $parent_product_id);
+
+                                $db_post['main_image_internal'] = !empty($upload_details['image_path']) ? $upload_details['image_path'] : '';
+
+                                $db_post['main_image_internal_thumb'] = !empty($upload_details['thumb_path']) ? $upload_details['thumb_path'] : '';
                             }
 
                             $db_post['id'] = $request->var_id[$key];
@@ -1264,7 +1319,12 @@ class ProductsController extends Controller {
                         }
                         else {
                             if (!empty($request->var_img[$key])) {
-                                $db_post['main_image_internal'] = $this->upload_product_img($request->var_img[$key], $parent_product_id);
+
+                                $upload_details = $this->upload_product_img($request->var_img[$key], $parent_product_id);
+
+                                $db_post['main_image_internal'] = !empty($upload_details['image_path']) ? $upload_details['image_path'] : '';
+
+                                $db_post['main_image_internal_thumb'] = !empty($upload_details['thumb_path']) ? $upload_details['thumb_path'] : '';
                             }
 
                             $product_ids[$key] = Products::create($db_post)->id;
@@ -1343,9 +1403,44 @@ class ProductsController extends Controller {
     }
 
     public
-            function upload_product_img($img, $id) {
+            function validateVariationData($request) {
+        $result = array(
+            'status' => true,
+            'msg'    => '',
+        );
 
-        $path = "";
+        $variation_combinations = [];
+
+        foreach ($request->var_sku as $key => $v_sku) {
+            if (!empty($request->var_size[$key]) || !empty($request->var_color[$key])) {
+                $variation_theme1 = !empty($request->var_size[$key]) ? $request->var_size[$key] : NULL;
+
+                $variation_theme2 = !empty($request->var_color[$key]) ? $request->var_color[$key] : NULL;
+
+                $variation_theme_combination = trim($variation_theme1) . '|||' . trim($variation_theme2);
+
+                if (in_array($variation_theme_combination, $variation_combinations)) {
+                    $result = array(
+                        'status' => false,
+                        'msg'    => 'Variation combinations should be unique',
+                    );
+
+                    break(1);
+                }
+                else {
+                    $variation_combinations[] = $variation_theme_combination;
+                }
+            }
+        }
+
+        return $result;
+    }
+
+    public
+            function upload_product_img($img, $id) {
+        $path       = "";
+        $thumb_path = "";
+        $extension  = "";
 
         // images
         if (!empty($img)) {
@@ -1367,11 +1462,397 @@ class ProductsController extends Controller {
                 $path = Storage::disk('local')->putFileAs($folder, $uploadedFile, $name);
             }
             else {
-                $path = Storage::putFile(($folder), $uploadedFile);
+
+                $name = time() . 'internalImage.' . $extension;
+
+                $path = Storage::putFileAs(($folder), $uploadedFile, $name);
+
+                $folder = "product-images/" . $id . '/thumbnail/';
+                if (!Storage::exists($folder)) {
+                    Storage::makeDirectory($folder, 0777, true);
+                }
+
+                $thumbName1 = explode('/', $path);
+
+                $thumbName = $thumbName1[2];
+
+                $originalPath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix() . "product-images/" . $id . '/' . $thumbName;
+
+                $thumbPath = Storage::disk('public')->getDriver()->getAdapter()->getPathPrefix() . $folder . $thumbName;
+
+                Image::make($uploadedFile)->resize(100, null, function ($constraint) {
+                    $constraint->upsize();
+                    $constraint->aspectRatio();
+                })->save($thumbPath, 100);
+
+                $thumb_path = $folder . $thumbName;
             }
+
+            $thumb_path = $extension == 'mp4' ? $path : $thumb_path;
         }
 
-        return $path;
+        return array(
+            'image_path' => $path,
+            'thumb_path' => $thumb_path,
+            'extension'  => $extension,
+        );
+    }
+
+    public
+            function innerOuterDetails(CreateRequest $request) {
+        try {
+
+            $data = array();
+
+            $where_array['product_id'] = $request->product_id;
+
+            $where_array['barcode'] = $request->outer_barcode;
+
+            $where_array['barcode_type'] = 3;
+
+            $barcodes_details = ProductBarcode::select('id', 'barcode', 'case_quantity')->where($where_array)->first();
+
+            if (!empty($barcodes_details)) {
+                $data['outer_details'] = $barcodes_details->toArray();
+
+                $inner_details = $barcodes_details->innerDetails()->select('barcode', 'case_quantity')->first();
+
+                if (!empty($inner_details)) {
+                    $data['inner_details'] = $inner_details->toArray();
+                }
+            }
+
+            return $this->sendResponse('Request successfully', 200, $data);
+        }
+        catch (Exception $ex) {
+            return $this->sendError($ex->getMessage(), 400);
+        }
+    }
+
+    function saveWarehouse(Request $request) {
+        if (!empty($request)) {
+            $data = [];
+
+            $resp_msg = "";
+
+            $db_array['id'] = !empty($request->id) ? $request->id : "";
+
+            $db_array['stock_hold_days'] = $request->stock_hold_days;
+            if (isset($request->is_override)) {
+                $db_array['is_override'] = $request->is_override;
+            }
+            if (isset($request->ros)) {
+                $db_array['ros'] = $request->ros;
+            }
+
+
+            if (!empty($db_array['id'])) {
+
+
+                $db_array['modified_by'] = $request->user()->id;
+
+                Products::where('id', $db_array['id'])->update($db_array);
+
+                $data['id'] = $db_array['id'];
+
+                $resp_msg = 'Product updated successfully';
+            }
+            if (!empty($resp_msg)) {
+
+                return $this->sendResponse($resp_msg, 200, $data);
+            }
+            else {
+                return $this->sendValidation(array('Unable to save product, please try again'), 422);
+            }
+        }
+        else {
+            return $this->sendValidation(array('Unable to save product, please try again'), 422);
+        }
+    }
+
+    public
+            function locationQty(Request $request) {
+        // dd(Products::getLocationQuantity($request->product_id));
+        //dd(Products::getOnPoBUtNotBookedIn($request->product_id));
+        // dd(Products::bookedInNotArraivedYet($request->product_id));
+
+        try {
+
+            $columns = [
+                0 => 'id',
+                1 => 'name',
+                2 => 'length',
+                3 => 'width',
+                4 => 'height',
+                5 => 'max_weight',
+                6 => 'quantity',
+                7 => 'recycle_carton',
+            ];
+
+            $adv_search_array = array();
+
+            if (!empty($request->advanceSearch)) {
+                parse_str($request->advanceSearch, $adv_search_array);
+            }
+            $params = array(
+                'order_column'   => $columns[$request->order[0]['column']],
+                'order_dir'      => $request->order[0]['dir'],
+                'search'         => $request->search['value'],
+                'advance_search' => $adv_search_array,
+            );
+
+
+
+            $locationsQty = Products::getLocationQuantity($adv_search_array['product_id'], $params, $request->length);
+            //   dd($locationsQty);
+            $data         = [];
+
+            if (!empty($locationsQty)) {
+                $data = $locationsQty->getCollection()->transform(function ($result) use ($data) {
+                    $tempArray     = array();
+                    $tempArray[]   = '<div class="min-h-35">' . $result->site_name . '</div>';
+                    $tempArray[]   = $result->aisle;
+                    $tempArray[]   = $result->location;
+                    $tempArray[]   = LocationType($result->type_of_location);
+                    $tempArray[]   = is_null($result->total_qty) ? 0 : $result->total_qty;
+                    $bestBeforHtml = "";
+                    $qtyHtml       = "";
+                    $transData     = $result->locationAssignTransaction()->select('best_before_date', DB::raw('SUM(qty) as date_qty'))->where('best_before_date', '!=', NULL)->groupBy('best_before_date')->get();
+                    foreach ($transData as $key => $value) {
+                        $bestBeforHtml .= "<tr><td>" . $value->best_before_date . "</td></tr><hr>";
+                        $qtyHtml       .= "<tr><td>" . $value->date_qty . "</td></tr><hr>";
+                    }
+
+                    $tempArray[] = empty($bestBeforHtml) ? '-' : $bestBeforHtml;
+                    $tempArray[] = empty($qtyHtml) ? '-' : $qtyHtml;
+
+
+
+                    return $tempArray;
+                });
+            }
+            $labelData                             = array();
+            $labelData['totalInPickLocationQty']   = Products::labelcountsOfLocationQty($adv_search_array['product_id'], $adv_search_array['warehouse_id'], 'totalInPickLocationQty');
+            $labelData['totalInBulkLocationQty']   = Products::labelcountsOfLocationQty($adv_search_array['product_id'], $adv_search_array['warehouse_id'], 'totalInBulkLocationQty');
+            $labelData['totalInReturnLocationQty'] = Products::labelcountsOfLocationQty($adv_search_array['product_id'], $adv_search_array['warehouse_id'], 'totalInReturnLocationQty');
+            $labelData['totalInPickLocationCount'] = Products::labelcountsOfLocationQty($adv_search_array['product_id'], $adv_search_array['warehouse_id'], 'totalInPickLocationCount');
+            $labelData['totalInBulkLocationCount'] = Products::labelcountsOfLocationQty($adv_search_array['product_id'], $adv_search_array['warehouse_id'], 'totalInBulkLocationCount');
+
+            $scanInfo = Products::getLastScannedProductInfo($adv_search_array['product_id']);
+            if (!empty($scanInfo)) {
+                $labelData['scanned_datetime'] = (!is_null($scanInfo->last_scanned_datetime)) ? dateFormateShowDate(strtotime($scanInfo->last_scanned_datetime)) : '-';
+                $labelData['scanned_user']     = (!is_null($scanInfo->last_scanned_by)) ? $scanInfo->first_name . ' ' . $scanInfo->last_name : '-';
+            }
+            // dd($labelData);
+            $jsonData = [
+                "draw"            => intval($request->draw), // For every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw.
+                "recordsTotal"    => $locationsQty->total(), // Total number of records
+                "recordsFiltered" => $locationsQty->total(),
+                "data"            => $data, // Total data array,
+                "labelData"       => $labelData
+            ];
+            return response()->json($jsonData);
+        }
+        catch (Exception $ex) {
+
+        }
+    }
+
+    public
+            function onPONOtBookedIn(Request $request) {
+
+        try {
+
+            $columns = [
+                0 => 'po_number',
+                1 => 'supplier_order_number',
+                2 => 'name',
+                3 => 'total_available_qty',
+            ];
+
+            $adv_search_array = array();
+
+            if (!empty($request->advanceSearch)) {
+                parse_str($request->advanceSearch, $adv_search_array);
+            }
+            $params = array(
+                'order_column'   => $columns[$request->order[0]['column']],
+                'order_dir'      => $request->order[0]['dir'],
+                'search'         => $request->search['value'],
+                'advance_search' => $adv_search_array,
+            );
+
+
+            $locationsQty1 = Products::getOnPoBUtNotBookedIn($adv_search_array['product_id'], $params, $request->length);
+
+            $data = [];
+
+            if (!empty($locationsQty1)) {
+                $data = $locationsQty1->getCollection()->transform(function ($result) use ($data) {
+                    $tempArray   = array();
+                    $tempArray[] = '<div class="min-h-35">' . $result->po_number . '</div>';
+                    $tempArray[] = empty($result->supplier_order_number) ? '-':$result->supplier_order_number;
+                    $tempArray[] = $result->name;
+                    $tempArray[] = !empty($result->total_available_qty) ? $result->total_available_qty : 0;
+
+
+
+                    return $tempArray;
+                });
+            }
+
+            $jsonData = [
+                "draw"            => intval($request->draw), // For every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw.
+                "recordsTotal"    => $locationsQty1->total(), // Total number of records
+                "recordsFiltered" => $locationsQty1->total(),
+                "data"            => $data // Total data array
+            ];
+            return response()->json($jsonData);
+        }
+        catch (Exception $ex) {
+
+        }
+    }
+
+    public
+            function bookedInButNotArrivedYet(Request $request) {
+
+        try {
+
+            $columns          = [
+                0 => 'booking_ref_id',
+                1 => 'book_date',
+                2 => 'from',
+                3 => 'from',
+            ];
+            $adv_search_array = array();
+
+            if (!empty($request->advanceSearch)) {
+                parse_str($request->advanceSearch, $adv_search_array);
+            }
+            $params = array(
+                'order_column'   => $columns[$request->order[0]['column']],
+                'order_dir'      => $request->order[0]['dir'],
+                'search'         => $request->search['value'],
+                'advance_search' => $adv_search_array,
+                'length'         => $request->length,
+                'page'           => $request->page,
+            );
+
+            $bookingIds = array();
+
+            $locationsQty = Products::bookedInNotArraivedYet($adv_search_array, $params, $request->length);
+
+            $data = [];
+
+            if (!empty($locationsQty)) {
+                $data = $locationsQty->getCollection()->transform(function ($result) use ($data) {
+                    $tempArray   = array();
+                    $tempArray[] = '<div class="min-h-35">' . $result->booking_ref_id . '</div>';
+                    $tempArray[] = $result->book_date;
+                    $tempArray[] = date("g:iA", strtotime($result->slot_from)) . ' <br/>' . date("g:iA", strtotime($result->slot_to));
+                    /* $po_list_array = explode('<br/>', $result->po_list);
+                      $counter       = count($po_list_array);
+                      if ($counter > 2) {
+                      $sliced_array    = array_slice($po_list_array, 0, 2);
+                      $new_po_list     = implode('<br/>', $sliced_array);
+                      $new_counter     = $counter - 2;
+                      $complete_string = $new_po_list . '<br/>';
+                      $complete_string .= '<a tabindex="0" data-html="true"  data-placement="bottom"  data-toggle="popover" data-trigger="focus" title="Po list" data-content="' . $result->po_list . '">(+' . $new_counter . ' more)</a>';
+                      $tempArray[]     = $complete_string;
+                      }
+                      else {
+                      $tempArray[] = $result->po_list;
+                      } */
+                    $tempArray[] = $result->po_number;
+                    $tempArray[] = $result->supplier_name;
+                    $tempArray[] = $result->total_product_qty;
+
+
+                    return $tempArray;
+                });
+            }
+
+            $jsonData = [
+                "draw"            => intval($request->draw), // For every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw.
+                "recordsTotal"    => $locationsQty->total(), // Total number of records
+                "recordsFiltered" => $locationsQty->total(),
+                "data"            => $data // Total data array
+            ];
+            return response()->json($jsonData);
+        }
+        catch (Exception $ex) {
+
+        }
+    }
+
+    public
+            function waitingToBePutAway(Request $request) {
+
+        try {
+            // dd(Products::getTotallocationQty(164));
+            $columns          = [
+                0 => 'location',
+                1 => 'type_of_location',
+                2 => 'total_qty',
+            ];
+            $adv_search_array = array();
+
+            if (!empty($request->advanceSearch)) {
+                parse_str($request->advanceSearch, $adv_search_array);
+            }
+            $params = array(
+                'order_column'   => $columns[$request->order[0]['column']],
+                'order_dir'      => $request->order[0]['dir'],
+                'search'         => $request->search['value'],
+                'advance_search' => $adv_search_array,
+            );
+
+
+            $records = Products::getWaitionPutAway($adv_search_array['product_id'], $params, $request->length);
+            //dd($locationsQty)  ;
+            $data    = [];
+
+            if (!empty($records)) {
+                $data = $records->getCollection()->transform(function ($result) use ($data) {
+                    $tempArray   = array();
+                    $tempArray[] = '<div class="min-h-35">' . $result->location . '</div>';
+                    $tempArray[] = LocationType($result->type_of_location);
+                    $tempArray[] = ($result->type_of_location == 3) ? $result->total_pick_pallet_qty : $result->total_bulk_pallet_qty;
+                    return $tempArray;
+                });
+            }
+
+            $jsonData = [
+                "draw"            => intval($request->draw), // For every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw.
+                "recordsTotal"    => $records->total(), // Total number of records
+                "recordsFiltered" => $records->total(),
+                "data"            => $data // Total data array
+            ];
+            return response()->json($jsonData);
+        }
+        catch (Exception $ex) {
+
+        }
+    }
+
+    //getlocations and product details by barcode
+
+    public
+            function productLocationDetailByBarcode(Request $request) {
+        try {
+            if (isset($request->barcode)) {
+                $productLocations                = Products::productDetailWithLocationsByScanBarcode($request->barcode);
+                $data['productLocationsDetails'] = $productLocations;
+                return $this->sendResponse("Success", 200, $data);
+            }
+            else {
+                return $this->sendResponse("Barcode is missing", 400);
+            }
+        }
+        catch (Exception $ex) {
+
+        }
     }
 
 }

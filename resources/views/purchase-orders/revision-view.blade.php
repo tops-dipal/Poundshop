@@ -16,7 +16,7 @@
 
                     <div class="form-field">
                         <label class="custom-lbl">@lang('messages.purchase_order.items.tables.delivery_charge')</label>
-                        <span>{{$revisionData->purchase_order_content['total_delivery_charge']}}</span>
+                        <span>@lang('messages.common.pound_sign'){{$revisionData->purchase_order_content['total_delivery_charge']}}</span>
                     </div>
                     <div class="form-field">
                         <label class="custom-lbl">@lang('messages.purchase_order.items.tables.tot_space')</label>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-field">
                         <label class="custom-lbl">@lang('messages.purchase_order.items.tables.cost_cube')</label>
-                        <span>{{$revisionData->purchase_order_content['cost_per_cube']}}</span>
+                        <span>@lang('messages.common.pound_sign'){{$revisionData->purchase_order_content['cost_per_cube']}}</span>
                     </div>
                     <div class="form-field">
                         <label class="custom-lbl">@lang('messages.purchase_order.items.tables.tot_cube')</label>
@@ -65,7 +65,7 @@
                                 <span class="title">@lang('messages.purchase_order.items.tables.sub_total')</span>
                             </td>
                             <td colspan="4" align="left">
-                                <span class="desc">{{$revisionData->purchase_order_content['sub_total']}}</span>
+                                <span class="desc">@lang('messages.common.pound_sign'){{priceFormate($revisionData->purchase_order_content['sub_total'])}}</span>
                             </td>
                         </tr>
                         <tr>
@@ -82,7 +82,7 @@
                                 <span class="title">@lang('messages.purchase_order.items.tables.sub_total')</span>
                             </td>
                             <td colspan="4" align="left">
-                                <span class="desc">{{$revisionData->purchase_order_content['sub_total']}}</span>
+                                <span class="desc">@lang('messages.common.pound_sign'){{priceFormate($revisionData->purchase_order_content['sub_total'])}}</span>
                             </td>
                         </tr>
                         <tr>
@@ -98,7 +98,7 @@
                                 <span class="title">@lang('messages.purchase_order.items.tables.delivery_charge')</span>
                             </td>
                             <td colspan="4" align="left">
-                                <span class="desc">{{$revisionData->purchase_order_content['total_delivery_charge']}}</span>
+                                <span class="desc">@lang('messages.common.pound_sign'){{priceFormate($revisionData->purchase_order_content['total_delivery_charge'])}}</span>
                             </td>
                         </tr>
                         <tr>
@@ -106,7 +106,7 @@
                                 <span class="title">@lang('messages.purchase_order.items.tables.total_cost')</span>
                             </td>
                             <td colspan="4" align="left">
-                                <span class="desc">{{$revisionData->purchase_order_content['total_cost']}}</span>
+                                <span class="desc">@lang('messages.common.pound_sign'){{priceFormate($revisionData->purchase_order_content['total_cost'])}}</span>
                             </td>
                         </tr>
                         <tr>
@@ -229,6 +229,9 @@
                         </div>
                     </div>
                 </div>
+            </div>
+            <h3 class="page-title-inner mt-5 mb-3">@lang('messages.purchase_order.form.ship_address')</h3>
+            <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group row">
                         <label class="col-lg-4 col-form-label py-1"><strong>@lang('messages.purchase_order.form.warehouse')</strong></label>
@@ -237,6 +240,7 @@
                         </div>
                     </div>
                 </div>
+                <div class="col-lg-6"></div>
                 <div class="col-lg-6">
                     <div class="form-group row">
                         <label class="col-lg-4 col-form-label py-1"><strong>@lang('messages.purchase_order.form.add1')</strong></label>
@@ -282,6 +286,57 @@
                         <label class="col-lg-4 col-form-label py-1"><strong>@lang('messages.purchase_order.zipcode')</strong></label>
                         <div class="col-lg-8 col-form-label py-1">
                             {{$revisionData->purchase_order_content['zipcode']}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3 class="page-title-inner mt-5 mb-3">@lang('messages.purchase_order.form.bill_address')</h3>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label py-1"><strong>@lang('messages.purchase_order.form.add1')</strong></label>
+                        <div class="col-lg-8 col-form-label py-1">
+                            {{$revisionData->purchase_order_content['billing_street_address1']}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label py-1"><strong>@lang('messages.purchase_order.form.add2')</strong></label>
+                        <div class="col-lg-8 col-form-label py-1">
+                            {{$revisionData->purchase_order_content['billing_street_address2']}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label py-1"><strong>@lang('messages.purchase_order.country')</strong></label>
+                        <div class="col-lg-8 col-form-label py-1">
+                            {{$revisionData->purchase_order_content['billing_country']}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label py-1"><strong>@lang('messages.purchase_order.state')</strong></label>
+                        <div class="col-lg-8 col-form-label py-1">
+                            {{$revisionData->purchase_order_content['billing_state']}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label py-1"><strong>@lang('messages.purchase_order.city')</strong></label>
+                        <div class="col-lg-8 col-form-label py-1">
+                            {{$revisionData->purchase_order_content['billing_city']}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group row">
+                        <label class="col-lg-4 col-form-label py-1"><strong>@lang('messages.purchase_order.zipcode')</strong></label>
+                        <div class="col-lg-8 col-form-label py-1">
+                            {{$revisionData->purchase_order_content['billing_zipcode']}}
                         </div>
                     </div>
                 </div>

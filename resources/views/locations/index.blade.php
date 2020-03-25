@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
 @section('title',__('messages.modules.locations_list'))
+<input type="hidden" name="carton_arr" value="{{ json_encode($cartons) }}">
 <div class="content-card custom-scroll">
     <div class="content-card-header">
         <h3 class="page-title">@lang('messages.modules.locations_list')</h3> 
@@ -89,11 +90,9 @@
                                             <div class="col-lg-7">
                                                 <select class="form-control" id="fil_location_type" name="fil_location_type">
                                                     <option value="">Select Location Type</option>
-                                                    @if(!empty($location_type))
-                                                        <?php $i=1;?>
-                                                        @foreach($location_type as $row)
-                                                            <option value="{{ $i }}">{{ucfirst($row)}}</option>
-                                                            <?php $i++;?>
+                                                    @if(!empty($location_type))                  
+                                                        @foreach($location_type as $key=>$row)
+                                                            <option value="{{ $key }}">{{ucfirst($row)}}</option>
                                                         @endforeach
                                                     @endif
                                                 </select>
@@ -172,8 +171,11 @@
                                             <span class="icon-moon red icon-Delete"></span>
                                             @lang('messages.modules.locations_delete')
                                             </button>
-                                            <button class="btn btn-add btn-red active-many">@lang('messages.common.active')</button>
-                                            <button class="btn btn-add btn-red incative-many">@lang('messages.common.inactive')</button>
+
+                                            <button class="btn btn-add btn-red active-many">
+                                                <span class="icon-moon yellow icon-Active"></span>@lang('messages.common.active')</button>
+                                            <button class="btn btn-add btn-red incative-many">
+                                            <span class="icon-moon gray icon-Inactive"></span>@lang('messages.common.inactive')</button>
                                         </div>
                                     </div>
                                 </div>
@@ -184,16 +186,30 @@
                         <th>@lang('messages.table_label.floor')</th>
                         <th>@lang('messages.table_label.box')</th>
                         <th>@lang('messages.table_label.location')</th>
+                        <th>@lang('messages.table_label.warehouse_name')</th>
                         <th>@lang('messages.table_label.location_type')</th>
                         <th>@lang('messages.table_label.case_pack')</th>
-                        <th>@lang('messages.table_label.length')</th>
-                        <th>@lang('messages.table_label.width')</th>
-                        <th>@lang('messages.table_label.height')</th>
-                        <th>@lang('messages.table_label.cbm')</th>
-                        <th>@lang('messages.table_label.stor_weight_short')</th>
+                        <th class="dt-head-align-right">
+                            <span class="dt-head-text">@lang('messages.table_label.length')</span>
+                        </th>
+                        <th class="dt-head-align-right">
+                                <span class="dt-head-text">@lang('messages.table_label.width')
+                                </span>
+                        </th>
+                        <th class="dt-head-align-right">
+                                <span class="dt-head-text">@lang('messages.table_label.height')
+                                </span>
+                        </th>
+                        <th class="dt-head-align-right">
+                                <span class="dt-head-text">@lang('messages.table_label.cbm')
+                                </span>
+                        </th>
+                        <th>
+                            @lang('messages.table_label.stor_weight_short')
+                        </th>
                         <th>@lang('messages.common.status')</th>
                         <th data-class-name="action action-three">
-                            <div class="m-w-120">@lang('messages.table_label.action')</div>
+                            <div>@lang('messages.table_label.action')</div>
                         </th>
                     </tr>
                 </thead>
@@ -223,12 +239,10 @@
                             <div class="form-group row align-items-center">
                                 <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.location_type')</label>
                                 <div class="col-lg-8">
-                                    <select class="form-control" id="edi_location_type" name="edi_location_type">                                        
+                                    <select class="form-control" id="edi_location_type" name="edi_location_type">
                                         @if(!empty($location_type))
-                                            <?php $i=1;?>
-                                            @foreach($location_type as $row)
-                                                <option value="{{ $i }}">{{ucfirst($row)}}</option>
-                                                <?php $i++;?>
+                                            @foreach($location_type as $key =>$row)
+                                                <option value="{{ $key }}">{{ucfirst($row)}}</option>
                                             @endforeach
                                         @endif
                                     </select>
@@ -245,12 +259,26 @@
                                     </select>
                                 </div>
                             </div>
+                        </div>     
+                        <div class="col-lg-12">
+                            <div class="form-group row align-items-center">
+                                <label for="inputPassword" class="col-lg-4 col-form-label">Box</label>
+                                <div class="col-lg-8">
+                                    <select class="form-control" id="edit_carton_id" name="edit_carton_id" > 
+                                        <option value="">Select Box</option>
+                                        @forelse($cartons as $ck=>$cv)
+                                        <option value="{{ $cv->id }}" attr_data="{{ $cv->length }}-{{ $cv->width }}-{{ $cv->height }}-{{ $cv->max_weight }}">{{ $cv->name }}</option>
+                                        @empty
+                                        @endforelse
+                                    </select>
+                                </div>
+                            </div>
                         </div>                         
                         <div class="col-lg-12">
                             <div class="form-group row align-items-center">
                                 <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.length')</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" id="edi_length" name="edi_length" maxlength="6" value="">
+                                    <input type="text" class="form-control" id="edi_length" name="edi_length" maxlength="6" value="" disabled="">
                                 </div>
                             </div>
                         </div>
@@ -258,7 +286,7 @@
                             <div class="form-group row align-items-center">
                                 <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.width')</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" id="edi_width" name="edi_width" maxlength="6" value="">
+                                    <input type="text" class="form-control" id="edi_width" name="edi_width" maxlength="6" value="" disabled="">
                                 </div>
                             </div>
                         </div>
@@ -266,7 +294,7 @@
                             <div class="form-group row align-items-center">
                                 <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.height')</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" id="edi_height" name="edi_height" maxlength="6" value="">
+                                    <input type="text" class="form-control" id="edi_height" name="edi_height" maxlength="6" value="" disabled="">
                                 </div>
                             </div>
                         </div>
@@ -282,7 +310,7 @@
                             <div class="form-group row align-items-center">
                                 <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.stor_weight_short_kg')</label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" id="edi_stor_weight" name="edi_stor_weight" value="" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
+                                    <input type="text" class="form-control" id="edi_stor_weight" name="edi_stor_weight" value="" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);" disabled="">
                                 </div>
                             </div>
                         </div>

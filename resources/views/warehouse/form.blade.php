@@ -217,6 +217,62 @@
                                     </div>
                                 </div>
                             </div>
+                            @if(!empty($location_type))
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <h3 class="p-title mb-4 mt-4">@lang('messages.user_management.set_ware_loc_prefix')</h3>                                
+                                </div>
+                            </div>
+                            <div class="row">
+                                @foreach($location_type as $key=>$row)
+                                @php
+                                $value_exist=0;
+                                $value=isset($warehouse_location_trans_data[$key])?$warehouse_location_trans_data[$key]:'';
+                                if(!empty($value))
+                                {
+                                    $value_exist=1;
+                                }
+
+                                if($key==7)
+                                {
+                                    $row='Aerosol';
+                                }
+                                else if($key==6)
+                                {
+                                    $row='Dropshipping';
+                                }
+                                else if($key==12)
+                                {
+                                    $row='Aerosol Cage Bulk';
+                                }
+                                else if($key==8)
+                                {
+                                    $row='Quarantine';
+                                }
+
+                                @endphp
+
+                                    <div class="col-lg-6">
+                                        <div class="form-group row">
+                                            <label for="inputPassword" class="col-lg-5 col-form-label">{{$row}} @lang('messages.table_label.prefix')<span class="asterisk">*</span></label>
+                                            <div class="col-lg-2">
+                                                <input type="text"  class="form-control" id="loc_prefix_{{$key}}" placeholder="" name="loc_prefix_{{$key}}" value="{{ $value }}" required="" maxlength="5" @php if(!empty($value_exist)){ echo "readonly";} @endphp>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                            @endif
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-lg-12 col-form-label">@lang('messages.purchase_order.form.notes')</label>
+                                        <div class="col-lg-12">
+                                           <textarea class="form-control" placeholder="@lang('messages.purchase_order.form.notes')" name="notes">{{ !empty($result->notes) ? $result->notes : '' }}</textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>						
                 </div>

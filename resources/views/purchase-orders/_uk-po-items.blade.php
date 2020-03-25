@@ -1,6 +1,7 @@
 @if(!empty($purchaseOrder->product) && @count($purchaseOrder->product) > 0 )
-@foreach($purchaseOrder->product as $product)
+@foreach($purchaseOrder->product()->orderBy('id','desc')->get() as $product)
 <tr>
+
     <td id="{{$product->id}}"><div class="d-flex">
             <label class="fancy-checkbox">
                 <input name="ids[]" type="checkbox" class="child-checkbox" value="{{$product->product_id}}"
@@ -16,35 +17,39 @@
         </div>
         <div class="d-flex group-item">
             <span class="title w-80">@lang('messages.purchase_order.items.tables.title')</span>
-            <span class="desc color-light">{{isset($product->products->title) ? $product->products->title : '--'}}</span>
+            <span class="desc color-light po-product-title" title="{{isset($product->products->title) ? $product->products->title : '--'}}">{{isset($product->products->title) ? $product->products->title : '--'}}</span>
         </div>
         <div class="d-flex group-item">
             <span class="title w-80">@lang('messages.purchase_order.items.tables.status')</span>
-            <span class="desc">--</span>
+            <span class="desc color-blue">{{isset($product->is_new_product) ? config('params.product_listed.'.$product->is_new_product) : '--'}}</span>
         </div>
         <div class="d-flex group-item">
             <span class="title w-80">@lang('messages.purchase_order.items.tables.supplier_sku')</span>
             <span class="desc">
-                <input type="text" class="supplier_sku po_textbox color-blue" name="supplier_sku_{{$product->product_id}}" maxlength="15" value="{{$product->supplier_sku}}" />
+                <input type="text" class="supplier_sku po_textbox color-blue w-120" name="supplier_sku_{{$product->product_id}}" maxlength="15" value="{{$product->supplier_sku}}" />
             </span>
         </div>
         <div class="d-flex group-item">
             <span class="title w-80">@lang('messages.purchase_order.items.tables.best_before')</span>
             <span class="desc">
-                <input type="text" value="{{$product->best_before_date}}"  name="best_before_date_{{$product->product_id}}" class="best_before_date po_textbox w-150" autocomplete="off" />
+                <input type="text" value="{{$product->best_before_date}}"  name="best_before_date_{{$product->product_id}}" class="best_before_date po_textbox w-120" autocomplete="off" />
             </span>
         </div>
     </td>
     <td>
-        <input  data-barcode="{{$product->barcode}}"   maxlength="20"  type="text" name="barcode_{{$product->product_id}}" class="barcode po_textbox w-150" value="{{$product->barcode}}" />
-    </td>
-    <td>
-        <div class="d-flex group-item">
-            <span class="title w-80">@lang('messages.purchase_order.items.tables.total_qty')</span>
+        <input  data-barcode="{{$product->barcode}}"   maxlength="20"  type="text" name="barcode_{{$product->product_id}}" class="barcode po_textbox input-barcode" value="{{$product->barcode}}" />
+        <div class="d-flex group-item mt-3">
             <span class="desc">
-                <input value="{{$product->total_quantity}}"   maxlength="9"  type="text" name="total_quantity_{{$product->product_id}}" class="total_quantity po_textbox" />
+                <label class="fancy-checkbox">
+                    <input type="checkbox" class="variant" name="variant" @if($product->is_variant ==1) checked="checked" @endif>
+                           <span><i></i>
+                        @lang('messages.purchase_order.items.tables.variant')</span>
+
+                </label>
             </span>
         </div>
+    </td>
+    <td>
         <div class="d-flex group-item">
             <span class="title w-80">@lang('messages.purchase_order.items.tables.qty_per_box')</span>
             <span class="desc">
@@ -55,6 +60,12 @@
             <span class="title w-80">@lang('messages.purchase_order.items.tables.total_box')</span>
             <span class="desc">
                 <input value="{{$product->total_box}}"  maxlength="8"  type="text" name="total_box_{{$product->product_id}}" class="total_box po_textbox"  />
+            </span>
+        </div>
+        <div class="d-flex group-item">
+            <span class="title w-80">@lang('messages.purchase_order.items.tables.total_qty')</span>
+            <span class="desc">
+                <input value="{{$product->total_quantity}}"   maxlength="9"  type="text" name="total_quantity_{{$product->product_id}}" class="total_quantity po_textbox" />
             </span>
         </div>
 
@@ -71,6 +82,7 @@
         </span>
     </td>
     <td>
+
 
         @if($product->vat_type == 0)
         <div class="d-flex group-item">
@@ -104,12 +116,12 @@
     </td>
 
     <td>
-        <!--<div class="d-flex group-item">
+        <div class="d-flex group-item">
             <span class="title w-60">@lang('messages.purchase_order.items.tables.expected')</span>
             <span class="desc">
-                <input type="text" value="{{$product->expected_mros}}" name="expected_mros_{{$product->product_id}}" class="expected_mros po_textbox" />
+                <input type="text" readonly="readonly" value="{{$product->expected_mros}}"  name="expected_mros_{{$product->product_id}}" class="expected_mros po_textbox" maxlenth="5" />
             </span>
-        </div>-->
+        </div>
         <div class="d-flex group-item">
             <span class="title w-60">@lang('messages.purchase_order.items.tables.selling_qty')</span>
             <span class="desc">
@@ -127,7 +139,7 @@
         <div class="d-flex group-item">
             <span class="title w-60">@lang('messages.purchase_order.items.tables.mros')</span>
             <span class="desc">
-                <input readonly="readonly" type="text" value="{{floatval($product->mros)}}"  name="mros_{{$product->mros}}" class="mros po_textbox" maxlength="9" />
+                <input readonly="readonly" type="text" value="{{ isset($product->mros)?floatval($product->mros):''}}"  name="mros_{{isset($product->mros)?$product->mros:''}}" class="mros po_textbox" maxlength="9" />
             </span>
         </div>
     </td>

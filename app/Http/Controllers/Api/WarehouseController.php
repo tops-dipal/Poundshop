@@ -1,11 +1,14 @@
 <?php
 namespace App\Http\Controllers\Api;
 use App\Warehouse;
+use App\WarehouseLocTypePrefix;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\Cartons\CreateRequest;
 use App\Http\Requests\Api\Cartons\UpdateRequest;
 use Illuminate\Support\Facades\View;
+use Batch;
+use App\Locations;
 
 class WarehouseController extends Controller
 {
@@ -93,9 +96,11 @@ class WarehouseController extends Controller
   {  
     try
     {
+      $warehouse_id='';
       if(isset($request->id) && !empty($request->id))
       {
         $warehouse_model= Warehouse::find($request->id);
+        $warehouse_id=$request->id;
       }
       else
       {
@@ -110,54 +115,62 @@ class WarehouseController extends Controller
       $warehouse_model->address_line2 = $request->address_line2;
       $warehouse_model->country = isset($request->country) ? $request->country : '0';
       if(isset($request->state_id))
-       {
-            $state=\App\State::where('name',$request->state_id)->where('country_id',$request->country)->first();
-            if(empty($state))
-            {
-                $stateObj=new \App\State;
-                $stateObj->name=$request->state_id;
-                $stateObj->country_id=$request->country;
-                $stateObj->save();
-                $warehouse_model->state=$stateObj->id;
-            }
-            else
-            {
-                $warehouse_model->state = $state->id;
-            }
-       }
-       if(isset($request->city_id))
-       {
-            $city=\App\City::where('name',$request->city_id)->where('state_id',$warehouse_model->state)->first();
-          
-            if(empty($city))
-            {
+      {
+        $state=\App\State::where('name',$request->state_id)->where('country_id',$request->country)->first();
+        if(empty($state))
+        {
+          $stateObj=new \App\State;
+          $stateObj->name=$request->state_id;
+          $stateObj->country_id=$request->country;
+          $stateObj->save();
+          $warehouse_model->state=$stateObj->id;
+        }
+        else
+        {
+          $warehouse_model->state = $state->id;
+        }
+      }
 
-                $cityObj=new \App\City;
-                $cityObj->name=$request->city_id;
-                $cityObj->state_id=$warehouse_model->state;
-                $cityObj->save();
-                $warehouse_model->city=$cityObj->id;
-            }
-            else
-            {
-                $warehouse_model->city = $city->id;
-            }
-       }           
+      if(isset($request->city_id))
+      {
+        $city=\App\City::where('name',$request->city_id)->where('state_id',$warehouse_model->state)->first();
+        if(empty($city))
+        {
+          $cityObj=new \App\City;
+          $cityObj->name=$request->city_id;
+          $cityObj->state_id=$warehouse_model->state;
+          $cityObj->save();
+          $warehouse_model->city=$cityObj->id;
+        }
+        else
+        {
+          $warehouse_model->city = $city->id;
+        }
+      }           
+      $warehouse_model->notes = $request->notes;
       $warehouse_model->zipcode = $request->zipcode;
       $warehouse_model->is_default = $request->is_default;
 
       if(!empty($warehouse_model->is_default))
       {
-         // Warehouse::update(array('is_default' => '0'));
         Warehouse::where('is_default', '=', 1)->update(['is_default' => 0]);
       }
       
       if(isset($request->id) && !empty($request->id))
       {
         $warehouse_model->modified_by = $request->user->id;
+        
+        //store trans data
+        $this->store_location_type_prefix($request,$request->id);
+
         if($warehouse_model->save())
         {
+          //check for photobooth location
+          $this->create_photobooth_location($request->id);
+          
+          //set default warehouse
           $this->make_one_default();
+
           return $this->sendResponse('Warehouse has been updated successfully', 200);
         }
         else
@@ -166,14 +179,21 @@ class WarehouseController extends Controller
         }
       }
       else
-      {
-        
-        $warehouse_model->created_by = $request->user->id;           
+      {        
+        $warehouse_model->created_by = $request->user->id;     
         if($warehouse_model->save())
         {
+          //store trans data
+          $this->store_location_type_prefix($request,$warehouse_model->id);
+          
+          //check for photobooth location
+          $this->create_photobooth_location($warehouse_model->id);
+
           $this->make_one_default();
           return $this->sendResponse('Warehouse has been created successfully', 200);
-        }else{
+        }
+        else
+        {
           return $this->sendError('Warehouse does not created, please try again', 422);
         }
       }
@@ -183,6 +203,29 @@ class WarehouseController extends Controller
       return $this->sendError($ex->getMessage(), 400);
     }
   }
+
+  public function store_location_type_prefix($data,$warehouse_id)
+  {
+    $location_type=LocationType();            
+    if(!empty($location_type) && !empty($warehouse_id))
+    {
+      //remove old location prefix
+      WarehouseLocTypePrefix::where('warehouse_id', $warehouse_id)->delete();
+
+      foreach($location_type as $key=>$row)
+      {        
+        $loation_id='loc_prefix_'.$key;        
+        $insert_data['warehouse_id']=$warehouse_id;
+        $insert_data['location_type']=$key;
+        $insert_data['prefix']=isset($data->$loation_id)?$data->$loation_id:'';
+        $insert_data['created_at']=date('Y-m-d H:i:s');
+        $insert_data['updated_at']=date('Y-m-d H:i:s');
+        WarehouseLocTypePrefix::insert($insert_data);
+      }
+    }        
+  }
+
+
 
   /**
    * Display the specified resource.
@@ -269,6 +312,56 @@ class WarehouseController extends Controller
         $warehouse_list_up->is_default = '1';
         $warehouse_list_up->save();
       }      
+    }
+  }
+
+  public function create_photobooth_location($warehouse_id='')
+  {
+    //check if photobooth location is exist for that warehouse if not then create else skip this 
+    $photo_locations=defaultPhotoLocation();    
+    if(!empty($photo_locations) && !empty($warehouse_id))
+    {
+      $get_location_prefix_for_photobooth=WarehouseLocTypePrefix::select('prefix')->where('warehouse_id',$warehouse_id)->where('location_type',11)->get();//get only photobooth prefix if there any exist
+      $final_location='';
+      if(!empty($get_location_prefix_for_photobooth) && !empty($get_location_prefix_for_photobooth->toArray()))
+      {
+        $prefix=isset($get_location_prefix_for_photobooth[0]->prefix)?$get_location_prefix_for_photobooth[0]->prefix:'';
+        $final_location.=$prefix.'.';
+      }
+
+      $final_location.=$photo_locations['aisle'].$photo_locations['rack'].'.'.$photo_locations['floor'].$photo_locations['box'];
+
+      //check if the photobooth location is already exist or not
+      $location_data=Locations::select('id','type_of_location')->where('site_id',$warehouse_id)->where('aisle',$photo_locations['aisle'])->where('rack',$photo_locations['rack'])->where('floor',$photo_locations['floor'])->where('box',$photo_locations['box'])->get();
+      
+      if(!empty($location_data) && !empty($location_data->toArray()))
+      {
+        //update case
+        //check if location type is different if different then update to the photobooth type
+        if($location_data[0]->type_of_location!='11')
+        {
+          $locationObj=new Locations();
+          $update_array[0]['id']=$location_data[0]->id;
+          $update_array[0]['type_of_location']='11';//photo booth location
+          $update_array[0]['location']=$final_location;
+          Batch::update($locationObj, $update_array, 'id');//update entry with default type as photo booth location
+        }
+      }
+      else
+      {  
+        //insert new photo booth location
+        $insert_data['site_id']=$warehouse_id;
+        $insert_data['aisle']=$photo_locations['aisle'];
+        $insert_data['rack']=$photo_locations['rack'];
+        $insert_data['floor']=$photo_locations['floor'];
+        $insert_data['box']=$photo_locations['box'];
+        $insert_data['location']=$final_location;
+        $insert_data['type_of_location']='11';//photo booth location
+        $insert_data['case_pack']='0';        
+        $insert_data['status']='1';
+        $insert_data['created_at']=date('Y-m-d H:i:s');        
+        Locations::insert($insert_data);
+      }
     }
   }
 }

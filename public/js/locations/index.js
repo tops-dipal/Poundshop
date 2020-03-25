@@ -40,6 +40,7 @@ var editor;
             null,
             null,
             null,
+            null,
             {"orderable": false, "searchable": false},
             {"orderable": false, "searchable": false},
         ];
@@ -71,63 +72,104 @@ var editor;
 
     $(document).on('click', '.btn-delete', function (event) 
     {
+
         event.preventDefault();
         var $currentObj = $(this);
-        var id = $(this).attr("id");            
-        bootbox.confirm({ 
-            title: "Confirm",
-            message: "Are you sure you want to delete record? This process cannot be undone.",
-            buttons: {
-                cancel: {
-                    label: 'Cancel',
-                    className: 'btn-gray'
-                },
-                confirm: {
-                    label: 'Delete',
-                    className: 'btn-red'
-                }
-            },
-            callback: function (result) 
-            {
-                if(result==true)
-                {
-                    $.ajax({
-                        url: BASE_URL + 'api-locations-remove/'+id,
-                        type: "post",
-                        processData: false,
-                        data:{id:id},
-                        headers: {
-                                'Authorization': 'Bearer ' + API_TOKEN,
-                            },
-                        beforeSend: function () {
-                            $("#page-loader").show();
-                        },
-                        success: function (response) {
-                            $("#page-loader").hide();
-                            if (response.status == 1) {
-                                PoundShopApp.commonClass._displaySuccessMessage(response.message);
-                                PoundShopApp.commonClass.table.draw();
-                            }
-                        },
-                        error: function (xhr, err) {
-                           $("#page-loader").hide();
-                           PoundShopApp.commonClass._commonFormErrorShow(xhr, err);
-                        }
+        var id = $(this).attr("id");  
+        var not_allowed_edit_delete_status=$('#hid_not_allowed_edit_delete_status_'+id).val();
+        if(not_allowed_edit_delete_status==1)
+        {
+             bootbox.alert({
+                    title: "Alert",
+                    message: "This location is in use , so you can't delete this location.",
+                    size: 'small'
+            });
+           
+            return false;
+        }    
+        else{
 
-                    });
-                }               
-            }
-        });                          
+             bootbox.confirm({ 
+                title: "Confirm",
+                message: "Are you sure you want to delete record? This process cannot be undone.",
+                buttons: {
+                    cancel: {
+                        label: 'Cancel',
+                        className: 'btn-gray'
+                    },
+                    confirm: {
+                        label: 'Delete',
+                        className: 'btn-red'
+                    }
+                },
+                callback: function (result) 
+                {
+                    if(result==true)
+                    {
+                        $.ajax({
+                            url: BASE_URL + 'api-locations-remove/'+id,
+                            type: "post",
+                            processData: false,
+                            data:{id:id},
+                            headers: {
+                                    'Authorization': 'Bearer ' + API_TOKEN,
+                                },
+                            beforeSend: function () {
+                                $("#page-loader").show();
+                            },
+                            success: function (response) {
+                                $("#page-loader").hide();
+                                if (response.status == 1) {
+                                    PoundShopApp.commonClass._displaySuccessMessage(response.message);
+                                    PoundShopApp.commonClass.table.draw();
+                                }
+                            },
+                            error: function (xhr, err) {
+                               $("#page-loader").hide();
+                               PoundShopApp.commonClass._commonFormErrorShow(xhr, err);
+                            }
+
+                        });
+                    }               
+                }
+            });                          
+
+        }      
+       
     });
 
     $(document).on('click', '.delete-many', function (event) 
     {
         var allVals = [];  
-        $("input[name='ids[]']:checked").each(function() {  
-            allVals.push($(this).attr('value'));
-        });  
+        var status_arr=[];
+        var all_not_delete_counter=0;
+        var newArr=[];
+        $("input[name='ids[]']:checked").each(function() { 
+            var status=$('#hid_not_allowed_edit_delete_status_'+$(this).attr('value')).val();
+            if(status==1)
+            {
+                all_not_delete_counter++;
+            }
+            else
+            {
+                allVals.push($(this).attr('value'));
+            }
+            newArr.push($(this).attr('value'));
+            status_arr.push(status);
+            
+        });
+       // console.log(allVals);return false;
+        if(allVals.length == 0 && newArr.length>0)
+        {
+            bootbox.alert({
+                title: "Alert",
+                message: "Selected All Locations are used somewhere else, so you can't delete it.",
+                size: 'small'
+            });
+            return false;
+        }
         
-        if (typeof allVals !== 'undefined' && allVals.length > 0) 
+        if (typeof newArr !== 'undefined' && newArr.length > 0) 
         {
             bootbox.confirm({ 
                 title: "Confirm",
@@ -343,6 +385,15 @@ var editor;
         }       
     });
 
+    $("#edit_carton_id").change(function () {
+        
+        var dimentionData=$(this).find("option:selected").attr('attr_data');
+        var dimentionDataArr=dimentionData.split("-");
+        $("#edi_length").val(dimentionDataArr[0]);
+        $("#edi_width").val(dimentionDataArr[1]);
+        $("#edi_height").val(dimentionDataArr[2]);
+        $("#edi_stor_weight").val(dimentionDataArr[3]);
+    });
     //Search outside the datatables
     $('#search_data').keyup(function()
     {
@@ -375,34 +426,50 @@ var editor;
 
 function update_field(record_id,location_type,case_pack)
 {
-    $.ajax({
-        url: BASE_URL + 'api-locations-inline-update',
-        type: "post",
-        processData: true,
-        data: {'record_id':record_id,'location_type':location_type,'case_pack':case_pack},
-        headers: 
-        {
-            'Authorization': 'Bearer ' + API_TOKEN,
-        },
-        beforeSend: function () 
-        {
-            $("#page-loader").show();
-        },
-        success: function (response) 
-        {
-            $("#page-loader").hide();
-            if (response.status == 1) 
+    var not_allowed_edit_delete_status=$('#hid_not_allowed_edit_delete_status_'+record_id).val();
+    if(not_allowed_edit_delete_status==1)
+    {
+        var old_type=$('#hid_location_type_'+record_id).val();
+        $('#location_type_'+record_id).val(old_type);
+         bootbox.alert({
+                title: "Alert",
+                message: "This location is in use , so you can't edit this location.",
+                size: 'small'
+        });
+       
+        return false;
+    }    
+    else
+    {
+        $.ajax({
+            url: BASE_URL + 'api-locations-inline-update',
+            type: "post",
+            processData: true,
+            data: {'record_id':record_id,'location_type':location_type,'case_pack':case_pack},
+            headers: 
             {
-                PoundShopApp.commonClass._displaySuccessMessage(response.message);
-                PoundShopApp.commonClass.table.draw();
+                'Authorization': 'Bearer ' + API_TOKEN,
+            },
+            beforeSend: function () 
+            {
+                $("#page-loader").show();
+            },
+            success: function (response) 
+            {
+                $("#page-loader").hide();
+                if (response.status == 1) 
+                {
+                    PoundShopApp.commonClass._displaySuccessMessage(response.message);
+                    PoundShopApp.commonClass.table.draw();
+                }
+            },
+            error: function (xhr, err) 
+            {
+               $("#page-loader").hide();
+               PoundShopApp.commonClass._commonFormErrorShow(xhr, err);
             }
-        },
-        error: function (xhr, err) 
-        {
-           $("#page-loader").hide();
-           PoundShopApp.commonClass._commonFormErrorShow(xhr, err);
-        }
-    });
+        });
+    }
 }
 
 //for checkbox all and none case
@@ -533,30 +600,94 @@ function advanceSearch()
     }
 }
 
-function edit_location(record_id)
+function edit_location(record_id,not_allowed_edit_delete_status)
 {
-    //get values
-    var location_type_val=$('#hid_location_type_'+record_id).val();
-    var case_pack_val=$('#hid_case_pack_'+record_id).val();
-    var length_val=$('#hid_length_'+record_id).val();
-    var width_val=$('#hid_width_'+record_id).val();
-    var height_val=$('#hid_height_'+record_id).val();
-    var cbm_val=$('#hid_cbm_'+record_id).val();
-    var sto_weight_val=$('#hid_stor_weight_'+record_id).val(); 
-    //put values in the fields
-    $('#edit_record_id').val(record_id);
-    $('#edi_location_type').val(location_type_val);
-    $('#edi_case_pack').val(case_pack_val);
-    $('#edi_length').val(length_val);
-    $('#edi_width').val(width_val);
-    $('#edi_height').val(height_val);
-    $('#edi_cbm').val(cbm_val);
-    $('#edi_stor_weight').val(sto_weight_val);
-    $('#locationModal').modal('show');
+    if(not_allowed_edit_delete_status==1)
+    {
+        var old_type=$('#hid_location_type_'+record_id).val();
+        $('#location_type_'+record_id).val(old_type);
+
+        bootbox.alert({
+                title: "Alert",
+                message: "This location is in use , so you can't edit this location.",
+                size: 'small'
+        });
+       
+        return false;
+    }
+    else
+    {
+        //get values
+        var location_type_val=$('#hid_location_type_'+record_id).val();
+        var case_pack_val=$('#hid_case_pack_'+record_id).val();
+        var length_val=parseFloat($('#hid_length_'+record_id).val());
+        var width_val=parseFloat($('#hid_width_'+record_id).val());
+        var height_val=parseFloat($('#hid_height_'+record_id).val());
+        var cbm_val=parseFloat($('#hid_cbm_'+record_id).val());
+        var sto_weight_val=parseFloat($('#hid_stor_weight_'+record_id).val());
+        var carton_val=$('#hid_carton_id_'+record_id).val(); 
+        //put values in the fields        
+        $('#edit_record_id').val(record_id);
+        $('#edi_location_type').val(location_type_val);
+        $('#edi_case_pack').val(case_pack_val);
+
+        if(isNaN(length_val))
+        {
+            length_val=0;
+        }
+
+        if(isNaN(width_val))
+        {
+            width_val=0;
+        }
+        
+        if(isNaN(height_val))
+        {
+            height_val=0;
+        }
+        
+        if(isNaN(cbm_val))
+        {
+            cbm_val=0;
+        }
+
+        if(isNaN(sto_weight_val))
+        {
+            sto_weight_val=0;
+        }
+
+        $('#edi_length').val(length_val);
+        $('#edi_width').val(width_val);
+        $('#edi_height').val(height_val);
+        $('#edi_cbm').val(cbm_val);
+        $('#edi_stor_weight').val(sto_weight_val);
+        $('#edit_carton_id').val(carton_val);
+        $('#locationModal').modal('show');
+        if(location_type_val==11)
+        {
+            document.getElementById("edi_location_type").disabled = true;
+        }
+        else
+        {
+            document.getElementById("edi_location_type").disabled = false;
+        }
+    }
+    
 }
+
+
 
 function saveLocation()
 {
+    if($('#edit_carton_id').val()=='')
+    {
+        bootbox.alert({
+                title: "Alert",
+                message: "Please select box.",
+                size: 'small'
+        });
+        return false;
+    }
     $.ajax({
         url: BASE_URL + 'api-locations-row-update',
         type: "post",
@@ -644,7 +775,7 @@ function fun_AllowOnlyAmountAndDot(txt)
 }
 
 
-$("#edi_length,#edi_width,#edi_height").keyup(function()
+$("#edit_carton_id").change(function () 
   {                            
     var multiple_volume = 0;
     var length=0;
@@ -716,7 +847,7 @@ function copy_location(record_id)
     var height_val=$('#hid_height_'+record_id).val();
     var cbm_val=$('#hid_cbm_'+record_id).val();
     var sto_weight_val=$('#hid_stor_weight_'+record_id).val(); 
-
+    var carton_val=$('#hid_carton_id_'+record_id).val();
     bootbox.confirm({ 
         title: "Confirm",
         message: "Are you sure you want to copy record? This process cannot be undone.",
@@ -738,7 +869,7 @@ function copy_location(record_id)
                     url: BASE_URL + 'api-locations-row-copy',
                     type: "post",
                     processData: true,
-                    data: {'record_id':record_id,'copy_order_column':copy_order_column,'copy_order_dir':copy_order_dir,'copy_search':copy_search,'copy_advance_search':copy_advance_search,'location_type_val':location_type_val,'case_pack_val':case_pack_val,'length_val':length_val,'width_val':width_val,'height_val':height_val,'cbm_val':cbm_val,'sto_weight_val':sto_weight_val},
+                    data: {'record_id':record_id,'copy_order_column':copy_order_column,'copy_order_dir':copy_order_dir,'copy_search':copy_search,'copy_advance_search':copy_advance_search,'location_type_val':location_type_val,'case_pack_val':case_pack_val,'length_val':length_val,'width_val':width_val,'height_val':height_val,'cbm_val':cbm_val,'sto_weight_val':sto_weight_val,'carton_id':carton_val},
                     headers: 
                     {
                         'Authorization': 'Bearer ' + API_TOKEN,

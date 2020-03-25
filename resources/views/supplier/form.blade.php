@@ -46,12 +46,18 @@
                             <i class="fa fa-exclamation-triangle" style="display: none;" aria-hidden="true"></i>
                         </a>
                     </li>
+                    <li role="presentation"  class="nav-item">
+                        <a class="nav-link" id="empty-pallets-tab" data-toggle="tab" href="#empty-pallets" role="tab" aria-controls="empty-pallets">
+                            @lang('messages.supplier.empty_pallets')
+                            <i class="fa fa-exclamation-triangle" style="display: none;" aria-hidden="true"></i>
+                        </a>
+                    </li>
                 @endif
             </ul>            
         </div>
         <div class="right-items">
             <a href="{{route('supplier.index')}}" class="btn btn-gray btn-header px-4">@lang('messages.common.cancel')</a>
-            <button type="submit" form="" class="btn btn-blue btn-header px-4 tab_actions general_tab_actions payment_tab_actions terms_condition_tab_actions" id="form_submit">@lang('messages.common.save')</button>
+            <button type="submit" form="" class="btn btn-blue btn-header px-4 tab_actions general_tab_actions payment_tab_actions ratings_tab_actions terms_condition_tab_actions empty_pallets_tab_actions" id="form_submit">@lang('messages.common.save')</button>
             <!-- Contact Into -->
             <button type="button" class="btn btn-add btn-blue font-12 tab_actions contact_tab_actions" onclick="contactForm(this)" id="add-barcode-btn" style="display: flex;">
                     <span class="icon-moon icon-Add"></span>
@@ -88,6 +94,10 @@
                             <div class="tab-pane fade" id="terms" role="tabpanel" aria-labelledby="terms-tab">
                                 @include('supplier.terms-condition')
                             </div>
+
+                             <div class="tab-pane fade" id="empty-pallets" role="tabpanel" aria-labelledby="empty-pallets-tab">
+                                @include('supplier.empty-pallets')
+                            </div>
                         @endif
                     </div>
                 </div>
@@ -101,7 +111,7 @@
                 <div class="modal-header align-items-center">
                     <h5 class="modal-title" id="exampleModalLabel">@lang('messages.supplier.create_contact')</h5>
                     <div>
-                        <button type="button" class="btn btn-gray font-12 px-3" data-dismiss="modal">@lang('messages.common.cancel')</button>
+                        <button type="button" class="btn btn-gray font-12 px-3" data-dismiss="modal" id="cancelContactModal">@lang('messages.common.cancel')</button>
                         <button type="button" class="btn btn-green font-12 px-3 ml-2" onclick="saveContact(this)" id="contact_submit" >@lang('messages.common.submit')</button>
                     </div>
                 </div>

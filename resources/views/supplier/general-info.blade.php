@@ -21,9 +21,12 @@
             </div>
             <div class="col-lg-6">
                 <div class="form-group row">
-                    <label class="col-lg-4 col-form-label">@lang('messages.supplier.min_po_amt')</label>
+                    <label class="col-lg-4 col-form-label">@lang('messages.supplier.min_po_amt') </label>
                     <div class="col-lg-8">
-                        <input type="text" class="form-control" placeholder="" name="min_po_amt" only_numeric_dimension value="{{ !empty(old('min_po_amt')) ? old('min_po_amt') : @$result->min_po_amt }}">
+                        <div class="position-relative">
+                            <span class="pound-sign-form-control">@lang('messages.common.pound_sign')</span>
+                            <input type="text" class="form-control" placeholder="" name="min_po_amt" only_numeric_dimension value="{{ !empty(old('min_po_amt')) ? old('min_po_amt') : @$result->min_po_amt }}">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -54,9 +57,12 @@
             </div>
             <div class="col-lg-6">
                 <div class="form-group row">
-                    <label class="col-lg-4 col-form-label">@lang('messages.supplier.credit_limit_allowed')</label>
+                    <label class="col-lg-4 col-form-label">@lang('messages.supplier.credit_limit_allowed') </label>
                     <div class="col-lg-8">
+                        <div class="position-relative">
+                            <span class="pound-sign-form-control">@lang('messages.common.pound_sign')</span>
                         <input type="text" class="form-control" placeholder="" name="credit_limit_allowed" value="{{ !empty(old('credit_limit_allowed')) ? old('credit_limit_allowed') : @$result->credit_limit_allowed }}" only_numeric_dimension>
+                    </div>
                     </div>
                 </div>
             </div>

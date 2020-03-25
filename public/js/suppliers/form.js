@@ -27,8 +27,6 @@
           {
             $('.country_id').select2();
           }
-
-       
         getGoogleAddress();
         initalize_tab_switch_save();
         
@@ -205,6 +203,12 @@
         errorElement: 'span',
         errorClass: 'invalid-feedback', // default input error message class
         ignore: [],
+        rules:{
+            pay_on_date_every_month: {
+                max: 31,
+                digits: true,
+            },
+        },
         messages: {
             payment_days: {
                 required: "Required",
@@ -268,6 +272,10 @@
                     error.insertAfter(element.parents('label'));
                 } 
             }
+            else if(element.attr('name') == 'pay_on_date_every_month')
+            {
+               error.insertAfter(element.parents('label')); 
+            }    
             else
             {
                 error.insertAfter(element);    
@@ -482,7 +490,21 @@ contactForm = function(me)
 
 saveContact = function(me)
 {
-    $('#contactForm').submit();
+    
+    if($('input[name="is_primary"]'). prop("checked") == false && $('.edit_contact').length!=0)
+   {
+        bootbox.alert({
+            title: "Alert",
+            message: "You can't change is primary option of this contact",
+            size: 'small'
+        });
+       
+        return false; 
+    }
+    else
+    {
+          $('#contactForm').submit();
+    }
 }
 
 
@@ -556,6 +578,7 @@ saveContact = function(me)
 //     }
 // }
 
+
 editContact = function(me)
 {
     $('#exampleModalLabel').text('Edit Contact');
@@ -573,8 +596,8 @@ editContact = function(me)
     var formarray =  getGetQueryStringParameter(formData);
     
     var primary_cont = $('input[name="primary_contact"]:checked').val();
-
-    if(formarray['email'] == primary_cont)
+    
+    if(formarray['is_primary'] == 1)
     {
         $('#contactForm input[name="is_primary"]').prop('checked', 'checked');
     }    
@@ -585,7 +608,8 @@ editContact = function(me)
         
         if(typeof formarray[el_name] != 'undefined' && el_name != 'is_primary')
         {
-            $('#contactForm input[name="'+el_name+'"]').val(formarray[el_name])
+            var name=formarray[el_name].replace('+', ' ')
+            $('#contactForm input[name="'+el_name+'"]').val(name)
         }
     });
 
@@ -854,6 +878,16 @@ function set_active_tab_action_buttons(tab_id = "")
         $('.terms_condition_tab_actions').show();
     }
 
+    if(tab_id == 'ratings-tab')
+    {
+        $('.ratings_tab_actions').show();
+    }
+
+    if(tab_id == 'empty-pallets-tab')
+    {
+        $('.empty_pallets_tab_actions').show();
+    }
+
     let form_id = $('#'+tab_id).attr('href');
     
     form_id = form_id.replace('#', 'form-');
@@ -935,6 +969,7 @@ setPrimaryContact = function (me)
                     if (response.status == 1) {
                         PoundShopApp.commonClass._displaySuccessMessage(response.message);
                     }
+                    refresh_tab('contactForm');
             },
             error: function (xhr, err) {
                $("#page-loader").hide();

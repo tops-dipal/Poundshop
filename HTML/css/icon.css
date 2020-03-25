@@ -1,0 +1,159 @@
+@font-face {
+  font-family: 'PoundShopttf';
+  src:  url('../fonts/PoundShopttf.eot?5jwxds');
+  src:  url('../fonts/PoundShopttf.eot?5jwxds#iefix') format('embedded-opentype'),
+    url('../fonts/PoundShopttf.ttf?5jwxds') format('truetype'),
+    url('../fonts/PoundShopttf.woff?5jwxds') format('woff'),
+    url('../fonts/PoundShopttf.svg?5jwxds#PoundShopttf') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'PoundShopttf' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-General-Info-1:before {
+  content: "\e900";
+}
+.icon-Contact-Info-2:before {
+  content: "\e901";
+}
+.icon-Payment-3:before {
+  content: "\e902";
+}
+.icon-Reference:before {
+  content: "\e903";
+}
+.icon-Terms--Conditions:before {
+  content: "\e904";
+}
+.icon-Stock:before {
+  content: "\e905";
+}
+.icon-Sale:before {
+  content: "\e906";
+}
+.icon-Supplier:before {
+  content: "\e907";
+}
+.icon-Purchse-Order:before {
+  content: "\e908";
+}
+.icon-Budget:before {
+  content: "\e909";
+}
+.icon-Stock1:before {
+  content: "\e90a";
+}
+.icon-Order:before {
+  content: "\e90b";
+}
+.icon-Product:before {
+  content: "\e90c";
+}
+.icon-Brand:before {
+  content: "\e90d";
+}
+.icon-Product-Status:before {
+  content: "\e90e";
+}
+.icon-Margin-Rate-of-Sale:before {
+  content: "\e90f";
+}
+.icon-Barcode:before {
+  content: "\e910";
+}
+.icon-Filter:before {
+  content: "\e911";
+}
+.icon-Add-PO:before {
+  content: "\e912";
+}
+.icon-Search:before {
+  content: "\e913";
+}
+.icon-Refresh:before {
+  content: "\e914";
+}
+.icon-Refresh-copy:before {
+  content: "\e915";
+}
+.icon-Edit:before {
+  content: "\e916";
+}
+.icon-Delete:before {
+  content: "\e917";
+}
+.icon-Drop-Down-1:before {
+  content: "\e918";
+}
+.icon-Drop-Down2:before {
+  content: "\e919";
+}
+.icon-Drop-Down2-copy:before {
+  content: "\e91a";
+}
+.icon-Drop-Down2-copy-2:before {
+  content: "\e91b";
+}
+.icon-Dashboard:before {
+  content: "\e91c";
+}
+.icon-Buyers-Inquiry-2:before {
+  content: "\e91d";
+}
+.icon-Book-In-Request:before {
+  content: "\e91e";
+}
+.icon-Goods-In:before {
+  content: "\e91f";
+}
+.icon-Storage:before {
+  content: "\e920";
+}
+.icon-Customers:before {
+  content: "\e921";
+}
+.icon-Drop-Shipping:before {
+  content: "\e922";
+}
+.icon-Pick-Pack-Shipping:before {
+  content: "\e923";
+}
+.icon-Spot-Check:before {
+  content: "\e924";
+}
+.icon-Stock-Control:before {
+  content: "\e925";
+}
+.icon-Invoice-Matching:before {
+  content: "\e926";
+}
+.icon-Setting:before {
+  content: "\e927";
+}
+.icon-Mail:before {
+  content: "\e928";
+}
+.icon-Add-Suplier:before {
+  content: "\e929";
+}
+.icon-Profile:before {
+  content: "\e92a";
+}
+.icon-Logout:before {
+  content: "\e92b";
+}

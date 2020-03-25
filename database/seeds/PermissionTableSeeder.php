@@ -326,9 +326,68 @@ class PermissionTableSeeder extends Seeder
         $permissions[] = [
                             'name' => 'listingmanager-delete',
                             'parent_id' => 'listingmanager-list',
+                          ];    
+
+        //Slot Master
+        $permissions[] =[
+                            'name'=>'slot-list',
+                            'parent_caption'=>'Slot Master',
+                        ];
+         $permissions[] = [
+                            'name' => 'slot-create',
+                            'parent_id' => 'slot-list',
+                         ];   
+
+          $permissions[] = [
+                            'name' => 'slot-delete',
+                            'parent_id' => 'slot-list',
                           ];                  
 
+          // Reports 
+          $permissions[] =[
+                            'name'=>'reports',
+                            'parent_caption'=>'Reports',
+                        ];
+         $permissions[] = [
+                            'name' => 'excess-qty-received-report',
+                            'parent_id' => 'reports',
+                         ]; 
+
+        //Qc Checklists
+        $permissions[] = [
+                            'name' => 'qc-checklist-list',
+                            'parent_caption' => 'QC Checklist',
+                         ];
+
+        $permissions[] = [
+                            'name' => 'qc-checklist-create',
+                            'parent_id' => 'qc-checklist-list',
+                         ];   
+
+        $permissions[] = [
+                            'name' => 'qc-checklist-edit',
+                            'parent_id' => 'qc-checklist-list',
+                         ];
+
+        $permissions[] = [
+                            'name' => 'qc-checklist-delete',
+                            'parent_id' => 'qc-checklist-list',
+                          ];
+                          
+        $permissions[] = [
+                            'name' => 'storage',
+                            'parent_caption' => 'Storage',
+                          ];
+
+
+        $permissions[] = [
+                            'name' => 'replen-list',
+                            'parent_id' => 'storage',
+                        ];
+
         
+       
+                         
         foreach ($permissions as $permission) 
         {
           if(isset($permission['parent_id']))

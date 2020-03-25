@@ -113,6 +113,7 @@ background-color: #5bc0de;
         </div>
     </div>
 </div>
+
 <!-- Contact Modal -->
 <div class="modal fade" id="barcodeModal" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg custom-modal" role="document">
@@ -127,49 +128,64 @@ background-color: #5bc0de;
                 </div>
             </div>
             <div class="modal-body p-4">
-                <form id="form-barcodes-popup" method="post">
-                    <input type="hidden" name="barcode_id" form="form-barcodes" value="">
-                    <div class="row">                        
-                        @php
-                        $sel_barcode_type = '1';
-                        @endphp
-                        @foreach(barcodeType() as $b_type_id => $b_type_name)
-                        <label class="col-lg-4">
-                            <label class="fancy-radio">
-                                <input type="radio" name="barcode_type" value="{{$b_type_id}}" {{($sel_barcode_type == $b_type_id) ? 'checked="checked"' : ''}} form="form-barcodes">
-                                <span><i></i>{{$b_type_name}}</span>
-                            </label>
+                <input type="hidden" name="barcode_id" form="form-barcodes" value="">
+                <div class="row">                        
+                    @php
+                    $sel_barcode_type = '1';
+                    @endphp
+                    @foreach(barcodeType() as $b_type_id => $b_type_name)
+                    <label class="col-lg-4">
+                        <label class="fancy-radio">
+                            <input type="radio" name="barcode_type" value="{{$b_type_id}}" {{($sel_barcode_type == $b_type_id) ? 'checked="checked"' : ''}} form="form-barcodes">
+                            <span><i></i>{{$b_type_name}}</span>
                         </label>
-                        @endforeach                        
-                    </div>
-                    <div class="row mt-3">
-                        <div class="col-md-6">
-                            <div class="form-group row">
-                                <label class="col-lg-12 col-form-label">@lang('messages.common.barcode') <span class="asterisk">*</span></label>
-                                <div class="col-lg-12 mt-1">
-                                    <input type="text" class="form-control" placeholder="" name="barcode" form="form-barcodes">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6" id="case_quantity">
-                            <div class="form-group row">
-                                <label class="col-lg-12 col-form-label" id="case_qty_label">@lang('messages.inventory.inner_case_qty') <span class="asterisk">*</span></label>
-                                <div class="col-lg-12 mt-1">
-                                    <input type="text" only_digit class="form-control" placeholder="" name="case_quantity" form="form-barcodes">
-                                </div>
+                    </label>
+                    @endforeach                        
+                </div>
+                <div class="row mt-3">
+                    <div class="col-md-6">
+                        <div class="form-group row">
+                            <label class="col-lg-12 col-form-label">@lang('messages.common.barcode') <span class="asterisk">*</span></label>
+                            <div class="col-lg-12 mt-1">
+                                <input type="text" class="form-control" placeholder="" name="barcode" form="form-barcodes">
                             </div>
                         </div>
                     </div>
-                </form>
-                
+                    <div class="col-md-6" id="case_quantity">
+                        <div class="form-group row">
+                            <label class="col-lg-12 col-form-label" id="case_qty_label">@lang('messages.inventory.inner_case_qty') <span class="asterisk">*</span></label>
+                            <div class="col-lg-12 mt-1">
+                                <input type="text" only_digit class="form-control" placeholder="" name="case_quantity" form="form-barcodes">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6" id="case_parent_barcode">
+                        <div class="form-group row">
+                            <label class="col-lg-12 col-form-label">@lang('messages.inventory.select_outer_barcode') <span class="asterisk">*</span></label>
+                            <div class="col-lg-12 mt-1">
+                                <select class="form-control" name="parent_id" form="form-barcodes">
+                                    <option value="">@lang('messages.inventory.select_outer_barcode')</option>
+                                    @if(!empty($outer_barcodes))
+                                        @foreach($outer_barcodes as $barcode_id => $barcode)
+                                            <option value="{{ $barcode_id }}">{{ $barcode }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-            
         </div>
     </div>
 </div>
 @endsection
 @section('script')
 <script type="text/javascript" src="{{asset('js/product/form.js')}}"></script>
+
+<script type="text/javascript" src="{{asset('js/product/warehouse-modal.js')}}"></script>
+
 @endsection
 @section('css')
 <style type="text/css">

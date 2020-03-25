@@ -58,4 +58,9 @@ class Pallet extends Model
         
         return $palletOb->paginate($perPage);
     }
+
+     public function bookingPallets()
+    {
+        return $this->hasMany('App\BookingPallet','pallet_id');
+    }
 }

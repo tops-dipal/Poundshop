@@ -83,6 +83,12 @@
                      </div>
                  </div>
              </div>
+             <div class="form-group row">
+                <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.range_management.day_stock')<span class="asterisk">*</span></label>
+                <div class="col-lg-8">
+                    <input type="text" class="form-control" id="" placeholder="Stock Holding Days" name="stock_hold_days[]" value="{{ $editRange->stock_hold_days }}">
+                </div>
+            </div>   
               <div class="button-container">
                  <button class="btn btn-blue btn-form" title="@lang('messages.modules.button_save')">@lang('messages.range_management.range_edit')</button>
                  <a href="{{route('range.index')}}" class="btn btn-gray btn-form" title="@lang('messages.modules.button_cancel')">@lang('messages.modules.button_cancel')</a>
@@ -93,7 +99,7 @@
      </form>
  </div>
 
- <div class="col-lg-6 hidden" style="border-right: 2px solid #e6e6e6;" id="create-form">
+ <!-- <div class="col-lg-6 hidden" style="border-right: 2px solid #e6e6e6;" id="create-form">
     <form action="{{route('api-range.store')}}" method="post" class="form-horizontal form-flex" id="create-range-form">
         <div class="add-category-form">
             <h3 class="title">@lang('messages.range_management.range_add')</h3>
@@ -186,4 +192,4 @@
             </div>
         </div>
     </form>
-</div>
+</div> -->

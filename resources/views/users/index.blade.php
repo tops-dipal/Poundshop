@@ -23,6 +23,7 @@
     </div>
      <div class="card-flex-container d-flex">                        
         <div class="d-flex-xs-block">
+            <div class="table-responsive">  
         <table id="users_table" class="display">
             <thead>
                 <tr>
@@ -55,13 +56,14 @@
                             </div>
                       </div>
                     </th>
-                    <th>@lang("messages.user_management.image")</th>
-                    <th>@lang("messages.user_management.name")</th>
+                    <th class="m-w-80">@lang("messages.user_management.image")</th>
+                    <th class="m-w-120">@lang("messages.user_management.name")</th>
                     <th>@lang("messages.user_management.email")</th>
+                    <th>Site</th>
                     <th>@lang("messages.user_management.role")</th>
                     <th>@lang("messages.user_management.contact_no")</th>
                     <th>@lang("messages.user_management.date_enroll")</th>
-                    <th data-class-name="action">@lang('messages.table_label.action')</th>       
+                    <th data-class-name="action action-one">@lang('messages.table_label.action')</th>       
                 </tr>
             </thead>
             <tbody>
@@ -69,7 +71,8 @@
                 <!--  -->
               
             </tbody>
-        </table>        
+        </table> 
+        </div>       
       </div>
     </div>
   </div>

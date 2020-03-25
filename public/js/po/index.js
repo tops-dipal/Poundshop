@@ -30,15 +30,53 @@
             {"orderable": false, "searchable": false},
             null,
             null,
+            null,
             {"orderable": false, "searchable": false},
         ];
-        var order_coloumns = [[6, "desc"]];
+        var order_coloumns = [[7, "desc"]];
         PoundShopApp.commonClass.table = PoundShopApp.commonClass._generateDataTable(PoundShopApp.commonClass.table,'po_table','api-purchase-orders',field_coloumns,order_coloumns,undefined,undefined,'',[],'purchase-order');    
+        
     };
-    
-    $(".master").click(function () {
+     $(".master").click(function () {
         $("input[name='ids[]']").prop('checked', $(this).prop('checked'));
     });
+    
+    function updateDataTableSelectAllCtrl(table)
+    {
+        
+        var $table             = table.table().node();
+        var $chkbox_all        = $('tbody input[type="checkbox"]', $table);
+        var $chkbox_checked    = $('tbody input[type="checkbox"]:checked', $table);
+        //var chkbox_select_all  = $('thead input[name="ids[]"]', $table).get(0);
+        var chkbox_select_all= $('.dataTables_scrollHead .master').get(0);
+        // If none of the checkboxes are checked
+        if($chkbox_checked.length === 0)
+        {
+            chkbox_select_all.checked = false;
+            if('indeterminate' in chkbox_select_all){
+                chkbox_select_all.indeterminate = false;
+            }
+
+            // If all of the checkboxes are checked
+        } 
+        else if ($chkbox_checked.length === $chkbox_all.length)
+        {
+            chkbox_select_all.checked = true;
+            if('indeterminate' in chkbox_select_all)
+            {
+                chkbox_select_all.indeterminate = false;
+            }
+            // If some of the checkboxes are checked
+        } 
+        else 
+        {
+            if('indeterminate' in chkbox_select_all)
+            {
+                 chkbox_select_all.checked = false;   
+                chkbox_select_all.indeterminate = true;
+            }
+        }
+    }
     $(document).on('click', '.btn-delete', function (event) {
         event.preventDefault();
         var $currentObj = $(this);
@@ -176,13 +214,24 @@
 //    $(document).on('keyup','#supplier_name',function(e){
 //          PoundShopApp.commonClass.table.draw();
 //    });
-    $(document).on('change','#uk_po,#import_po,#missing_photo,#missing_information',function(e){
+    $(document).on('change','#pending_descripancy,#uk_po,#import_po,#missing_photo,#missing_information,#outstanding_po',function(e){
         if ($(this).is(':checked')) {
                 $(this).val(1);
               } else {
                 $(this).val(0);
               }
     });
+    
+    $(document).ready(function ()
+    {   
+        var rows_selected = [];   
+        $('#po_table tbody').on('click', 'input[type="checkbox"]', function(e)
+        {
+            var table = PoundShopApp.commonClass.table; 
+            updateDataTableSelectAllCtrl(table);        
+            e.stopPropagation();
+        });
+});
     
     
     //clear filter
@@ -201,11 +250,14 @@ function advanceSearch()
     var import_po=$('#import_po').val();
     var missing_photo=$('#missing_photo').val();
     var missing_information=$('#missing_information').val();
+    var outstanding_po = $("#outstanding_po").val();
+    var pending_descripancy = $("#pending_descripancy").val();
     var counter=0;
     if(po_status !==""){
         counter++;
     }
-        
+       
+    
     
     if(supplier_category !==""){
         counter++;
@@ -236,6 +288,14 @@ function advanceSearch()
         counter++;
     }
         
+    if(outstanding_po !== '0'){
+        counter++;
+    }
+    
+    if(pending_descripancy !== '0'){
+        counter++;
+    }
+    
         
      PoundShopApp.commonClass.table.draw() ; 
      if(counter > 0){

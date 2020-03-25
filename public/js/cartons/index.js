@@ -117,7 +117,7 @@
                     if(result==true)
                     {
                         var join_selected_values = allVals.join(","); 
-                                $.ajax({
+                        $.ajax({
                              url: BASE_URL + 'api-cartons-remove-multiple',
                              type: "post",
                              processData: false,
@@ -140,7 +140,7 @@
                                 PoundShopApp.commonClass._commonFormErrorShow(xhr, err);
                              }
 
-                         });
+                        });
                     }
                 }
             });
@@ -176,6 +176,7 @@
 //for checkbox all and none case
 function updateDataTableSelectAllCtrl(table)
 {
+   
     var $table             = table.table().node();
     var $chkbox_all        = $('tbody input[type="checkbox"]', $table);
     var $chkbox_checked    = $('tbody input[type="checkbox"]:checked', $table);

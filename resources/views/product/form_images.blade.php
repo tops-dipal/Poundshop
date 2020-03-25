@@ -35,8 +35,8 @@
 
                     @endphp
                     @if($ext!="mp4")
-
-                    <img src="{{url('/img/img-loading.gif') }}" data-original="{{ asset($result->main_image_internal_thumb) }}" class="thumbnail1" style="max-width:100%; height:150px;" id="InternalImgPreview"/>
+                    <a href="{{ asset($result->main_image_internal) }}" data-rel="lightcase">
+                    <img src="{{url('/img/img-loading.gif') }}" data-original="{{ asset($result->main_image_internal_thumb) }}" class="thumbnail1" style="max-width:100%; height:150px;" id="InternalImgPreview"/></a>
 
                      <video style="max-width:150px; max-height:150px;" controls="controls" preload="metadata" class="InternalVideoPreview hidden">
                         <source src="{{ $result->main_image_internal }}#t=0.5" type="video/mp4">
@@ -45,7 +45,7 @@
                     <video style="max-width:150px; max-height:150px;" controls="controls" preload="metadata" class="InternalVideoPreview">
                         <source src="{{ asset($result->main_image_internal) }}#t=0.5" type="video/mp4">
                     </video>
-                    <img src="{{url('/storage/uploads/product-images/no-image.jpeg') }}" class="thumbnail hidden" style="max-width:100%; height:150px;" id="InternalImgPreview"/>
+                    <img src="{{url('/img/no-image.jpeg') }}" class="thumbnail hidden" style="max-width:100%; height:150px;" id="InternalImgPreview"/>
                     @endif
               
             </div>
@@ -57,7 +57,10 @@
                 </div>
             </div>
             <div class="col-lg-4">
-                <button type="button" class="btn btn-danger" id="internal_img_remove">&times;</button>                
+                @php
+                $styleVar=(url('/img/no-image.jpeg')== asset($result->main_image_internal_thumb)) ? 'display: none' : ''; 
+                @endphp
+                <button type="button" class="btn btn-danger" id="internal_img_remove" style="{{ $styleVar  }}">&times;</button>                
             </div>
         </div>
     </div>
@@ -71,7 +74,8 @@
                 $ext = pathinfo($result->main_image_marketplace, PATHINFO_EXTENSION);
                 @endphp
                 @if($ext!="mp4")
-                <img src="{{url('/img/img-loading.gif') }}" data-original="{{ asset($result->main_image_marketplace_thumb) }}" class=" thumbnail" style="max-width:100%; height:150px;" id="magentoimagePreview"/>
+                <a href="{{ asset($result->main_image_marketplace) }}" data-rel="lightcase">
+                <img src="{{url('/img/img-loading.gif') }}" data-original="{{ asset($result->main_image_marketplace_thumb) }}" class=" thumbnail" style="max-width:100%; height:150px;" id="magentoimagePreview"/></a>
                  <video style="max-width:150px; max-height:150px;" controls="controls" preload="metadata" class="magentoVideoPreview hidden">
                     <source src="" type="video/mp4">
                 </video>
@@ -80,10 +84,11 @@
                 <video style="max-width:150px; max-height:150px;" controls="controls" preload="metadata" class="magentoVideoPreview">
                     <source src="{{ asset($result->main_image_marketplace) }}#t=0.5" type="video/mp4">
                 </video>
-                 <img src="{{url('/storage/uploads/product-images/no-image.jpeg') }}" class=" thumbnail hidden" style="max-width:100%; height:150px;" id="magentoimagePreview"/>
+                 <img src="{{url('/img/no-image.jpeg') }}" class=" thumbnail hidden" style="max-width:100%; height:150px;" id="magentoimagePreview"/>
                 @endif
             @else
-             <img src="{{url('/img/img-loading.gif') }}" data-original="{{ asset($result->main_image_marketplace_url) }}" class=" thumbnail" style="max-width:100%; height:150px;" id="magentoimagePreview"/>
+             <a href="{{ asset($result->main_image_marketplace_url) }}" data-rel="lightcase">
+             <img src="{{url('/img/img-loading.gif') }}" data-original="{{ asset($result->main_image_marketplace_url) }}" class=" thumbnail" style="max-width:100%; height:150px;" id="magentoimagePreview"/></a>
             @endif
             </div>
             <div class="col-lg-8">
@@ -93,8 +98,11 @@
                 </div>
                 
             </div>
-            <div class="col-lg-4">                
-                <button type="button" class="btn btn-danger" id="magento_img_remove">&times;</button>
+            <div class="col-lg-4">      
+             @php
+                $styleVarMagento=(url('/img/no-image.jpeg')== asset($result->main_image_marketplace_thumb)) ? 'display: none' : ''; 
+                @endphp          
+                <button type="button" class="btn btn-danger" id="magento_img_remove" style="{{ $styleVarMagento  }}">&times;</button>
             </div>
         </div>
     </div>
@@ -122,7 +130,8 @@
                         $ext = pathinfo($imgVal->image, PATHINFO_EXTENSION);
                         @endphp
                         @if($ext!="mp4")
-                        <img src="{{url('/img/img-loading.gif') }}" data-original="{{ asset('storage/uploads/'.$imgVal->image_thumb) }}" class=" thumbnail" style="max-width:150px; max-height:150px;" id="imagePreview_{{ $imgCount }}" />
+                         <a href="{{ asset('storage/uploads/'.$imgVal->image) }}" data-rel="lightcase">
+                        <img src="{{url('/img/img-loading.gif') }}" data-original="{{ asset('storage/uploads/'.$imgVal->image_thumb) }}" class=" thumbnail" style="max-width:150px; max-height:150px;" id="imagePreview_{{ $imgCount }}" /></a>
                         <!--  <video style="max-width:150px; max-height:150px;" controls="controls" preload="metadata" id="videoPreview_{{ $imgCount }}" class="hidden">
                             <source src="" type="video/mp4">
                         </video> -->
@@ -133,7 +142,7 @@
                         <!-- <img src="{{url('/storage/uploads/product-images/no-image.jpeg') }}" class=" thumbnail hidden" style="max-width:150px; max-height:150px;" id="imagePreview_{{ $imgCount }}" /> -->
                         @endif
                     @else
-                        <img src="{{url('/storage/uploads/product-images/no-image.jpeg') }}" class=" thumbnail" style="max-width:150px; max-height:150px;" id="imagePreview_{{ $imgCount }}" />
+                        <img src="{{url('/img/no-image.jpeg') }}" class=" thumbnail" style="max-width:150px; max-height:150px;" id="imagePreview_{{ $imgCount }}" />
                     @endif
                     <div class="remove_{{ $imgCount }}">
                         <input type="hidden" name="removeImageId_{{ $imgCount }}" id="removeImageId_{{ $imgCount }}" value="{{ $imgVal->id }}">

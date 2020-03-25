@@ -3,14 +3,15 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\SupplierMaster,App\WareHouse;
+use App\SupplierMaster,
+    App\WareHouse;
 use Carbon\Carbon;
 use Route;
+use Cookie;
 
-class PurchaseOrderController extends Controller
-{
-    function __construct()
-    {
+class PurchaseOrderController extends Controller {
+
+    function __construct() {
 //        $this->middleware('permission:po-list|po-create|po-edit|po-delete', ['only' => ['index','store']]);
 //
 //        $this->middleware('permission:po-create', ['only' => ['create','store']]);
@@ -18,19 +19,17 @@ class PurchaseOrderController extends Controller
 //        $this->middleware('permission:po-edit', ['only' => ['edit','update']]);
 //
 //        $this->middleware('permission:po-delete', ['only' => ['destroy']]);
-        
-         //$this->middleware('signed',['only'=>['edit']]);
-       
+        //$this->middleware('signed',['only'=>['edit']]);
     }
-    
+
     /**
      * Display a listing of the resource.
      * @author Hitesh Tank
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        
+    public
+            function index() {
+
         return view('purchase-orders.index');
     }
 
@@ -40,15 +39,15 @@ class PurchaseOrderController extends Controller
      * @date : 23 Nov
      * @return \Illuminate\Http\Response
      */
-    public function create()
-    {
-        $suppliers= SupplierMaster::getAllSupplierList();
-        $poNumber=\App\PurchaseOrder::autoGeneratePO();
-        $wareHouses= WareHouse::getWareHouse();
-        $countries = \App\Country::all();
-        $settings=\App\Setting::getData(['vat_rates','billing_address']);
-        
-        return view('purchase-orders.create',compact('suppliers','poNumber','wareHouses','countries','settings'));
+    public
+            function create() {
+        $suppliers  = SupplierMaster::getAllSupplierList();
+        $poNumber   = \App\PurchaseOrder::autoGeneratePO();
+        $wareHouses = WareHouse::getWareHouse();
+        $countries  = \App\Country::all();
+        $settings   = \App\Setting::getData(['vat_rates', 'billing_address']);
+
+        return view('purchase-orders.create', compact('suppliers', 'poNumber', 'wareHouses', 'countries', 'settings'));
     }
 
     /**
@@ -57,8 +56,8 @@ class PurchaseOrderController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
-    {
+    public
+            function store(Request $request) {
         //
     }
 
@@ -68,8 +67,8 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
-    {
+    public
+            function show($id) {
         //
     }
 
@@ -80,21 +79,33 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
-    {
-        try{
-            $purchaseOrder=\App\PurchaseOrder::find($id);
-            $suppliers= SupplierMaster::getAllSupplierList();
-            $wareHouses= WareHouse::getWareHouse();
-            $countries = \App\Country::all();
-            $settings=\App\Setting::getData(['vat_rates','billing_address']);
-            if($purchaseOrder){
-                return view('purchase-orders.edit',compact('purchaseOrder','suppliers','wareHouses','countries','settings'));
-            }else{
+    public
+            function edit($id) {
+        try {
+            $comesFromModule = Cookie::get('comesFrom'); // for show Next Scan Button In PO-Products if it is comes from buyes enquiry
+            $purchaseOrder   = \App\PurchaseOrder::find($id);
+            $supplierList    = SupplierMaster::select('id', 'name', 'country_id')->get();
+
+            if ($purchaseOrder) {
+                $deliveryData = $purchaseOrder->deliveryDetail();
+                $suppliers    = SupplierMaster::getAllSupplierList();
+                $wareHouses   = WareHouse::getWareHouse();
+                $countries    = \App\Country::all();
+                $settings     = \App\Setting::getData(['vat_rates', 'billing_address']);
+
+                if ($purchaseOrder->product) {
+                    return view('purchase-orders.edit', compact('purchaseOrder', 'suppliers', 'wareHouses', 'countries', 'settings', 'deliveryData', 'supplierList', 'comesFromModule'));
+                }
+                else {
+                    abort('404');
+                }
+            }
+            else {
                 abort('404');
             }
-        } catch (Exception $ex) {
-                abort('404');
+        }
+        catch (Exception $ex) {
+            abort('404');
         }
     }
 
@@ -105,8 +116,8 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
-    {
+    public
+            function update(Request $request, $id) {
         //
     }
 
@@ -116,8 +127,8 @@ class PurchaseOrderController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
+    public
+            function destroy($id) {
         //
     }
 
@@ -126,33 +137,33 @@ class PurchaseOrderController extends Controller
      * @param type $id
      * @return type
      */
-    
-    public function viewRevision($id){
-        try{
-            if(!empty($id))
-            {
-                $revisionData=\App\PurchaseOrderRevises::find($id);   
-                if($revisionData){
+    public
+            function viewRevision($id) {
+        try {
+            if (!empty($id)) {
+                $revisionData = \App\PurchaseOrderRevises::find($id);
+                if ($revisionData) {
 //                    dd($revisionData->purchase_order_content);
-                    return view('purchase-orders.revision-view',compact('revisionData'));
-                }else{
+                    return view('purchase-orders.revision-view', compact('revisionData'));
+                }
+                else {
                     abort(403);
                 }
-            }else{
+            }
+            else {
                 abort(403);
             }
-        } catch (Exception $ex) {
-                abort(403);
+        }
+        catch (Exception $ex) {
+            abort(403);
         }
     }
 
-    public function taxPaymentReport(Request $request)
-   {
-        $suppliers=\App\SupplierMaster::get();
-        $countries=\App\Country::get();
-        return view('purchase-orders.tax-payment-report',compact('countries','suppliers'));
-   }
-
-
+    public
+            function taxPaymentReport(Request $request) {
+        $suppliers = \App\SupplierMaster::get();
+        $countries = \App\Country::get();
+        return view('purchase-orders.tax-payment-report', compact('countries', 'suppliers'));
+    }
 
 }

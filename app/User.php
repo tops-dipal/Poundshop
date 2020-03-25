@@ -23,10 +23,10 @@ class User extends Authenticatable
                 if(file_exists(Storage::path($this->attributes['profile_pic'])))
                 return url('/storage/uploads') . '/' . $this->attributes['profile_pic'];
                 else
-                return url('/storage/uploads/users/userplaceholder.png');
+                return url('/img/userplaceholder.png');
             }
         else
-            return url('/storage/uploads/users/userplaceholder.png');
+            return url('/img/userplaceholder.png');
     }
     /**
      * The attributes that are mass assignable.
@@ -61,8 +61,8 @@ class User extends Authenticatable
     public static function getAllUsers($perPage = '',
                                 $params = array()){
         
-        $totesOb=self::select();
-        $totesOb->orderBy($params['order_column'],$params['order_dir']);
+        $object=self::select('users.*','warehouse_master.name as site_name');
+        $object->orderBy($params['order_column'],$params['order_dir']);
         if (!empty($params['search'])) {
            $totesOb->orWhere('first_name','like',"%".$params['search']."%");
            $totesOb->orWhere('last_name','like',"%".$params['search']."%");
@@ -71,6 +71,9 @@ class User extends Authenticatable
            
           //$totesOb->orWhere('date_enroll','like',"%".$params['search']."%");
         }
-        return $totesOb->paginate($perPage);
+        $object->leftJoin('warehouse_master',function($join){
+            $join->on('warehouse_master.id','users.site_id');
+        });
+        return $object->paginate($perPage);
     }
 }

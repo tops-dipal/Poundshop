@@ -37,8 +37,9 @@
     $(".master").click(function () {
         $("input[name='ids[]']").prop('checked', $(this).prop('checked'));
     });
+    $('body').on('click','.submitBtn',function(){
 
-     $("#create-mapping-form").validate({
+     $("body #create-mapping-form").validate({
             focusInvalid: false, // do not focus the last invalid input
             invalidHandler: function(form, validator) {
 
@@ -82,8 +83,21 @@
                 label.remove();
             },
             submitHandler: function (form) {
-                var dataString = $("#create-mapping-form").serialize();
+                
+                
+               $('.magentoparent_id option:selected').each(function(i, obj) {
+                    // if anyone wants an audi, let me know
+                    /*if (obj.value() == "87")
+                        alert("found!");*/
+                        var element = $(this);
+                        if(element.val()==$('#magento_category_id').val())
+                        {
+                            $('#magento_category_id').val(element.attr('attr-table-id'));
+                        }
+                });
+               var dataString = $("#create-mapping-form").serialize();
                 $('.btn-blue').attr('disabled', true);
+                
                 $.ajax({
                     type: "POST",
                     url: $("#create-mapping-form").attr("action"),
@@ -99,14 +113,14 @@
                     },
                     success: function (response) {
                         $('.btn-blue').attr('disabled', false);
-                        $("#page-loader").hide();
+                        $("body  #page-loader").hide();
                         if (response.status == 1) {
-                            //$("#create-carton-form")[0].reset();
+                           
                             PoundShopApp.commonClass._displaySuccessMessage(response.message);
-                            setTimeout(function () {
-                                location.reload();
-                               // window.location.href = WEB_BASE_URL + '/cartons';
-                            }, 1000);
+                            PoundShopApp.commonClass.table.draw();
+                            getForm('create');
+                             
+                             //$("#create-mapping-form")[0].reset();
                         }
                     },
                     error: function (xhr, err) {
@@ -117,6 +131,7 @@
 
             }
         });
+    });
     $(document).on('click', '.btn-delete', function (event) {
         event.preventDefault();
         var $currentObj = $(this);
@@ -417,7 +432,7 @@ $('body').on('change','.magentoparent_id',function(){
                                 $('body').data(category_id, child_nodesJson);
                             }    
                         } 
-                        childDropDownStr+="<option value='"+val.id+"'>"+val.name+"</option>";  
+                        childDropDownStr+="<option value='"+val.id+"' attr-table-id='"+val.table_id+"' attr-child-nodes='"+child_nodesJson+"'>"+val.name+"</option>";  
 
                     });
                 }
@@ -461,5 +476,23 @@ $('.refresh').on('click',function()
     $('#search_data').val('');
     PoundShopApp.commonClass.table.search($('#search_data').val()).draw() ;  
 });
+function getForm(formtype)
+{
+    $.ajax({
+        url:  WEB_BASE_URL + '/mapping-form-type/'+formtype,
+        type: "get",
+        headers: {
+            'Authorization': 'Bearer ' + API_TOKEN,
+        },
+        success: function (response) {
+          $('.form').replaceWith(response.view);
+           
+        },
+        error: function (xhr, err) {
+            $('.btn-blue').attr('disabled', false);
+            PoundShopApp.commonClass._commonFormErrorShow(xhr, err);
+        }
+    });
+}
 
 

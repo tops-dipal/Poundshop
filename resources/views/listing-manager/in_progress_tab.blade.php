@@ -49,6 +49,7 @@
             <div class="d-flex-xs-block">
                 <!-- <div class="tab-content" id="myTabContent">
                     <div class="tab-pane fade show active" id="already-listed" role="tabpanel" aria-labelledby="already-listed-tab"> -->
+                        <div class="table-responsive">
                         <table id="inprogress_table" class="display">
                             <thead>
                                 <tr>
@@ -71,12 +72,16 @@
                                         </div>
                                     </th>
                                     <th>@lang('messages.inventory.image')</th>
-                                    <th>@lang('messages.inventory.title')</th>
-                                    <th>@lang('messages.inventory.sku')</th>
-                                    <th>@lang('messages.common.quantity')</th>
-                                    <th>@lang('messages.common.price')</th>
-                                     <th>@lang('messages.magento_listing.date_to_list')</th>
-                                    <th data-class-name="action">@lang('messages.table_label.action')</th>              
+                                    <th class="m-w-200">@lang('messages.inventory.title')</th>
+                                    <th class="w-150">@lang('messages.inventory.sku')</th>
+                                    <th class="w-130">@lang('messages.common.quantity')</th>
+                                    <th class="w-130 dt-head-align-right">
+                                        <span class="dt-head-text"> 
+                                            @lang('messages.common.price')
+                                        </span>    
+                                    </th>
+                                    <th class="w-130">@lang('messages.magento_listing.date_to_list')</th>
+                                    <th data-class-name="action action-two">@lang('messages.table_label.action')</th>              
                                 </tr>
                             </thead>
                             
@@ -84,6 +89,7 @@
                                 
                             </tbody>
                         </table>  
+                    </div>
                     <!-- </div>
                 </div> -->
             </div>

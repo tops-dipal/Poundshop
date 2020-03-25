@@ -45,6 +45,7 @@
 }
 .custom-modal .modal-header{
   border-bottom: 2px solid #e6e6e6;
+  padding: 10px 15px;
 }
 .custom-modal .modal-title{
   font-size: 14px;  
@@ -52,4 +53,9 @@
   color: rgb(54, 23, 85);
   text-transform: uppercase;
   line-height: 1.2;
+}
+.custom-modal .modal-body{
+  padding: 15px;
+  max-height: 80vh;
+  overflow-x: auto;
 }

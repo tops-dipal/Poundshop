@@ -15,4 +15,8 @@ class Setting extends Model
     public static function getData($data){
         return self::whereIn('module_name',$data)->get();
     }
+
+    public static function getColumnVal($column_key){
+        return self::select('id','column_val')->where('column_key',$column_key)->get();
+    }
 }

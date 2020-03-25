@@ -60,7 +60,7 @@ var logical_tags = '<?php echo json_encode(product_logic_base_tags()) ?>';
                                             <label class="fancy-checkbox">
                                                 <input type="checkbox" name="filter_{{$db_fields}}" value="1">
                                                 <span><i></i>
-                                                    Show Products With {{$tag}} Tags
+                                                    Show Products With {{$tag}} Tag
                                                 </span>
                                             </label>
                                             @endforeach
@@ -152,8 +152,18 @@ var logical_tags = '<?php echo json_encode(product_logic_base_tags()) ?>';
                             <th><div class="m-w-80">@lang('messages.inventory.allocated')</div></th>
                             <th><div class="m-w-80">@lang('messages.inventory.free_stock')</div></th>
                             <th><div class="m-w-80">@lang('messages.inventory.product_id')</div></th>
-                            <th><div class="m-w-80">@lang('messages.inventory.cost_price')</div></th>
-                            <th><div class="m-w-80">@lang('messages.inventory.selling_price')</div></th>
+                            <th class="dt-head-align-right">
+                                <div class="m-w-80">
+                                    <span class="dt-head-text">     
+                                        @lang('messages.inventory.cost_price')
+                                    </span>
+                                </div>
+                            </th>
+                            <th class="dt-head-align-right">
+                                <div class="m-w-80">
+                                    @lang('messages.inventory.selling_price')
+                                </div>
+                            </th>
                             <th><div class="m-w-100">@lang('messages.inventory.tag')</div></th>
                             <th><div class="m-w-120">@lang('messages.inventory.last_stock_receipt')</div></th>
                             <th><div class="m-w-80">@lang('messages.inventory.magento_status')</div></th>

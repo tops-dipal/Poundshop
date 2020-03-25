@@ -26,6 +26,7 @@
 		</div>	
 		<div class="card-flex-container d-flex">					    
 			<div class="d-flex-xs-block">
+				<div class="table-responsive">
 				<table id="commoditycode_table" class="display">
 				    <thead>
 				        <tr>
@@ -58,10 +59,10 @@
 		                            </div>
 					            </div>
 				            </th>
-				            <th>@lang('messages.commodity_code_master.commodity_code')</th>
-				            <th>@lang('messages.commodity_code_master.commodity_code_desc')</th>
+				            <th class="m-w-120">@lang('messages.commodity_code_master.commodity_code')</th>
+				            <th class="m-w-120">@lang('messages.commodity_code_master.commodity_code_desc')</th>
 				            <th>@lang('messages.commodity_code_master.is_default')</th>
-				            <th data-class-name="action">@lang('messages.table_label.action')</th>				
+				            <th data-class-name="action action-two">@lang('messages.table_label.action')</th>				
 				        </tr>
 				    </thead>
 				    <tbody>
@@ -72,7 +73,8 @@
 				    <tbody>
 				        
 				    </tbody>
-				</table>				
+				</table>
+				</div>				
 			</div>
 		</div>
 	</div>

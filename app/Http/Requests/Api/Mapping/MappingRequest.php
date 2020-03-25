@@ -48,8 +48,6 @@ class MappingRequest extends FormRequest
             'unique_with' => 'Mapping already exists.',
             'range_id.required'=>'Please Select Buying Range',
             'magento_category_id.required'=>'Please Select Magento Selling Category',
-            // 'purchase_order_id.exists' => 'PO does not exists.',
-            // 'purchase_order_id.required'=>'Please select proper PO.'
         ];
     }
     

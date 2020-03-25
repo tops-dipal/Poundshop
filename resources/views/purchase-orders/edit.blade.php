@@ -4,6 +4,7 @@
 @section('css')
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css"/>
 @endsection
+
 <div class="content-card custom-scroll">
     <div class="content-card-header">
         <h3 class="page-title">@lang('messages.purchase_order.edit_po') : # {{$purchaseOrder->po_number}}</h3>
@@ -17,6 +18,11 @@
                 <li class="nav-item">
                     <a   class="nav-link tab-click" id="item-tab" data-toggle="tab" href="#items" role="tab" aria-controls="contact" aria-selected="false">
                         @lang('messages.purchase_order.tab.items')
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a   class="nav-link tab-click" id="delivery-tab" data-toggle="tab" href="#deliveries" role="tab" aria-controls="deliveries" aria-selected="false">
+                        @lang('messages.purchase_order.tab.deliveries')
                     </a>
                 </li>
                 <li class="nav-item">
@@ -68,7 +74,7 @@
             <button title="Save" type="submit" style="display: none;"  id="update-term-button"  class="btn btn-blue btn-header px-4 ">@lang('messages.common.save')</button>
         </div>
     </div>
-    <div class="card-flex-container">
+    <div class="card-flex-container pt-0  custom_fix_header">
         <input type="hidden" id="hidden_standard_rate" value="{{floatval($purchaseOrder->standar_rate_value)}}" />
         <input type="hidden" id="hidden_zero_rate" value="{{floatval($purchaseOrder->zero_rate_value)}}" />
         <input type="hidden" id="hidden_country_id" value="{{$purchaseOrder->country_id}}" />
@@ -77,7 +83,7 @@
 
         <div class="tab-content h-100" id="myTabContent">
             <!--PO Detail -->
-            <div class="tab-pane fade" id="general" role="tabpanel" aria-labelledby="general-tab">
+            <div class="tab-pane py-4 fade" id="general" role="tabpanel" aria-labelledby="general-tab">
                 <div class="form-fields">
                     <div class="container-fluid">
                         @include('purchase-orders.general-detail')
@@ -85,17 +91,17 @@
                 </div>
             </div>
             <!--PO Detail -->
-            <div class="tab-pane fade" id="items" role="tabpanel" aria-labelledby="item-tab">
-                <div class="form-fields">
-                    <div class="container-fluid">
-                        @include('purchase-orders.po-items')
-                    </div>
-                </div>
+            <div class="tab-pane fade" id="items" role="tabpanel" aria-labelledby="item-tab">                
+                @include('purchase-orders.po-items')                    
+            </div>
+            <!-- PO Delivery-->
+            <div class="tab-pane h-100 fade" id="deliveries" role="tabpanel" aria-labelledby="delivery-tab">
+                @include('purchase-orders.po-delivered')
             </div>
             <div class="tab-pane h-100 fade" id="revise" role="tabpanel" aria-labelledby="revision-tab">
                 @include('purchase-orders.po-revision')
             </div>
-            <div class="tab-pane fade" id="terms" role="tabpanel" aria-labelledby="terms-tab">
+            <div class="tab-pane py-4 fade" id="terms" role="tabpanel" aria-labelledby="terms-tab">
                 <div class="form-fields">
                     <div class="container-fluid">
                         @include('purchase-orders.terms')
@@ -110,4 +116,6 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
 <script type="text/javascript" src="{{asset('js/po/edit.js?v='.CSS_JS_VERSION)}}"></script>
 <script type="text/javascript" src="{{asset('js/po/revision.js?v='.CSS_JS_VERSION)}}"></script>
+<script type="text/javascript" src="{{asset('js/po/delivery.js?v='.CSS_JS_VERSION)}}"></script>
+<script type="text/javascript" src="{{asset('js/po/move_to_new_po.js?v='.CSS_JS_VERSION)}}"></script>
 @endsection

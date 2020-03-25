@@ -33,7 +33,7 @@
 
                 		<div class="col-lg-6">
                             <div class="form-group row">
-                                <label class="col-lg-4 col-form-label">@lang('messages.magento_listing.prouduct_id') <span class="asterisk">*</span></label>
+                                <label class="col-lg-4 col-form-label">@lang('messages.magento_listing.prouduct_id_type') <span class="asterisk">*</span></label>
                                 <div class="col-lg-8 mt-2">
                                     <div class="d-flex align-items-center">
                                     	@php
@@ -50,13 +50,21 @@
                                                 <span class="bold category_radio_label"><i></i>{{$product_identifier_type_caption}} </span>
                                             </label>
                                         @endforeach
-                                        <input type="text" class="form-control" only_digit placeholder="" name="magento_product_id" value="{{ $select_data($magento_posting_details, $product_master_details, 'magento_product_id', 'product_identifier') }}">
                                     </div>    
                                 </div>
                             </div>
                         </div>
 
                 		<div class="col-lg-6">
+                            <div class="form-group row">
+                                <label class="col-lg-4 col-form-label">@lang('messages.magento_listing.prouduct_id') <span class="asterisk">*</span></label>
+                                <div class="col-lg-8">
+                                    <input type="text" class="form-control" only_digit placeholder="" name="magento_product_id" value="{{ $select_data($magento_posting_details, $product_master_details, 'magento_product_id', 'product_identifier') }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
                             <div class="form-group row">
                                 <label class="col-lg-4 col-form-label">@lang('messages.common.sku') <span class="asterisk">*</span></label>
                                 <div class="col-lg-8">
@@ -78,7 +86,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-4 col-form-label">@lang('messages.magento_listing.date_to_go_live') <span class="asterisk">*</span></label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control datepicker_disbale_past" placeholder="" name="date_to_go_live" readonly="" value="{{ !empty($magento_posting_details->date_to_go_live) ? system_date($magento_posting_details->date_to_go_live) : system_date() }}">
+                                    <input type="text" class="form-control date_to_go_live" placeholder="" name="date_to_go_live" readonly="" value="{{ !empty($magento_posting_details->date_to_go_live) ? date('d-M-Y H:i', strtotime($magento_posting_details->date_to_go_live)) :  date('d-M-Y H:i') }}">
                                 </div>
                             </div>
                         </div>
@@ -87,7 +95,10 @@
                             <div class="form-group row">
                                 <label class="col-lg-4 col-form-label">@lang('messages.magento_listing.single_selling_price') <span class="asterisk">*</span></label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" only_numeric placeholder="" name="selling_price" value="{{ $select_data($magento_posting_details, $product_master_details, 'selling_price', 'single_selling_price') }}">
+                                    <div class="position-relative">
+                                        <span class="pound-sign-form-control disabled-control">£</span>
+                                        <input type="text" class="form-control" only_numeric placeholder="" name="selling_price" value="{{ $select_data($magento_posting_details, $product_master_details, 'selling_price', 'single_selling_price') }}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +107,10 @@
                             <div class="form-group row">
                                 <label class="col-lg-4 col-form-label">@lang('messages.magento_listing.bulk_selling_price') </label>
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" only_numeric placeholder="" name="bulk_selling_price" value="{{ $select_data($magento_posting_details, $product_master_details, 'bulk_selling_price', 'bulk_selling_price') }}">
+                                    <div class="position-relative">
+                                        <span class="pound-sign-form-control disabled-control">£</span>
+                                        <input type="text" class="form-control" only_numeric placeholder="" name="bulk_selling_price" value="{{ $select_data($magento_posting_details, $product_master_details, 'bulk_selling_price', 'bulk_selling_price') }}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -104,8 +118,16 @@
                         <div class="col-lg-6">
                             <div class="form-group row">
                                 <label class="col-lg-4 col-form-label">@lang('messages.magento_listing.quantity') <span class="asterisk">*</span></label>
+                                @php
+                                $quantity=@$select_data($magento_posting_details, $product_master_details, 'quantity', 'quantity');
+                                if($quantity=='' || $quantity==0)
+                                {
+                                    $quantity=$defaultStock;
+                                }
+                                
+                                @endphp
                                 <div class="col-lg-8">
-                                    <input type="text" class="form-control" only_digit placeholder="" name="quantity" value="{{ @$select_data($magento_posting_details, $product_master_details, 'quantity', 'quantity') }}" >
+                                    <input type="text" class="form-control" only_digit placeholder="" name="quantity" value="{{ $quantity }}" disabled="">
                                 </div>
                             </div>
                         </div>
@@ -322,7 +344,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-6 col-form-label">@lang('messages.magento_listing.product_length') </label>
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control" only_numeric placeholder="" name="magento_product_length" value="{{ @$select_data($magento_posting_details, $product_master_details, 'magento_product_length', 'product_length') }}">
+                                    <input type="text" class="form-control" only_numeric placeholder="" name="magento_product_length" value="{{ apply_float_value(@$select_data($magento_posting_details, $product_master_details, 'magento_product_length', 'product_length')) }}">
                                 </div>
                             </div>
                         </div>
@@ -331,7 +353,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-6 col-form-label">@lang('messages.magento_listing.product_height') </label>
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control" only_numeric placeholder="" name="magento_product_height" value="{{ @$select_data($magento_posting_details, $product_master_details, 'magento_product_height', 'product_height') }}">
+                                    <input type="text" class="form-control" only_numeric placeholder="" name="magento_product_height" value="{{ apply_float_value(@$select_data($magento_posting_details, $product_master_details, 'magento_product_height', 'product_height')) }}">
                                 </div>
                             </div>
                         </div>
@@ -340,7 +362,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-6 col-form-label">@lang('messages.magento_listing.product_width') </label>
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control"  only_numeric placeholder="" name="magento_product_width" value="{{ @$select_data($magento_posting_details, $product_master_details, 'magento_product_width', 'product_width') }}">
+                                    <input type="text" class="form-control"  only_numeric placeholder="" name="magento_product_width" value="{{ apply_float_value(@$select_data($magento_posting_details, $product_master_details, 'magento_product_width', 'product_width')) }}">
                                 </div>
                             </div>
                         </div>
@@ -349,7 +371,7 @@
                             <div class="form-group row">
                                 <label class="col-lg-6 col-form-label">@lang('messages.magento_listing.product_weight') </label>
                                 <div class="col-lg-6">
-                                    <input type="text" class="form-control"  only_numeric placeholder="" name="magento_product_weight" value="{{ @$select_data($magento_posting_details, $product_master_details, 'magento_product_weight', 'product_weight') }}">
+                                    <input type="text" class="form-control"  only_numeric placeholder="" name="magento_product_weight" value="{{ apply_float_value(@$select_data($magento_posting_details, $product_master_details, 'magento_product_weight', 'product_weight')) }}">
                                 </div>
                             </div>
                         </div>

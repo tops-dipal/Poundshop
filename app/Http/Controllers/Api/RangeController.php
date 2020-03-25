@@ -22,6 +22,16 @@ class RangeController extends Controller
             {
 
                 $children = $this->buildCategoryTree($elements, $element['id']);
+                $mapData=count($element['magento_categories']);
+                if($mapData!=0)
+                {
+                    $element['map_status']="Mapped";
+                   
+                }
+                else
+                {
+                     $element['map_status']="Not Mapped";
+                }
                 $element['edit_url']=route('range.edit',$element['id']);
                 if ($children) {
                     $element['child_status']=1;
@@ -43,7 +53,7 @@ class RangeController extends Controller
     }
     public function index(Request $request)
     {
-        $allRanges = \App\Range::orderBy('category_name','ASC')->get()->makeHidden(['parent', 'children'])->toArray();
+        $allRanges =  Range::getAllRangeWithMappedCategory()->toArray();
         $parent = $this->buildCategoryTree($allRanges);
         $process='add';
       
@@ -56,6 +66,7 @@ class RangeController extends Controller
            $range_model=new Range;
            $i=0;
            $categories=$request->category_name;
+           $stockDays=$request->stock_hold_days;
            $seaseonalStatusArr=$request->seasonal_status;
            $fromMonthArr=$request->seasonal_range_frommonth;
            $toMonthArr=$request->seasonal_range_tomonth;
@@ -66,6 +77,7 @@ class RangeController extends Controller
              if($value)
               {
                 $storeCatArr[$i]['category_name']=$value;
+                $storeCatArr[$i]['stock_hold_days']=$stockDays[$key];
                 
                   $storeCatArr[$i]['parent_id'] = (empty($request->selected_parent) && ($request->selected_parent==0)) ? NULL: $request->selected_parent;
                 
@@ -122,19 +134,31 @@ class RangeController extends Controller
     public function update(UpdateRequest $request,$id)
     {
     	try{
-          //return $request->all();
+          
            $range_model=Range::find($id);
            $range_model->category_name = $request->category_name[0];
-           $range_model->parent_id = $request->selected_parent;
-           if($range_model->parent_id!=Null)
-              {
+           $range_model->stock_hold_days = $request->stock_hold_days[0];
+           if(isset($request->stock_hold_days[0]))
+           {
+            $this->updateProductStockDay($id,$request->stock_hold_days[0]);
+           }
+           if($request->selected_parent!=$id)
+           {
+            $range_model->parent_id = $request->selected_parent;
+           }
+           else
+           {
+            $range_model->parent_id = NULL;
+           }
+           if($range_model->parent_id!=NULL)
+            {
                 $range=Range::find($range_model->parent_id);
                 $range_model->path=$range->getParentPath().' >> '.$range_model->category_name;
-              }
-              else
-              {
-                 $range_model->path=$range_model->category_name;
-              }
+            }
+            else
+            {
+                $range_model->path=$range_model->category_name;
+            }
            $range_model->seasonal_status = $request->seasonal_status;
            if($range_model->seasonal_status==1)
            {
@@ -187,6 +211,14 @@ class RangeController extends Controller
       {
         return $this->sendValidation(array('Please enter keyword.'), 422);
       } 
-    }    
+    }   
+
+    public function updateProductStockDay($rangeId,$stockDays)
+    {
+        $updateArr=array();
+        $updateArr['stock_hold_days']=$stockDays;
+        \App\Products::where('buying_category_id',$rangeId)->where('is_override',1)->update($updateArr);
+        return;
+    } 
 
 }

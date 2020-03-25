@@ -15,6 +15,9 @@ use Illuminate\Http\Request;
 Route::get('/' ,'Auth\LoginController@showLoginForm');
 Auth::routes();
 Route::get('logout','Auth\LoginController@logout');
+
+Route::get('supplier-material-receipt/{booking_id}','SupplierMaterialReceiptController@index')->name('supplier_material_receipt.index');
+
 Route::group(['middleware' => ['web', 'auth', 'preventBackHistory', 'checkUserSessionToken']], function() 
 {
     Route::get('dashboard','DashboardController@index')->name('user-dashboard');
@@ -28,11 +31,16 @@ Route::group(['middleware' => ['web', 'auth', 'preventBackHistory', 'checkUserSe
     Route::resource('pallets','PalletsController');
     Route::resource('range','RangeController');
     Route::resource('warehouse','WarehouseController');
+    Route::get('locations/update-all-location','LocationsController@updateAllLocationData');
     Route::resource('locations','LocationsController');
     Route::resource('commodity-codes','CommodityCodeController');
     Route::resource('import-duty','ImportDutyController');
     Route::resource('setting','SettingController');
     Route::resource('category-mapping','CategoryMappingController');
+    Route::resource('slot','SlotController');
+    Route::resource('qc-checklist','QCCheckListController');
+    Route::resource('buy-by-product','BuyByProductController');
+    Route::resource('location-assign','LocationAssignController');
     //Route::get('locations/setting','LocationsController@setting')->name('locations-setting');
     Route::get('setting-location','LocationsController@setting')->name('locations-setting');
 
@@ -46,6 +54,7 @@ Route::group(['middleware' => ['web', 'auth', 'preventBackHistory', 'checkUserSe
     Route::get('product/form-variations/{id}','ProductsController@formVariations');
     Route::get('product/get-variations-list/{id}','ProductsController@GetProductVariations');
     Route::get('product/form-images/{id}','ProductsController@formImages');
+    Route::get('product/product-outer-barcodes','ProductsController@productOuterBarcode');   
 
     // Route::get('product/form-buying-range/{id?}','ProductsController@formBuyingRange');
     // Route::get('product/form-stock-file/{id}','ProductsController@formStockfile');
@@ -80,6 +89,62 @@ Route::group(['middleware' => ['web', 'auth', 'preventBackHistory', 'checkUserSe
     Route::get('listing-manager/magento/in-progress','MagentoListingManager@inProgressRecords')->name('magento-in-progress');
     Route::get('listing-manager/magento/add/{id}/{store_id}','MagentoListingManager@add')->name('magento.add');
     Route::get('listing-manager/magento/edit/{id}','MagentoListingManager@edit')->name('magento.edit');
+
+    Route::resource('booking-in','BookingsController');
+    Route::get('booking-in/booking_day_list/{date}','BookingsController@bookingDayList')->name('booking-in.bookingDayList');
+
+
+    // Material Receipt
+    Route::get('material-receipt/{booking_id}','MaterialReceiptController@index')->name('material_receipt.index');
+    Route::post('material-receipt/list-ajax-table','MaterialReceiptController@listAjaxTable')->name('material_receipt.list_ajax');
+    Route::post('material-receipt/ajax-manage-variations','MaterialReceiptController@manageVariations');
+    Route::get('material-receipt-html-version','MaterialReceiptController@htmlVersion');
+
+    Route::post('material-receipt/side-bar-data','MaterialReceiptController@getSideBarView')->name('material_receipt.sidebar-view');
+
+    Route::post('material-receipt/pallet-return-receive-data','MaterialReceiptController@htmlBookingPallet')->name('material_receipt.booking-pallets');
+
+    //Category Mapping
+    Route::get('mapping-form-type/{type}','CategoryMappingController@getForm')->name('get-mapping-form');
+    Route::get('mapping-relation/{range_id}','CategoryMappingController@mappedNotMappedRelation')->name('mapping-relation');
+    Route::post('mapping-relation-range-list','CategoryMappingController@getChildCategories')->name('mapping-relation-range-list');
+     //
+    Route::post('get-qc-list-products','QCCheckListController@getQcList')->name('get-qc-list');
+
+    Route::get('print-product-barcodes','PrintViewController@barcode');
+    
+    Route::get('set-barcode-img','BarcodeImageController@index');
+
+    //Buy By Product Routes
+    Route::get('search-barcode/{barcode}','BuyByProductController@serachByBarcode')->name('search-barcode');
+
+    Route::get('put-away-dashboard','PutAwayController@getDashboard')->name('put-away-dashboard');
+
+    Route::get('put-away','PutAwayController@getPutAway')->name('put-away');
+
+    Route::get('put-away-job-list','PutAwayController@getPutAwayJobList')->name('put-away-job-list');
+
+    // Print Qc Checklist for products
+    Route::get('print-product-qcchecklist-bookingwise','PrintViewController@productQCChecklistPDF');
+
+    Route::get('qc-checklist-print-qc', 'QCCheckListController@printQC')->name('print-qc');
+
+    //Replen Request
+    Route::resource('replen-request','ReplenRequestController');
+    Route::resource('replen','ReplenController');
+    Route::get('assign-aisle','ReplenRequestController@assignAisle')->name('assign-aisle');
+
+    Route::get('excess-qty-received-report','ReportController@excessQtyReceivedReport')->name('excess-qty-received-report'); 
+
+
+    //count of warehouse tab base on warehouse selection - Inventory warehouse Tab
+    Route::post('count-based-on-site','ProductsController@getSiteWiseWarehouseCount')->name('count-based-on-site');
+
+    
+    //Move Product
+    Route::get('move-products','ProductsController@moveProducts')->name('move-products');
+
+
 });
 
 

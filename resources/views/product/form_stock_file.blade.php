@@ -4,7 +4,7 @@
 <div class="row">
     <div class="col-lg-6">
         <div class="form-group row">
-            <label class="col-lg-4 col-form-label">@lang('messages.inventory.product_id') <span class="asterisk">*</span></label>
+            <label class="col-lg-4 col-form-label">@lang('messages.inventory.product_id_type') <span class="asterisk">*</span></label>
             <div class="col-lg-8 mt-2">
                 <div class="d-flex align-items-center"> 
                     @php
@@ -18,13 +18,12 @@
                     
                     @foreach(product_identifier_type() as $product_identifier_type_id => $product_identifier_type_caption )
                         
-                        <label class="fancy-radio pr-3">
+                        <label class="fancy-radio sm pr-3">
                              <input type="radio" name="product_identifier_type" value="{{$product_identifier_type_id}}" {{ ($sel_product_id_type == $product_identifier_type_id) ? 'checked="checked"' : "" }}>
-                            <span><i></i>{{$product_identifier_type_caption}}</span>
+                            <span class="font-14-dark"><i></i>{{$product_identifier_type_caption}}</span>
                         </label>
                         
                     @endforeach
-                    <input type="text" class="form-control" only_digit placeholder="" name="product_identifier" value="{{ !empty(old('product_identifier')) ? old('product_identifier') : @$result->product_identifier }}">
                 </div>    
             </div>
         </div>
@@ -32,9 +31,9 @@
 
     <div class="col-lg-6">
         <div class="form-group row">
-            <label class="col-lg-4 col-form-label">@lang('messages.inventory.created_by') </label>
+            <label class="col-lg-4 col-form-label">@lang('messages.inventory.product_id') <span class="asterisk">*</span></label>
             <div class="col-lg-8">
-                <input disabled="" type="text" class="form-control" placeholder="" name="created_by" value="{{ !empty($result->created_by) ? $result->user->first_name : Auth::user()->first_name }}">
+                  <input type="text" class="form-control" only_digit placeholder="" name="product_identifier" value="{{ !empty(old('product_identifier')) ? old('product_identifier') : @$result->product_identifier }}">
             </div>
         </div>
     </div>
@@ -66,9 +65,9 @@
 
     <div class="col-lg-6">
         <div class="form-group row">
-            <label class="col-lg-4 col-form-label">@lang('messages.inventory.created_date') </label>
+            <label class="col-lg-4 col-form-label">@lang('messages.common.sku') <span class="asterisk">*</span></label>
             <div class="col-lg-8">
-                <input disabled="" type="text" class="form-control" placeholder="" name="created_at" value="{{ !empty($result->created_at) ? system_date($result->created_at) : system_date() }}">
+                <input readonly=""  type="text" class="form-control" name="sku" value="{{ !empty($result->sku) ? $result->sku : get_sku() }}">
             </div>
         </div>
     </div>
@@ -93,9 +92,21 @@
 
     <div class="col-lg-6">
         <div class="form-group row">
-            <label class="col-lg-4 col-form-label">@lang('messages.common.sku') <span class="asterisk">*</span></label>
+            <label class="col-lg-4 col-form-label">@lang('messages.inventory.commodity_code') </label>
             <div class="col-lg-8">
-                <input readonly=""  type="text" class="form-control" name="sku" value="{{ !empty($result->sku) ? $result->sku : get_sku() }}">
+                <select class="form-control" placeholder="" name="commodity_code_id">
+                    
+                    @php
+                        $sel_commodity_code_id = !empty(old('commodity_code_id')) ? old('commodity_code_id') : @$result->commodity_code_id;
+                    @endphp
+
+                    <option value="">@lang('messages.common.select') @lang('messages.inventory.commodity_code')</option>
+                    @foreach($commodity_codes as $commodity_code)
+                        <option value="{{$commodity_code->id}}" {{ ($sel_commodity_code_id == $commodity_code->id) ? 'selected="selected"' : '' }}>
+                            {{$commodity_code->code}}
+                        </option>
+                    @endforeach
+                </select>
             </div>
         </div>
     </div>
@@ -127,25 +138,21 @@
 
     <div class="col-lg-6">
         <div class="form-group row">
-            <label class="col-lg-4 col-form-label">@lang('messages.inventory.commodity_code') </label>
+            <label class="col-lg-4 col-form-label">@lang('messages.inventory.created_by') </label>
             <div class="col-lg-8">
-                <select class="form-control" placeholder="" name="commodity_code_id">
-                    
-                    @php
-                        $sel_commodity_code_id = !empty(old('commodity_code_id')) ? old('commodity_code_id') : @$result->commodity_code_id;
-                    @endphp
-
-                    <option value="">@lang('messages.common.select') @lang('messages.inventory.commodity_code')</option>
-                    @foreach($commodity_codes as $commodity_code)
-                        <option value="{{$commodity_code->id}}" {{ ($sel_commodity_code_id == $commodity_code->id) ? 'selected="selected"' : '' }}>
-                            {{$commodity_code->code}}
-                        </option>
-                    @endforeach
-                </select>
+                <input disabled="" type="text" class="form-control" placeholder="" name="created_by" value="{{ !empty($result->created_by) ? $result->user->first_name : Auth::user()->first_name }}">
             </div>
         </div>
     </div>
 
+    <div class="col-lg-6">
+        <div class="form-group row">
+            <label class="col-lg-4 col-form-label">@lang('messages.inventory.created_date') </label>
+            <div class="col-lg-8">
+                <input disabled="" type="text" class="form-control" placeholder="" name="created_at" value="{{ !empty($result->created_at) ? system_date($result->created_at) : system_date() }}">
+            </div>
+        </div>
+    </div>
     
 </div>
 <fieldset class="custom-field">
@@ -160,11 +167,11 @@
             @endphp
 
             <div class="col-lg-8 mt-2">
-                <label class="fancy-radio pr-3">
-                    <input type="radio" placeholder="" name="is_essential" value="0" {{ ($sel_is_essential == 0) ? 'checked="checked"' : '' }}><span><i></i>No</span>
+                <label class="fancy-radio sm pr-3">
+                    <input type="radio" placeholder="" name="is_essential" value="0" {{ ($sel_is_essential == 0) ? 'checked="checked"' : '' }}><span class="font-14-dark"><i></i>No</span>
                 </label>
-                <label class="fancy-radio pr-3">
-                     <input type="radio" placeholder="" name="is_essential" value="1" {{ ($sel_is_essential == 1) ? 'checked="checked"' : '' }}><span><i></i>Yes</span>
+                <label class="fancy-radio sm pr-3">
+                     <input type="radio" placeholder="" name="is_essential" value="1" {{ ($sel_is_essential == 1) ? 'checked="checked"' : '' }}><span class="font-14-dark"><i></i>Yes</span>
                 </label>
             </div>
         </div>
@@ -205,12 +212,12 @@
             <label class="col-lg-4 col-form-label">@lang('messages.inventory.product_on_hold')</label>
             <div class="col-lg-8 mt-2">
                 <label>
-                    <label class="fancy-radio pr-3">
-                     <input type="radio" placeholder="" name="on_hold" value="0" {{ ($sel_on_hold == 0) ? 'checked="checked"' : '' }}><span><i></i>No</span>
+                    <label class="fancy-radio sm pr-3">
+                     <input type="radio" placeholder="" name="on_hold" value="0" {{ ($sel_on_hold == 0) ? 'checked="checked"' : '' }}><span  class="font-14-dark"><i></i>No</span>
                 </label>
                 <label>
-                    <label class="fancy-radio pr-3">
-                     <input type="radio"  placeholder="" name="on_hold" value="1" {{ ($sel_on_hold == 1) ? 'checked="checked"' : '' }}><span><i></i>Yes</span>
+                    <label class="fancy-radio sm pr-3">
+                     <input type="radio"  placeholder="" name="on_hold" value="1" {{ ($sel_on_hold == 1) ? 'checked="checked"' : '' }}><span  class="font-14-dark"><i></i>Yes</span>
                 </label>
             </div>
         </div>
@@ -265,7 +272,10 @@
                 <span class="asterisk">*</span>
             </label>
             <div class="col-lg-8">
-                <input type="text" only_numeric class="form-control" placeholder="" name="single_selling_price" value="{{ !empty($result->single_selling_price) ? $result->single_selling_price : @$result->single_selling_price }}">
+                <div class="position-relative">
+                    <span class="pound-sign-form-control">@lang('messages.common.pound_sign')</span>
+                    <input type="text" only_numeric class="form-control" placeholder="" name="single_selling_price" value="{{ !empty($result->single_selling_price) ? $result->single_selling_price : @$result->single_selling_price }}">
+                </div>
             </div>
         </div>
     </div>
@@ -274,7 +284,10 @@
         <div class="form-group row">
             <label class="col-lg-4 col-form-label">@lang('messages.inventory.last_cost_price') </label>
             <div class="col-lg-8">
-                <input disabled="disabled" type="text" class="form-control" id="last_cost_price" value="{{ !empty($result->last_cost_price) ? $result->last_cost_price : 0.00 }}">
+                <div class="position-relative">
+                    <span class="pound-sign-form-control disabled-control">@lang('messages.common.pound_sign')</span>
+                    <input disabled="disabled" type="text" class="form-control" id="last_cost_price" value="{{ !empty($result->last_cost_price) ? $result->last_cost_price : 0.00 }}">
+                </div>
             </div>
         </div>
     </div>
@@ -283,7 +296,7 @@
         <div class="form-group row">
             <label class="col-lg-4 col-form-label">@lang('messages.inventory.estimated_margin') </label>
             <div class="col-lg-8">
-                <input disabled="disabled" type="text" class="form-control" id="estimated_margin" value="">
+                <label class="col-form-label" id="estimated_margin"></label>
             </div>
         </div>
     </div>
@@ -293,7 +306,7 @@
             <label class="col-lg-4 col-form-label">@lang('messages.inventory.vat_type') </label>
             <div class="col-lg-8 mt-2">
                 @foreach(product_vat_types() as $vat_type_id => $vat_type)
-                    <label class="fancy-radio pr-3"><input name="vat_type" type="radio" value="{{$vat_type_id}}" {{ (@$result->vat_type == $vat_type_id)  ? 'checked="checked"' : '' }}><span><i></i>{{$vat_type}}</span></label>
+                    <label class="fancy-radio sm pr-3"><input name="vat_type" type="radio" value="{{$vat_type_id}}" {{ (@$result->vat_type == $vat_type_id)  ? 'checked="checked"' : '' }}><span  class="font-14-dark"><i></i>{{$vat_type}}</span></label>
                 @endforeach
             </div>
         </div>
@@ -304,7 +317,10 @@
         <div class="form-group row">
             <label class="col-lg-4 col-form-label">@lang('messages.inventory.bulk_selling_price') </label>
             <div class="col-lg-8">
-                <input type="text" only_numeric class="form-control" placeholder="" name="bulk_selling_price" value="{{ !empty(old('bulk_selling_price')) ? old('bulk_selling_price') : @$result->bulk_selling_price }}">
+                <div class="position-relative">
+                    <span class="pound-sign-form-control">@lang('messages.common.pound_sign')</span>
+                    <input type="text" only_numeric class="form-control" placeholder="" name="bulk_selling_price" value="{{ !empty(old('bulk_selling_price')) ? old('bulk_selling_price') : @$result->bulk_selling_price }}">
+                </div>
             </div>
         </div>
     </div>
@@ -360,7 +376,7 @@
         <div class="form-group row">
             <label class="col-lg-6 col-form-label">@lang('messages.inventory.product_length') </label>
             <div class="col-lg-6">
-                <input type="text" only_numeric class="form-control" placeholder="" name="product_length" value="{{ !empty(old('product_length')) ? old('product_length') : @$result->product_length }}">
+                <input type="text" only_numeric class="form-control" placeholder="" name="product_length" value="{{ !empty(old('product_length')) ? apply_float_value(old('product_length')) : apply_float_value(@$result->product_length) }}">
             </div>
         </div>
     </div>
@@ -369,7 +385,7 @@
         <div class="form-group row">
             <label class="col-lg-6 col-form-label">@lang('messages.inventory.product_width') </label>
             <div class="col-lg-6">
-                <input type="text" only_numeric class="form-control" placeholder="" name="product_width" value="{{ !empty(old('product_width')) ? old('product_width') : @$result->product_width }}">
+                <input type="text" only_numeric class="form-control" placeholder="" name="product_width" value="{{ !empty(old('product_width')) ? apply_float_value(old('product_width')) : apply_float_value(@$result->product_width) }}">
             </div>
         </div>
     </div>
@@ -378,16 +394,16 @@
         <div class="form-group row">
             <label class="col-lg-6 col-form-label">@lang('messages.inventory.product_height') </label>
             <div class="col-lg-6">
-                <input type="text" only_numeric class="form-control" placeholder="" name="product_height" value="{{ !empty(old('product_height')) ? old('product_height') : @$result->product_height }}">
+                <input type="text" only_numeric class="form-control" placeholder="" name="product_height" value="{{ !empty(old('product_height')) ? apply_float_value(old('product_height')) : apply_float_value(@$result->product_height) }}">
             </div>
         </div>
     </div>
 
     <div class="col-lg-3">
         <div class="form-group row">
-            <label class="col-lg-6 col-form-label">@lang('messages.inventory.product_weight') </label>
+            <label class="col-lg-6 col-form-label">@lang('messages.table_label.stor_weight') </label>
             <div class="col-lg-6">
-                <input type="text" only_numeric class="form-control" placeholder="" name="product_weight" value="{{ !empty(old('product_weight')) ? old('product_weight') : @$result->product_weight }}">
+                <input type="text" only_numeric class="form-control" placeholder="" name="product_weight" value="{{ !empty(old('product_weight')) ? apply_float_value(old('product_weight')) : apply_float_value(@$result->product_weight) }}">
             </div>
         </div>
     </div>

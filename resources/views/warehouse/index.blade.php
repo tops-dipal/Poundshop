@@ -23,6 +23,7 @@
     </div>  
     <div class="card-flex-container d-flex">                        
         <div class="d-flex-xs-block">
+            <div class="table-responsive">
             <table id="warehouse_table" class="display">
                 <thead>
                     <tr>
@@ -53,15 +54,16 @@
                                 </div>
                             </div>
                         </th>
-                        <th>@lang('messages.table_label.warehouse_name')</th>
-                        <th>@lang('messages.table_label.warehouse_type')</th>
+                        <th class="m-w-120">@lang('messages.table_label.warehouse_name')</th>
+                        <th class="m-w-120">@lang('messages.table_label.warehouse_type')</th>
                         <th>@lang('messages.table_label.contact_person')</th>
                         <th>@lang('messages.table_label.phone_no')</th>
-                        <th data-class-name="action">@lang('messages.table_label.action')</th>
+                        <th data-class-name="action action-two">@lang('messages.table_label.action')</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
-            </table>                
+            </table>      
+            </div>          
         </div>
     </div>
 </div>

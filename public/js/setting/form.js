@@ -18,6 +18,20 @@
     {        
 
     };
+    $("#short_date").keydown(function(e)
+    {
+        var key = e.charCode || e.keyCode || 0;
+        // allow backspace, tab, delete, enter, arrows, numbers and keypad numbers ONLY
+        // home, end, period, and numpad decimal
+        return (
+            key == 8 || 
+            key == 9 ||
+            key == 13 ||
+            key == 46 ||
+            (key >= 35 && key <= 40) ||
+            (key >= 48 && key <= 57) ||
+            (key >= 96 && key <= 105));
+    });
     
     $("#setting-form").validate({
         focusInvalid: false, // do not focus the last invalid input
@@ -44,7 +58,32 @@
             "standard_vat_rate":{
                 required:true,
                 maxlength:5,
-            }
+            },
+            "short_date":{
+                required:true,
+                maxlength:5,
+            },
+            "address1":{
+                required:true,
+                maxlength:100,
+            },
+            "address2":{
+                required:true,
+                maxlength:100,
+            },
+            "country":{
+                required:true,
+            },
+            "state":{
+                required:true,
+            },
+            "city":{
+                required:true,
+            },
+            "postcode":{
+                required:true,
+                maxlength:10,
+            },
          },
           
         errorPlacement: function (error, element) {

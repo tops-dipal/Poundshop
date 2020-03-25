@@ -18,6 +18,20 @@
             liveSearch:true,
             size:10
         });
+        
+        var date = new Date();
+        
+        date.setDate(date.getDate());
+        
+        var current_val = $('.date_to_go_live').val();
+        
+        $('body .date_to_go_live').datetimepicker({
+            format   : 'D-MMM-YYYY HH:mm',
+            minDate  : date,
+            ignoreReadonly: true,
+            useCurrent: false,
+            sideBySide: true,
+        }); 
     }
 
     $('body').on('click', '#save_and_post', function(){
@@ -100,10 +114,10 @@
         },
         errorPlacement: function (error, element) {
             error.insertAfter(element);
-            if(element.attr('name') == 'magento_product_id')
-            {
-               error.insertAfter(element.parent('div')); 
-            }
+            // if(element.attr('name') == 'magento_product_id')
+            // {
+            //    error.insertAfter(element.parent('div')); 
+            // }
             if(element.attr('name') == 'category_ids[]')
             {
                error.insertAfter(element.parent('div')); 

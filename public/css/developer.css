@@ -9,8 +9,14 @@
     background: url(../icons/save.png) no-repeat;
     background-size: cover;
 }
-th.action-three, td.action-three{
-    width: 130px !important;
+th.action-three, td.action-three .action-btns{
+    width: 110px !important;
+}
+th.action-two, td.action-two .action-btns{
+    width: 70px !important;
+}
+th.action-one, td.action-one .action-btns{
+    width: 45px !important;
 }
 .hidden{
     display: none;
@@ -84,4 +90,160 @@ th.action-three, td.action-three{
     align-items: center;
     justify-content: center;
     cursor: pointer;
+}
+
+.bookin_prev,
+.bookin_next{
+    position: relative;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 14px;
+}
+.bookin_prev:after{
+    content: '<< Previous';
+}
+.bookin_next:after{
+    content: 'Next >>';
+}
+.bookin_paging{
+    display: flex;
+    font-size: 12px;
+}
+.bookin_paging>div{
+    padding: 0 10px;
+}
+.btn-delete .icon-moon {
+    color: #ec1c24;
+}
+.btn-delete.bg-light-red {
+    background: #fbd2d3;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    width: 30px;
+    height: 30px;
+    margin: 2px 0;
+}
+
+.btn-view-qc{
+    background: #d7d1dd;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    width: 30px;    
+    height: 30px;
+    margin: 2px 0;
+    text-decoration: none;
+}
+.btn-view-qc .icon-moon {
+    color: #361755;
+    font-size: 12px;
+}
+
+.pointer-cursor{
+    cursor: pointer;
+}
+.descripancy-upload-img{
+    position: relative;
+}
+.descripancy-upload-img .remove{
+    position: absolute;
+    top: 0;
+    right: 0;
+    background: red;
+    color: #fff;
+    padding: 0 2px;
+}
+.wrap-label {
+    width: 100px;
+}
+.wrap-label .inputfile-custom + label{
+    flex-wrap: wrap;
+    height: auto;
+}
+.wrap-label .inputfile-custom + label strong{
+    width: 100%;
+}
+.wrap-label .inputfile-custom + label span{
+    flex: 0 0 100%;
+    line-height: 1.6;
+    padding: 0 5px;
+    font-size: 12px;
+}
+.wrap-label .inputfile-custom + label strong{
+    padding: 4px 8px;
+    font-size: 12px;
+}
+.product-case-detail .card-photobooth{
+    border: 2px solid #c8c6cc;
+}
+.product-case-detail .card-photobooth .content {
+    padding: 10px 5px;
+}
+/** Hitesh Tank **/
+table.dataTable tfoot th, table.dataTable tfoot td {
+    padding: 5px !important;
+    border-top: none !important;
+    font-size: 13px;
+}
+.goods-in-summary{
+    border: 2px solid #ddd;
+    padding: 5px 15px;
+    margin-bottom: 5px;
+}
+.goods-in-summary .summary-item{
+    display: flex;
+    align-items: center;
+    margin-top: 5px;
+}
+.goods-in-summary .summary-item .title{
+    flex: 0 0 160px; 
+    font-weight: 500;   
+}
+
+.custom-table input[type=text].validation-error{
+    border: 1px solid red;
+}
+
+.hide_ajaxDatable_column{
+    display: none;
+}
+
+.btn-full-width{
+    width: 100%;
+}
+
+.input-barcode{
+    width: 120px !important;
+}
+.putaway-fix-title{
+    min-width: 220px !important;
+}
+.err-absolute{
+    position: relative;
+}
+.err-absolute .invalid-feedback{
+    position: absolute;
+}
+.po-product-title{
+    line-height: 1.2;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+.d-flex-align-end{
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.dt-head-align-right{
+    text-align: right!important;
+}
+
+.dt-head-align-right span.dt-head-text{
+    padding-right:1rem !important;
 }

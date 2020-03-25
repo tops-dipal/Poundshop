@@ -26,6 +26,7 @@
 		</div>	
 		<div class="card-flex-container d-flex">					    
 			<div class="d-flex-xs-block">
+				<div class="table-responsive">
 				<table id="importduty_table" class="display">
 				    <thead>
 				        <tr>
@@ -60,9 +61,13 @@
 				            </th>
 				            <th>@lang('messages.commodity_code_master.commodity_code')</th>
 				            <th>@lang('messages.commodity_code_master.commodity_code_desc')</th>
-				            <th>@lang('messages.import_duty_master.rate_per')</th>
+				            <th class="dt-head-align-right">
+                                <span class="dt-head-text">	
+                                	@lang('messages.import_duty_master.rate_per')
+                                </span>
+                            </th>
 				            <th>@lang('messages.user_management.country')</th>
-				            <th data-class-name="action">@lang('messages.table_label.action')</th>				
+				            <th data-class-name="action action-two">@lang('messages.table_label.action')</th>				
 				        </tr>
 				    </thead>
 				    <tbody>
@@ -73,7 +78,8 @@
 				    <tbody>
 				        
 				    </tbody>
-				</table>				
+				</table>
+				</div>				
 			</div>
 		</div>
 	</div>

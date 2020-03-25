@@ -115,7 +115,11 @@
                         </th>
                         <th>@lang('messages.table_label.supplier')</th>
                         <th>@lang('messages.table_label.account')</th>
-                        <th>@lang('messages.table_label.credit_limit')</th>
+                        <th class="dt-head-align-right">
+                            <span class="dt-head-text">
+                                @lang('messages.table_label.credit_limit')
+                            </span>    
+                        </th>
                         <th>@lang('messages.table_label.contact')</th>
                         <th>@lang('messages.table_label.email')</th>
                         <th>@lang('messages.table_label.phone')</th>

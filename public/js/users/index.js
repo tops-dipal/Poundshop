@@ -39,6 +39,7 @@
             null,
             null,
             null,
+            null,
             {"orderable": false, "searchable": false},
         ];
         var order_coloumns = [[0, "desc"]];

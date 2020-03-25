@@ -13,6 +13,9 @@
         $(document).ready(function ()
         {
             c._initialize();
+            jQuery.validator.addMethod("notOnlyZero", function (value, element, param) {
+                return this.optional(element) || parseInt(value) > 0;
+            });
         });
     };
 
@@ -210,9 +213,8 @@
                         if (response.status_code == 200) 
                         {
                             PoundShopApp.commonClass._displaySuccessMessage(response.message);
-                            setTimeout(function () {
-                                     location.reload();
-                             }, 2000);
+                            refreash_tab('form-images');
+                          
                         }
                     },
                      error: function (xhr, err) {
@@ -409,10 +411,10 @@ $('.input-images').imageUploader();
         },
         errorPlacement: function (error, element) {
             error.insertAfter(element);
-            if(element.attr('name') == 'product_identifier')
-            {
-               error.insertAfter(element.parent('div')); 
-            }
+            // if(element.attr('name') == 'product_identifier')
+            // {
+            //    error.insertAfter(element.parent('div')); 
+            // }
         },
         highlight: function (element) { // hightlight error inputs
             $(element).closest('.form-group').addClass('has-error'); // set error class to the control group
@@ -495,8 +497,46 @@ $('.input-images').imageUploader();
             label.remove();
         },
     });
+    $("#form-warehouse").validate({
+        // focusInvalid: false, // do not focus the last invalid input
+        invalidHandler: function(form, validator) {
+            if (!validator.numberOfInvalids())
+                return;
+            $('html, body').animate({
+                scrollTop: $(validator.errorList[0].element).offset().top-30
+            }, 1000);
+        },
+        errorElement: 'span',
+        errorClass: 'invalid-feedback', // default input error message class
+         ignore: [],
+        rules: {
+            "stock_hold_days":{
+                required:true,
+                number:true,
+                 notOnlyZero: '0'
+            }
+            // "var_barcode[]":{
+            //     required: true,
+            // },
+        },
+        messages:{
+            "stock_hold_days": {
+                notOnlyZero: 'Zero not allowed'
+            }
+        },
+        errorPlacement: function (error, element) {
+            error.insertAfter(element);
+        },
+        highlight: function (element) { // hightlight error inputs
+            $(element).closest('.form-group').addClass('has-error'); // set error class to the control group
+        },
+        success: function (label) {
+            label.closest('.form-group').removeClass('has-error');
+            label.remove();
+        },
+    });
     
-    $("#form-barcodes-popup").validate({
+    $("#form-barcodes").validate({
         // focusInvalid: false, // do not focus the last invalid input
         invalidHandler: function(form, validator) {
             if (!validator.numberOfInvalids())
@@ -564,6 +604,10 @@ $('.input-images').imageUploader();
                         if(form_id == 'form-barcodes')
                         {
                             $('#barcodeModal').modal('hide');
+
+                            let product_id = $('#'+form_id).find('input[name="id"]').val();
+
+                            refreash_outer_barcode_options(product_id);
                         }
                            
                         if(form_id == 'form-stock-file')
@@ -652,61 +696,7 @@ $('.input-images').imageUploader();
                         reader.readAsDataURL(input.files[0]);
                     }
                     
-                   /*else
-                   {
-                        
-                        var  fileReader=reader;
-                           var file=input.files[0];
-
-                            fileReader.onload = function() {
-                          var blob = new Blob([fileReader.result], {type: file.type});
-                          var url = URL.createObjectURL(blob);
-
-                          var video = document.createElement('video');
-                          
-                          var timeupdate = function() {
-                            
-                            if (snapImage()) {
-                                
-                              video.removeEventListener('timeupdate', timeupdate);
-                              video.pause();
-                            }
-                          };
-                          video.addEventListener('loadeddata', function() {
-                            if (snapImage()) {
-                              video.removeEventListener('timeupdate', timeupdate);
-                            }
-                          });
-                          var snapImage = function() {
-                            var canvas = document.createElement('canvas');
-                            
-                            canvas.width = video.videoWidth;
-                            canvas.height = video.videoHeight;
-                            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                            var image = canvas.toDataURL();
-                            var success = 1;
-                            if (success) {
-                              var img = document.createElement('img');
-                              img.src = image;
-                              
-                              block.attr('src', image);
-                              
-                            }
-
-                            return success;
-                          };
-                          video.addEventListener('timeupdate', timeupdate);
-                          video.preload = 'metadata';
-                          video.src = url;
-                          
-                          video.muted = true;
-                          video.playsInline = true;
-                          video.play();
-                        };
-                        fileReader.readAsArrayBuffer(file);
-                        
-                        }
-                   }*/
+                   
                }    
             }
             else
@@ -738,7 +728,14 @@ $('.input-images').imageUploader();
                 nextbtn.show();
             }
         }else{
-            alert('Please select video or image file.');
+             bootbox.alert({
+                        title: "Alert",
+                        message: "Please select video or image file..",
+                        size: 'small'
+                    });
+                    $('.btn-blue').attr('disabled',true);
+                   return false;
+           
         }
 
     };
@@ -782,61 +779,6 @@ var previewVariationImage = function(input, block,nextbtn="",videoShower=""){
                         reader.readAsDataURL(input.files[0]);
                     }
                     
-                   /*else
-                   {
-                        
-                        var  fileReader=reader;
-                           var file=input.files[0];
-
-                            fileReader.onload = function() {
-                          var blob = new Blob([fileReader.result], {type: file.type});
-                          var url = URL.createObjectURL(blob);
-
-                          var video = document.createElement('video');
-                          
-                          var timeupdate = function() {
-                            
-                            if (snapImage()) {
-                                
-                              video.removeEventListener('timeupdate', timeupdate);
-                              video.pause();
-                            }
-                          };
-                          video.addEventListener('loadeddata', function() {
-                            if (snapImage()) {
-                              video.removeEventListener('timeupdate', timeupdate);
-                            }
-                          });
-                          var snapImage = function() {
-                            var canvas = document.createElement('canvas');
-                            
-                            canvas.width = video.videoWidth;
-                            canvas.height = video.videoHeight;
-                            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
-                            var image = canvas.toDataURL();
-                            var success = 1;
-                            if (success) {
-                              var img = document.createElement('img');
-                              img.src = image;
-                              
-                              block.attr('src', image);
-                              
-                            }
-
-                            return success;
-                          };
-                          video.addEventListener('timeupdate', timeupdate);
-                          video.preload = 'metadata';
-                          video.src = url;
-                          
-                          video.muted = true;
-                          video.playsInline = true;
-                          video.play();
-                        };
-                        fileReader.readAsArrayBuffer(file);
-                        
-                        }
-                   }*/
                }    
             }
             else
@@ -870,7 +812,14 @@ var previewVariationImage = function(input, block,nextbtn="",videoShower=""){
             }
         }else{
             $(input).val('');
-            alert('Please select video or image file.');
+              bootbox.alert({
+                        title: "Alert",
+                        message: "Please select video or image file.",
+                        size: 'small'
+                    });
+                    $('.btn-blue').attr('disabled',true);
+                   return false;
+            
         }
 
     };
@@ -887,9 +836,29 @@ function calculate_estimated_margin()
     
     if(!isNaN(sp) && !isNaN(cp))
     {   
-        var estimated_margin = (sp - cp);
+        var estimated_margin = ((sp - cp)/cp)*100;
 
-        $('#estimated_margin').val(estimated_margin);
+        if(estimated_margin == 'Infinity')
+        {
+            estimated_margin = sp - cp;
+        }    
+
+        if(isNaN(estimated_margin))
+        {
+            estimated_margin = 0;
+        }
+        
+        estimated_margin = estimated_margin.toFixed(2); 
+
+        estimated_margin = estimated_margin+'%';
+
+        $('#estimated_margin').text(estimated_margin);
+    }
+    else
+    {
+        estimated_margin = '0.00%';
+
+        $('#estimated_margin').text(estimated_margin);
     }
 }
 
@@ -1078,11 +1047,17 @@ $('input[name="barcode_type"]').on('change', function(){
 
         if($(this).val() == '2')
         {
-            $('#case_qty_label').text(POUNDSHOP_MESSAGES.inventory.inner_case_qty);
+            $('#case_qty_label').html(POUNDSHOP_MESSAGES.inventory.inner_case_qty+' <span class="asterisk">*</span>');
+                
+            $('select[name="parent_id"]').attr('required', 'required');   
+            $('#case_parent_barcode').show();
         }   
         else
         {
-            $('#case_qty_label').text(POUNDSHOP_MESSAGES.inventory.outer_case_qty);
+            $('#case_qty_label').html(POUNDSHOP_MESSAGES.inventory.outer_case_qty+'<span class="asterisk">*</span>');
+
+            $('select[name="parent_id"]').removeAttr('required', 'required');   
+            $('#case_parent_barcode').hide();
         } 
 
         $('#case_quantity').show();
@@ -1091,6 +1066,9 @@ $('input[name="barcode_type"]').on('change', function(){
     {
         $('input[name="case_quantity"]').removeAttr('required', 'required');
         $('#case_quantity').hide();
+
+        $('select[name="parent_id"]').removeAttr('required', 'required');   
+        $('#case_parent_barcode').hide();
     }  
 })
 
@@ -1158,7 +1136,7 @@ function deleteBarcode(me)
                 message: "Please select atleast one record to delete.",
                 size: 'small'
             });
-            return false;
+        return false;
     }    
 }
 
@@ -1171,6 +1149,7 @@ function editBarcode(me)
         $('#barcodeModal input[name="barcode_id"]').val($(me).attr('attr-id'));
         $('#barcodeModal input[name="barcode"]').val($(me).attr('attr-barcode'));
         $('#barcodeModal input[name="case_quantity"]').val($(me).attr('attr-case_quantity'));
+        $('#barcodeModal select[name="parent_id"]').val($(me).attr('attr-parent-id'));
         $('#barcodeModal input[name="barcode_type"][value='+$(me).attr('attr-barcode_type')+']').prop('checked', true);
 
         $('#barcodeModal input[name="barcode_type"][value='+$(me).attr('attr-barcode_type')+']').trigger('change');
@@ -1382,24 +1361,25 @@ $('body').on('click', '.btn-add-variation', function (e) {
             
             // $(var_row_clone).find('input[name^=var_barcode]').attr('required', 'required');
 
-            var variation_title = $('input[name="title"]').val();
+            var variation_title = $('input[name="title"]').val().trim();
 
             if (variation_type == "size") {
                 $(var_row_clone).find("input[name^=var_size]").val(theme_array[i].size)
-                variation_title += ', '+theme_1+':'+theme_array[i].size;
+                 variation_title += ' - '+theme_array[i].size;
             }
             else if (variation_type == "color") {
                 variation_column_hide_show(2)
                 $(var_row_clone).find("input[name^=var_color]").val(theme_array[i].color)
-                variation_title += ', '+theme_2+':'+theme_array[i].color;
+                variation_title += ' - '+theme_array[i].color;
             }
             else if (variation_type == "size-color") {
                 variation_column_hide_show(1)
                 variation_column_hide_show(2)
                 $(var_row_clone).find("input[name^=var_size]").val(theme_array[i].size)
                 $(var_row_clone).find("input[name^=var_color]").val(theme_array[i].color)
-                variation_title += ', '+theme_1+':'+theme_array[i].size;
-                variation_title += ', '+theme_2+':'+theme_array[i].color;
+                
+                variation_title += ' - '+theme_array[i].size;
+                variation_title += ', '+theme_array[i].color;
             }
 
             barcode = $('input[name="product_identifier"]').val();
@@ -1969,6 +1949,30 @@ function update_serialize_form_data(formId = 'main_form')
     {
         on_load_form_data[formId] = $('#'+formId).serialize();
     }   
+}
+
+function refreash_outer_barcode_options(product_id)
+{
+    if(typeof product_id != 'undefined' && product_id != "")
+    {
+        $.ajax({
+                type: "GET",
+                url: WEB_BASE_URL+'/product/product-outer-barcodes',
+                data:{
+                        product_id : product_id
+                    },
+                datatype: 'html',
+                headers: {
+                    'Authorization': 'Bearer ' + API_TOKEN,
+                },
+                success: function (response) {
+                   $('select[name="parent_id"]').html(response);
+                },
+                error: function (xhr, err) {
+                   
+                }
+            });
+    }    
 }
 
 function refreash_tab(form_id = '', html_div_id = "", refreash_url_attr = "refreash_url")

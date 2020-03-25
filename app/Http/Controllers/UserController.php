@@ -188,6 +188,7 @@ class UserController extends Controller
      
 
          $user =User::find($id);
+         $user_role='';
         
         if(!empty($user))
         {   
@@ -234,13 +235,18 @@ class UserController extends Controller
                 
             }*/
             $page="edit";
-             $sites=\App\Warehouse::get();
-              $attachments=\App\Attachment::where('user_id',$user->id)->get();
+            $sites=\App\Warehouse::get();
+            $attachments=\App\Attachment::where('user_id',$user->id)->get();
             $state_name=($user->state_id!=0)?\App\State::find($user->state_id)->name:'';
-            $city_name=($user->city_id!=0)?\App\City::find($user->city_id)->name:'';
-            
-            
-            return view('users.edit', compact(['user','roles','countries','country_states','state_cities','page','sites','attachments','state_name','city_name']));
+            $city_name=($user->city_id!=0)?\App\City::find($user->city_id)->name:'';   
+            $user_role=$user->roles->first();  
+            if(!empty($user_role))
+            {
+                $user_role=$user_role->name;
+            }    
+               
+            return view('users.edit', compact(['user','roles','countries','country_states','state_cities','page','sites','attachments','state_name','city_name','user_role']));
+
             //return view('supplier.form',compact('page_title', 'prefix_title', 'countries', 'result', 'country_states', 'state_cities'));
         }
         else
@@ -335,6 +341,4 @@ class UserController extends Controller
                         ->with('success','User deleted successfully');
 
     }
-
-
 }

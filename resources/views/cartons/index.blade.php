@@ -22,6 +22,7 @@
         </div>	
         <div class="card-flex-container d-flex">					    
             <div class="d-flex-xs-block">
+                <div class="table-responsive">
                 <table id="carton_table" class="display">
                     <thead>
                         <tr>
@@ -55,17 +56,36 @@
                                 </div>
                             </th>
                             <th>@lang('messages.table_label.carton_name')</th>
-                            <th>@lang('messages.table_label.length')</th>
-                            <th>@lang('messages.table_label.width')</th>
-                            <th>@lang('messages.table_label.height')</th>
-                            <th>@lang('messages.table_label.max_weight')</th>
-                            <th>@lang('messages.table_label.qty')</th>
+                            <th class="dt-head-align-right">
+                                <span class="dt-head-text">
+                                    @lang('messages.table_label.length')
+                                </span>
+                            </th>
+                            <th class="dt-head-align-right">
+                                <span class="dt-head-text">
+                                    @lang('messages.table_label.width')
+                                </span>
+                            </th>
+                            <th class="dt-head-align-right">
+                                <span class="dt-head-text">
+                                    @lang('messages.table_label.height')
+                                </span>
+                            </th>
+                            <th class="dt-head-align-right">
+                                <span class="dt-head-text"> 
+                                    @lang('messages.table_label.max_weight')
+                                </span>
+                            </th>
+                            <th>
+                               @lang('messages.table_label.qty')
+                            </th>
                             <th>@lang('messages.table_label.recycled_carton')</th>
-                            <th data-class-name="action">@lang('messages.table_label.action')</th>				
+                            <th data-class-name="action action-two">@lang('messages.table_label.action')</th>				
                         </tr>
                     </thead>
                     <tbody></tbody>
                 </table>				
+                </div>
             </div>
         </div>
 </div>

@@ -36,17 +36,13 @@
                     </div>
                 </div>  
              
-            <form method="post" id="listing-manager-form" enctype="multipart/form-data">
-                <div class="right-items">
+            <form method="post" id="listing-manager-form" enctype="multipart/form-data">                
                     <select name="store_id" id="store_id"  class="form-control" hidden="">
                         @forelse($storeList as $key=>$val)
                         <option value="{{ $val->id }}" {{ $loop->first ? 'selected="selected"' : '' }}>{{ $val->store_name }}</option>
                         @empty
-                        @endforelse
-                        
+                        @endforelse                        
                     </select>
-                  
-                </div>  
             </form>                  
         </div>  
         <div class="card-flex-container d-flex">
@@ -86,11 +82,11 @@
                                     </th>
                                     <th>@lang('messages.inventory.image')</th>
                                     <th><div class="m-w-200">@lang('messages.inventory.title')</div></th>
-                                    <th>@lang('messages.inventory.sku')</th>
-                                    <th>@lang('messages.common.quantity')</th>
-                                    <th>@lang('messages.common.price')</th>
+                                    <th class="w-150">@lang('messages.inventory.sku')</th>
+                                    <th class="w-130">@lang('messages.common.quantity')</th>
+                                    <th class="w-130">@lang('messages.common.price')</th>
                                      <th>@lang('messages.magento_listing.listing_date')</th>
-                                    <th data-class-name="action">@lang('messages.table_label.action')</th>             
+                                    <th data-class-name="action action-three">@lang('messages.table_label.action')</th>             
                                 </tr>
                             </thead>
                            

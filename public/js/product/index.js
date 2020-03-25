@@ -33,7 +33,7 @@
                 
                 $('#seasonal_range').hide();
 
-                $('#custom_advance_search_fields input,select,textarea').each(function()
+                $('#custom_advance_search_fields').find('input,select,textarea').each(function()
                 {
                     if(typeof $(this).val() != undefined && !$(this).hasClass('clear_except'))
                     {
@@ -98,14 +98,22 @@
             null,
             null,
             {"orderable": false, "searchable": false},
-            {"orderable": false, "searchable": false},
-            {"orderable": false, "searchable": false},
+            null,
+            null,
             {"orderable": false, "searchable": false},
         ];
         
         var order_coloumns = [[0, "desc"]];
 
-        PoundShopApp.commonClass.table = PoundShopApp.commonClass._generateDataTable(PoundShopApp.commonClass.table, dataTableId,'api-product',field_coloumns,order_coloumns,undefined,undefined,'Search by SKU, Title, Barcode' , [], 'custom_advance_search');    
+        var columnDefs = [
+                   { targets : [8,9],
+                     render : function(data, type, row) {
+                        return '<p class="mb-0 pr-3 text-right">'+data+'</p>';
+                     }     
+                   }
+                ];
+
+        PoundShopApp.commonClass.table = PoundShopApp.commonClass._generateDataTable(PoundShopApp.commonClass.table, dataTableId,'api-product',field_coloumns,order_coloumns,undefined,undefined,'Search by SKU, Title, Barcode' , [], 'custom_advance_search', columnDefs);    
     };
         
     $('.datepicker_month_and_date').datepicker({
@@ -225,7 +233,7 @@ function advanceSearch()
 
     if($('#custom_advance_search_fields').length > 0)
     {    
-        $('#custom_advance_search_fields input,select,textarea').each(function()
+        $('#custom_advance_search_fields').find('input,select,textarea').each(function()
         {
             if(typeof $(this).val() != undefined && $(this).val() != null && !$(this).hasClass('clear_except'))
             {

@@ -51,7 +51,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.max_vol')<small> (@lang('messages.totes.meter3'))</small></label>
+                                        <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.max_vol')<small> (@lang('messages.totes.meter')<sup style="font-12">3</sup>)</small></label>
                                         <div class="col-lg-8">
                                             <input readonly="readonly" disabled="disabled" type="text" class="form-control" id="max_volume" placeholder="" name="max_volume" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
                                         </div>

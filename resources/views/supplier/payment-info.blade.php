@@ -48,6 +48,14 @@
                     </label>
                 </label>
             </div>
+            <hr>
+            <div class="form-group">
+                <label class="col-form-label d-flex align-items-center">
+                    @lang('messages.supplier.we_pay_this_supplier_on')
+                    <input type="text" class="form-control w-50 mr-3 ml-3" only_digit name="pay_on_date_every_month" value="{{ !empty(old('pay_on_date_every_month')) ? old('pay_on_date_every_month') : @$result->pay_on_date_every_month }}">
+                    @lang('messages.supplier.of_every_month')
+                </label>
+            </div>
                           
         </div>
         <div class="col-lg-7 bl-2"> 
@@ -97,27 +105,29 @@
             <div class="form-group" id="retroOptions" {{ ($sel_allow_retro_discount != '1') ? 'style=display:none' : '' }}>
                 <label class="col-form-label d-flex flex-wrap align-items-center">
                     @lang('messages.supplier.retro_if_poundshop_spend')
-                    <input type="text" class="form-control w-120 mx-3 my-1" only_digit name="retro_amount" value="{{ !empty(old('retro_amount')) ? old('retro_amount') : @$result->retro_amount }}">
+                    <div class="position-relative">
+                        <span class="pound-sign-form-control mx-3 my-1">@lang('messages.common.pound_sign')</span>
+                        <input type="text" class="form-control w-120 mx-3 my-1" only_digit name="retro_amount" value="{{ !empty(old('retro_amount')) ? old('retro_amount') : @$result->retro_amount }}">
+                    </div>    
                     @lang('messages.supplier.retro_from')
                     @php
                     $sel_retro_from_date = !empty(old('retro_from_date')) ? old('retro_from_date') : @$result->retro_from_date;
                     @endphp
                     <input class="form-control w-120 mx-3 my-1 datepicker" type="text" readonly="" name="retro_from_date" readonly="" value="{{ !empty($sel_retro_from_date) ? system_date($sel_retro_from_date) : system_date()}}">
                     @lang('messages.supplier.retro_to')
-                    <input class="form-control w-120 mx-3 my-1 datepicker" type="text" readonly="" name="retro_to_date" readonly="" value="{{ !empty(old('retro_to_date')) ? old('retro_to_date') : system_date(@$result->retro_to_date) }}">
-                    @lang('messages.supplier.retro_with_supplier')
+                    <input class="form-control w-120 mx-3 my-1 datepicker" type="text" readonly="" name="retro_to_date" readonly="" value="{{ !empty(old('retro_to_date')) ? old('retro_to_date') : system_date(@$result->retro_to_date) }}">.
                     @lang('messages.supplier.retro_than_supplier_will_provide')
                     <input type="text" class="form-control w-50 mx-3 my-1" name="retro_percent_discount" value="{{ !empty(old('retro_percent_discount')) ? old('retro_percent_discount') : @$result->retro_percent_discount }}">
                     @lang('messages.supplier.percent_discount_excludes_vat')
                     
                     <label class="col-form-label d-flex align-items-center">
-                        <label class="fancy-radio sm">
+                        <label class="fancy-radio sm ml-3">
                             <input type="radio" name="retro_type" checked="checked" value="1">
                             <span><i></i></span>
                         </label>
                         @lang('messages.supplier.retro_type_order_placed')
                     </label>
-                    <label class="col-form-label d-flex align-items-center">
+                    <label class="col-form-label d-flex align-items-center ml-3">
                         <label class="fancy-radio sm">
                             <input type="radio" name="retro_type" {{ (@$result->retro_type == 2) ? 'checked="checked"' : "" }} value="2">
                             <span><i></i></span>
@@ -125,10 +135,7 @@
                         @lang('messages.supplier.retro_type_delivered')
                     </label>
                 </label>
-                
             </div>            
-            
-            
         </div>
     </div>
 

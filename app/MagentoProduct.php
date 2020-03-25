@@ -13,7 +13,7 @@ class MagentoProduct extends Model
         if(!empty($this->attributes['main_image_url']))
             return $this->attributes['main_image_url'];
         else
-            return url('/storage/uploads/product-images/no-image.jpeg');
+            return url('/img/no-image.jpeg');
     }
 
     public static function revise_valid_product($magento_id)

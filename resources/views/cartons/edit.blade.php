@@ -32,7 +32,7 @@
                                     <div class="form-group row">
                                         <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.length')<small> (@lang('messages.totes.cm'))</small><span class="asterisk">*</span></label>
                                         <div class="col-lg-8">
-                                          <input type="text" class="form-control" id="length" placeholder="" name="length" value="{{$carton->length}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
+                                          <input type="text" class="form-control" id="length" placeholder="" name="length" value="{{apply_float_value($carton->length)}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
                                         </div>
                                     </div>
                                 </div>
@@ -40,7 +40,7 @@
                                     <div class="form-group row">
                                         <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.width')<small> (@lang('messages.totes.cm'))</small><span class="asterisk">*</span></label>
                                         <div class="col-lg-8">
-                                          <input type="text" class="form-control" id="width" placeholder="" name="width" value="{{$carton->width}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
+                                          <input type="text" class="form-control" id="width" placeholder="" name="width" value="{{apply_float_value($carton->width)}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
                                         </div>
                                     </div>
                                 </div>
@@ -48,15 +48,15 @@
                                     <div class="form-group row">
                                         <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.stck_height')<small> (@lang('messages.totes.cm'))</small><span class="asterisk">*</span></label>
                                         <div class="col-lg-8">
-                                          <input type="text" class="form-control" id="height" placeholder="" name="height" value="{{$carton->height}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
+                                          <input type="text" class="form-control" id="height" placeholder="" name="height" value="{{apply_float_value($carton->height)}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
                                         </div>
                                     </div>
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.max_vol')<small> (@lang('messages.totes.meter3'))</small></label>
+                                        <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.max_vol')<small> (@lang('messages.totes.meter')<sup style="font-12">3</sup>)</small></label>
                                         <div class="col-lg-8">
-                                            <input readonly="readonly" disabled="disabled" type="text" class="form-control" id="max_volume" placeholder="" name="max_volume" value="{{$carton->max_volume}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
+                                            <input readonly="readonly" disabled="disabled" type="text" class="form-control" id="max_volume" placeholder="" name="max_volume" value="{{apply_float_value($carton->max_volume)}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
                                         </div>
                                     </div>
                                 </div>
@@ -64,7 +64,7 @@
                                     <div class="form-group row">
                                         <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.table_label.max_weight')<small> (@lang('messages.totes.kg'))</small><span class="asterisk">*</span></label>
                                         <div class="col-lg-8">
-                                          <input type="text" class="form-control" id="" placeholder="" name="max_weight_carry" value="{{$carton->max_weight}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
+                                          <input type="text" class="form-control" id="" placeholder="" name="max_weight_carry" value="{{apply_float_value($carton->max_weight)}}" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
                                         </div>
                                     </div>
                                 </div>

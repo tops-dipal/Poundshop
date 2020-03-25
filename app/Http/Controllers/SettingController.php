@@ -57,6 +57,11 @@ class SettingController extends Controller
             //print_r($data->terms->terms_pound_uk);exit;
             return view('setting.term_condition',compact('data'));
         }
+        if($moduleName=='general')
+        {
+            $fields=Setting::where('module_name','!=','vat_rates')->get();
+            return view('setting.general-form',compact('fields'));
+        }
         else
         {
 

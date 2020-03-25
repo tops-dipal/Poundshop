@@ -1,0 +1,95 @@
+@media (min-width:1200px){
+	.custom-row-gutter-ten .custom-col-half .dashboard-card{
+		margin-bottom: 0;
+	}
+}
+@media (min-width:1440px){
+}
+@media (min-width:1600px){
+	.login-container .login-form .img-fluid{top:25px}
+	.login-container .login-logo{padding:60px}
+	.login-container .login-form{right:170px;width:620px;height:calc(100% - 40px);padding:200px 60px 30px 60px}
+	.login-container .login-form .title{font-size:4.2rem}
+	.login-container .login-form .form{margin-top:80px}
+	.login-form .form-group{margin-bottom:30px}
+	.login-container .forgot-url{padding:40px 0}
+	.login-container .privacy-term{margin-top:60px}
+	.custom-row-gutter-ten .custom-col-5 {
+		flex: 0 0 20%;
+	}
+	th.email,
+	td.email{
+		width: 300px !important;
+		max-width: 300px !important;
+		word-break: break-all;
+	}
+}
+@media screen and (max-width:1024px) and (min-width:992px){
+	.custom-row-gutter-ten .custom-col-5 {
+		flex: 0 0 50%;
+	}
+	.dashboard-card.mini-height{min-height: 365px;}
+	.sidebar-area{
+		width: 260px;
+		max-width: 260px;
+	}
+	.content-area {
+	    margin-left: 260px;
+	}
+	.content-area .top-profile {
+	    width: calc(100% - 280px);
+	}
+}
+@media screen and (max-width:992px) and (min-width:768px){
+	.login-container .login-logo{padding:30px;margin:0 auto;display:table}
+	.login-container .login-form{position:relative;left:0;top:0;max-width:100%;margin:0 auto}
+	.custom-row-gutter-ten .custom-col-5 ,
+	.custom-row-gutter-ten .custom-col-half{
+		flex: 0 0 50%;
+	}
+	.sidebar-area{
+		width: 280px;
+		max-width: 280px;
+		left: -300px;
+		/*left: 0;*/
+    	z-index: 99;
+	}
+	.content-area {
+	    margin-left: 0;
+	}
+	.content-area .top-profile {
+	    width: calc(100% - 20px);
+	}
+}
+@media screen and (max-width:767px) and (min-width:320px){
+	.d-flex-xs-block{
+		display: block;
+	}
+	.login-container{padding:15px}
+	.login-container .login-logo{padding:0 0 20px}
+	.login-container .login-form{position:relative;left:0;top:0;max-width:100%;margin:0 auto}
+	.login-container .login-form{padding:100px 20px 20px 20px}
+	.page-wrapper{
+		height: auto;
+	}
+	.custom-row-gutter-ten .custom-col-5 ,
+	.custom-row-gutter-ten .custom-col-half{
+		flex: 0 0 100%;
+	}
+	.sidebar-area{
+		width: 280px;
+		max-width: 280px;
+		left: -300px;
+		/*left: 0;*/
+    	z-index: 99;
+	}
+	.content-area {
+	    margin-left: 0;
+	}
+	.content-area .top-profile {
+	    width: calc(100% - 20px);
+	}
+	.custom-table-header .dataTables_filter input{
+		width: 100%;
+	}
+}

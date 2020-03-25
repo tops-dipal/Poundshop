@@ -94,10 +94,10 @@
         },
         errorPlacement: function (error, element) {
             error.insertAfter(element);
-            if(element.attr('name') == 'magento_product_id')
-            {
-               error.insertAfter(element.parent('div')); 
-            }
+            // if(element.attr('name') == 'magento_product_id')
+            // {
+            //    error.insertAfter(element.parent('div')); 
+            // }
             if(element.attr('name') == 'category_ids[]')
             {
                error.insertAfter(element.parent('div')); 

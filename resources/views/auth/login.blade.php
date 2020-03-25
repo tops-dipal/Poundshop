@@ -1,7 +1,7 @@
 @extends('auth-layouts.app')
 @section('title','Login')
 @section('content')
-    <img class="login-logo img-fluid" src="{{ asset('img/logo.svg')}}"  />
+    <img class="login-logo img-fluid" src="{{ asset('img/logo-tagline.svg')}}"  />
         <div class="login-form">
           <img class="img-fluid" src="{{ asset('img/five-color.png')}}" />
            <h3 class="title">{{ __('Login') }}</h3>

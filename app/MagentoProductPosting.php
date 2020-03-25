@@ -16,7 +16,7 @@ class MagentoProductPosting extends Model
         if(!empty($this->attributes['main_image_url']))
             return $this->attributes['main_image_url'];
         else
-            return url('/storage/uploads/product-images/no-image.jpeg');
+            return url('/img/no-image.jpeg');
     }
 
     public static function posting_valid_product($product_master_id, $store_id)

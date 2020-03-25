@@ -181,13 +181,16 @@ class MagentoCateController extends Controller
 					{
 						foreach($patch as $row1)
 						{
-							if(!empty($structure))
+							if(isset($category_wise_data[$row1]))
 							{
-								$structure.=' >> '.$category_wise_data[$row1];
-							}	
-							else
-							{
-								$structure=$category_wise_data[$row1];
+								if(!empty($structure))
+								{
+									$structure.=' >> '.$category_wise_data[$row1];
+								}	
+								else
+								{
+									$structure=$category_wise_data[$row1];
+								}
 							}
 						}
 					}

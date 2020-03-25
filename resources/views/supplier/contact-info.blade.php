@@ -4,10 +4,10 @@
          <div class="row">
             <div class="col-md-12">
                 <div class="table-responsive mt-2">
-                    <table id="supplier_contact_person" class="table border-less display">
+                    <table id="supplier_contact_person" class="table border-less display table-striped custom-table">
                         <thead>
                             <tr>
-                                <th>
+                                <th class="checkbox-container">
                                     <div class="d-flex">
                                         <label class="fancy-checkbox">
                                             <input type="checkbox" class="master-checkbox">
@@ -57,11 +57,11 @@
                                                         <input type="checkbox" class="child-checkbox" value="{{$supplierContact->id}}">
                                                         <span><i></i></span></label></div>
                                             </td>
-                                            <td>{{$supplierContact->name}}</td>
+                                            <td>{{ucwords($supplierContact->name)}}</td>
                                             <td>{{$supplierContact->email}}</td>
                                             <td>{{$supplierContact->phone}}</td>
                                             <td>{{$supplierContact->mobile}}</td>
-                                            <td>{{$supplierContact->designation}}</td>
+                                            <td>{{ucwords($supplierContact->designation)}}</td>
                                             <td>
                                                 <label class="fancy-radio">
                                                     <input type="radio" name="primary_contact" value="{{$supplierContact->id}}" {{ ($supplierContact->is_primary == '1') ? 'checked="checked"' : "" }}>

@@ -118,6 +118,17 @@
             $('#state_id').val($('body').data("state_id")).trigger('change');
         });
     }
+    $('#user_role').change(function(){        
+        var selected_string=$(this).find('option:selected').text();
+        if(selected_string.includes('Replen'))
+        {
+            $('.replen_team_option').css('display','block');
+        }
+        else
+        {
+            $('.replen_team_option').css('display','none');
+        }
+    });
     $('#zipcode').keypress(function (e) {
         var regex = new RegExp("^[a-zA-Z0-9\\-\\s]+$");
         var str = String.fromCharCode(!e.charCode ? e.which : e.charCode);
@@ -149,103 +160,6 @@
                 $('.btn-blue').attr('disabled', false);
             }
         }
-    });
-    $('input[name="attachments[]"]').change(function(){
-
-        var tot_size=0;
-        var count_files = $(this).get(0).files.length;
-        
-        for (var i = 0; i < $(this).get(0).files.length; ++i) {
-        var file_size=$(this).get(0).files[i].size;
-        tot_size = tot_size+file_size;
-        }
-        for (var i = 0; i < $(this).get(0).files.length; ++i) {
-        var file1=$(this).get(0).files[i].name;
-        if(!/(\.png|\.jpg|\.jpeg|\.pdf)$/i.test(file1))
-        {
-            
-        $('.btn-blue').attr('disabled','disabled');
-        $(".file_error").show();
-        $(".file_error").text("Only png, jpg, jpeg and pdf files are allowed (Upload upto 3 files and 10MB).");
-        $(this).css("border", "1px solid #c00");
-        var err_var=true;
-        }else{
-            console.log("Hello");
-        $(".file_error").text("");
-        $(".file_error").hide();
-       $('.btn-blue').removeAttr('disabled','disabled');
-        $(this).css("border", "1px solid #ddd");
-        var err_var=false;
-        }
-        }
-        if(err_var==false){
-            
-        if(tot_size > 10485760 && count_files > 4){
-            console.log("abc");
-        $(".file_error").text("Only png, jpg, jpeg and pdf files are allowed (Upload upto 3 files and 10MB).");
-        $('.btn-blue').attr('disabled','disabled');
-        $(this).css("border", "1px solid #ddd");
-        }else{
-            
-        $('.btn-blue').removeAttr('disabled','disabled');
-        $(".file_error").text("");
-        $(this).css("border", "1px solid #c00");
-        }
-        }
-        });
-
-
-     $(document).on('click', '.btn-delete', function (event) {
-        event.preventDefault();
-        var $currentObj = $(this);
-        var id = $(this).attr("id");
-        bootbox.confirm({ 
-            title: "Confirm",
-            message: "Are you sure you want to delete records? This process cannot be undone.",
-            buttons: {
-                cancel: {
-                    label: 'Cancel',
-                    className: 'btn-gray'
-                },
-                confirm: {
-                    label: 'Delete',
-                    className: 'btn-red'
-                }
-            },
-            callback: function (result) 
-            {
-                if(result==true)
-                {
-                     $.ajax({
-                        url: BASE_URL + 'api-attachment-delete/'+id,
-                        type: "post",
-                        processData: false,
-                        data:{id:id},
-                        headers: {
-                           Authorization: 'Bearer ' + API_TOKEN,
-                        },
-                        beforeSend: function () {
-                            $("#page-loader").show();
-                        },
-                        success: function (response) {
-                                $("#page-loader").hide();
-                                if (response.status == 1) {
-                                    $('#tr_'+id).remove();
-                                     $('.attachment_div').load(document.URL +  ' .attachment_div');
-                                    PoundShopApp.commonClass._displaySuccessMessage(response.message);
-                                   // PoundShopApp.commonClass.table.draw();
-                                }
-                        },
-                        error: function (xhr, err) {
-                           $("#page-loader").hide();
-                           PoundShopApp.commonClass._commonFormErrorShow(xhr, err);
-                        }
-
-                    });
-                }
-            }
-
-        });
     });
      $("#edit-user-form").validate({
             focusInvalid: false, // do not focus the last invalid input
@@ -380,8 +294,53 @@
 window.PoundShopApp = window.PoundShopApp || {}
 window.PoundShopApp.poundShopUsers = new poundShopUsers();
 
-})($);
-
+})(jQuery);
+/*function getStatesCountrywise()
+{
+    $.ajax({
+        type: "GET",
+        url:BASE_URL+"api-states/"+$("#country_id").val(),
+        headers: {
+            'Authorization': 'Bearer ' + API_TOKEN,
+        },
+        success: function (response) {
+            var items=response.data;
+            $.each(items, function (i, item) {
+                $('#state_id').append($('<option>', { 
+                    value: item.id,
+                    text : item.name 
+                }));
+            });
+           
+        },
+        error: function (xhr, err) {
+            console.log(err);
+        }
+    });
+}
+function getCityStateWise()
+{
+    $.ajax({
+        type: "GET",
+        url:BASE_URL+"api-cities/"+$("#state_id").val(),
+        headers: {
+            'Authorization': 'Bearer ' + API_TOKEN,
+        },
+        success: function (response) {
+            var items=response.data;
+            $.each(items, function (i, item) {
+                $('#city_id').append($('<option>', { 
+                    value: item.id,
+                    text : item.name 
+                }));
+            });
+           
+        },
+        error: function (xhr, err) {
+            console.log(err);
+        }
+    });
+}*/
 function Validate(event) {
     var regex = new RegExp(" /^((\+[1-9]{1,4}[ \-]*)|(\([0-9]{2,3}\)[ \-]*)|([0-9]{2,4})[ \-]*)*?[0-9]{3,4}?[ \-]*[0-9]{3,4}?$/");
     var key = String.fromCharCode(event.charCode ? event.which : event.charCode);

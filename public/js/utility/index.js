@@ -62,3 +62,6 @@ $('#tag1').tagsinput({
     source: citynames.ttAdapter()
   }
 });
+$(document).ready(function(){
+  $('[data-toggle="popover"]').popover();   
+});

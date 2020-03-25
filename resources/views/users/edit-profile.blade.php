@@ -199,19 +199,7 @@ th, td {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-6">
-                                                <div class="form-group row">
-                                                    <label for="inputPassword" class="col-lg-4 col-form-label">@lang("messages.user_management.user_role")</label>
-                                                    <div class="col-lg-8">
-                                                        <select name="user_role" class="form-control">
-                                                            @forelse($roles as $roleKey=>$roleVal)
-                                                                <option value="{{ $roleVal->id }}">{{ $roleVal->name }}</option>
-                                                            @empty
-                                                            @endforelse
-                                                        </select>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                            
                                             
                                             <div class="col-lg-6">
                                                 <div class="form-group row">
@@ -223,8 +211,10 @@ th, td {
                                                         </div>
                                                       <span class="imageError invalid-feedback"></span>
                                                        <div class="imageDiv"> 
-                                                          @if(!is_null($user->profile_pic) && file_exists(Storage::path($user->profile_pic)))
-                                                          <img src="{{ asset('storage/uploads/'.$user->profile_pic) }}" alt="Smiley face" height="100" width="100">
+                                                           @if(!is_null($user->getOriginal('profile_pic')))
+                                                          <a href="{{ $user->profile_pic }}" data-rel="lightcase">
+                                                          <img src="{{$user->profile_pic }}" alt="Smiley face" width="100">
+                                                            </a>
                                                           <button class="btn btn-danger remove-img" type="button" onclick="removeImage('{{ $user->id }}')">X</button>
                                                       @endif
                                                     </div>

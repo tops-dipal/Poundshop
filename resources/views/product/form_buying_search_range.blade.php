@@ -2,10 +2,10 @@
 	<div class="col-lg-8">
         <div class="form-group row mb-5">
             <label class="col-lg-2 col-form-label"> @lang('messages.inventory.range') </label>
-            <div class="col-lg-4">
+            <div class="col-lg-4 col-8">
                 <input type="text" class="form-control" placeholder="Enter keyword" id="category-search-box" value="">
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4 col-4">
             	<button type="button" class="btn btn-blue btn-header px-4" onclick="get_categories_by_keyword(this)" id="category_search">@lang('messages.common.search')</button>
             </div>	
         </div>

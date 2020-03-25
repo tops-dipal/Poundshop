@@ -96,7 +96,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.purchase_order.country')</label>
+                                        <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.purchase_order.country')<span class="asterisk">*</span></label>
                                         <div class="col-lg-8">
                                             <select class="form-control" id="country_id" name="country_id">
                                                 <option value="">Select Country</option>
@@ -180,6 +180,22 @@
                                         <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.purchase_order.form.supplier_comment')</label>
                                         <div class="col-lg-8">
                                             <textarea class="form-control" name="supplier_comment" id="supplier_comment" maxlength="500"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6">
+                                    <div class="form-group row">
+                                        <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.purchase_order.form.dropshipping')</label>
+                                        <div class="col-lg-8 pt-2">
+                                            <label class="fancy-radio">
+                                                <input type="radio" name="is_drop_shipping" value="1" />
+                                                <span><i></i>Yes</span>
+                                            </label>
+                                            <label class="fancy-radio">
+                                                <input type="radio" name="is_drop_shipping" value="0" checked=""/>
+                                                <span><i></i>No</span>
+                                            </label>
                                         </div>
                                     </div>
                                 </div>

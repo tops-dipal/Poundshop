@@ -49,6 +49,36 @@ class ListingManagerController extends Controller
                                         'product_type' => 'required',
                                       ];
                 }
+
+                if($function_name == 'update')
+                {    
+                    CreateRequest::$roles_array = [
+                                        'sku' => 'required',
+                                        'product_title' => 'required',
+                                        'magento_item_id' => 'required',
+                                        'store_id' => 'required',
+                                        'selling_price' => 'required',
+                                        'quantity' => 'required',
+                                       // 'brand' => 'required',
+                                        'category_ids.0' => 'required',
+                                        'category_ids.*' => 'required',
+                                        'magento_product_length' => 'required',
+                                        'magento_product_height' => 'required',
+                                        'magento_product_width' => 'required',
+                                        'magento_product_weight' => 'required',
+                                        'product_description' => 'required',
+                                        'product_type' => 'required',
+                                      ];
+                }
+
+                if($function_name == 'setDateToGoLive')
+                {    
+                    CreateRequest::$roles_array = [
+                                        'ids.*' => 'required',
+                                        'store_id' => 'required',
+                                        'date_to_go_live' => 'required',
+                                      ];
+                }
             }
         }
     }
@@ -101,7 +131,7 @@ class ListingManagerController extends Controller
                   	$tempArray[] = $result->sku;
                   	// $tempArray[] = 'New';
                   	$tempArray[] = 0;
-                  	$tempArray[] = $result->single_selling_price;
+                  	$tempArray[] = trans('messages.common.pound_sign').$result->single_selling_price;
                      $tempArray[] =(!empty($result->date_to_go_live)) ? system_date($result->date_to_go_live) : '-';
                     $viewActionButton = View::make('listing-manager.action-buttons', ['object' => $result,'listing'=>'to-be-listed','store_id'=>$adv_search_array['store_id']]);
                     $tempArray[]      = $viewActionButton->render();
@@ -133,7 +163,16 @@ class ListingManagerController extends Controller
 	    	$db_array['product_master_id'] = $request->product_master_id;
 	    	$db_array['store_id'] = $request->store_id;
 	    	$db_array['product_title'] = $request->product_title;
-	    	$db_array['date_to_go_live'] = !empty($request->date_to_go_live) ? db_date($request->date_to_go_live) : NULL;
+	    	$date_to_go_live = NULL;
+            if(!empty($request->date_to_go_live))
+            {
+                $date_to_go_live = $request->date_to_go_live;
+
+                $date_to_go_live = str_replace('/', '-', $date_to_go_live);
+
+                $date_to_go_live = date('Y-m-d H:i:s', strtotime($date_to_go_live));
+            }    
+            $db_array['date_to_go_live'] = $date_to_go_live;
 	    	$db_array['selling_price'] = $request->selling_price;
 	    	$db_array['bulk_selling_price'] = $request->bulk_selling_price;
 	    	$db_array['quantity'] = $request->quantity;
@@ -416,7 +455,7 @@ class ListingManagerController extends Controller
                   	$tempArray[] = $result->sku;
                   	// $tempArray[] = 'New';
                   	$tempArray[] = $result->quantity;
-                  	$tempArray[] = $result->selling_price;
+                  	$tempArray[] = trans('messages.common.pound_sign').$result->selling_price;
                      $tempArray[] =(!empty($result->date_to_go_live)) ? system_date($result->date_to_go_live) : '-';
                     $viewActionButton = View::make('listing-manager.action-buttons', ['object' => $result,'listing'=>'inprogress','store_id'=>$adv_search_array['store_id']]);
                     $tempArray[]      = $viewActionButton->render();
@@ -849,4 +888,151 @@ class ListingManagerController extends Controller
        } 
     }
 
+    public function setDateToGoLive(CreateRequest $request)
+    {
+        try
+        {
+            $product_master_ids = $request->ids;
+            
+            $posting_details = MagentoProductPosting::select('id','product_master_id')->where(function($q) use ($request,$product_master_ids){
+                                                                            $q->whereIn('product_master_id', $product_master_ids);
+                                                                            $q->where('store_id', $request->store_id);
+                                                                            $q->where('is_revised', 0);
+                                                                            $q->where('is_posted', 0);
+                                                                        })->get();
+
+            $updateId = array();
+            
+            foreach ($posting_details as  $posting_detail) {
+                
+                array_push($updateId, $posting_detail->id);
+
+                if (($key = array_search($posting_detail->product_master_id, $product_master_ids)) !== false)
+                {
+                    unset($product_master_ids[$key]);
+                }
+            }
+            
+            if(!empty($product_master_ids))
+            {    
+                $product_master_details = \App\Products::whereIn('id', $product_master_ids)->get();
+
+                $insert_array=array();
+                
+                foreach($product_master_details as $key => $product)
+                {
+                    $insert_array[$key]=array();
+                    
+                    $date_to_go_live = NULL;
+                    
+                    if(!empty($request->date_to_go_live))
+                    {
+                        $date_to_go_live = $request->date_to_go_live;
+
+                        $date_to_go_live = str_replace('/', '-', $date_to_go_live);
+
+                        $date_to_go_live = date('Y-m-d H:i:s', strtotime($date_to_go_live));
+                    }    
+                    $insert_array[$key]['date_to_go_live'] = $date_to_go_live;
+                    $insert_array[$key]['sku'] = $product->sku;
+                    $insert_array[$key]['magento_product_id_type'] = $product->magento_product_id_type;
+                    $insert_array[$key]['magento_product_id'] = $product->magento_product_id;
+                    $insert_array[$key]['product_type'] = $product->product_type;
+                    $insert_array[$key]['product_master_id'] = $product->id;
+                    $insert_array[$key]['store_id'] = $request->store_id;
+                    $insert_array[$key]['product_title'] = $product->title;
+                    $insert_array[$key]['selling_price'] = $product->single_selling_price;
+                   // $insert_array[$key]['quantity'] = $product->quantity;
+                    $insert_array[$key]['country_of_origin'] = $product->country_of_origin;
+                    $insert_array[$key]['brand'] = $product->brand;
+                    $insert_array[$key]['category_ids'] = !empty($product->buying_category_id) ? $product->buying_category_id : '';
+                    $insert_array[$key]['magento_product_length'] = $product->product_length;
+                    $insert_array[$key]['magento_product_height'] = $product->product_height;
+                    $insert_array[$key]['magento_product_width'] = $product->product_width;
+                    $insert_array[$key]['magento_product_weight'] = $product->product_weight;
+                    $insert_array[$key]['short_description'] = $product->short_description;
+                    $insert_array[$key]['product_description'] = $product->long_description;
+                    $insert_array[$key]['variation_theme_id'] = !empty($product->variation_theme_id) ? $product->variation_theme_id : NULL;
+                    $insert_array[$key]['is_posted'] = 1;
+                    $insert_array[$key]['posting_result_status'] = 0;
+                    $insert_array[$key]['status'] = 1;
+                    $insert_array[$key]['main_image_url'] = !empty($product->main_image_marketplace) ? $product->main_image_marketplace : '';
+
+                    if((strrpos($insert_array[$key]['main_image_url'], 'https:') === false && strrpos($insert_array[$key]['main_image_url'], 'http:') === false) && !empty($insert_array[$key]['main_image_url']))
+                    {
+                        $protocol = $request->secure() ? 'https:' : 'http:';
+
+                        $insert_array[$key]['main_image_url'] = $protocol.$insert_array[$key]['main_image_url'];    
+                    }  
+                    $other_images = array();
+
+                    // set protocol
+                    if(!empty($product->productImages))
+                    {
+                        foreach($product->productImages as $image_detail)
+                        {
+                            $image_detail->image=(!empty($image_detail->image))?  url('/storage/uploads') .'/'. $image_detail->image : '';
+
+                            if((strrpos($image_detail->image, 'https:') === false && strrpos($image_detail->image, 'http:') === false) && !empty($image_detail->image))
+                            {
+                                $protocol = $request->secure() ? 'https:' : 'http:';
+
+                                $image_detail->image = $protocol.$image_detail->image;    
+                            }   
+
+                            $other_images[] = $image_detail->image;
+                        }   
+                    } 
+                    $insert_array[$key]['image_details'] = !empty($other_images) ? serialize($other_images) : '';
+                }  
+            }
+            
+            $status=0;
+            
+            if(!empty($insert_array))
+            {
+                // insert
+                if(\App\MagentoProductPosting::insert($insert_array))
+                {
+                    $status=1;
+                }
+            }
+
+            if(!empty($updateId))
+            {
+                // update
+                $update_array['is_posted'] =  1;
+
+                $date_to_go_live = NULL;
+                    
+                if(!empty($request->date_to_go_live))
+                {
+                    $date_to_go_live = $request->date_to_go_live;
+
+                    $date_to_go_live = str_replace('/', '-', $date_to_go_live);
+
+                    $date_to_go_live = date('Y-m-d H:i:s', strtotime($date_to_go_live));
+                }
+
+                $update_array['date_to_go_live'] =  $date_to_go_live;
+
+                if(\App\MagentoProductPosting::whereIn('id',$updateId)->update($update_array))
+                {
+                    $status=1;
+                }
+            } 
+            
+            if($status==1)
+            {
+                return $this->sendResponse('Products added for listing', 200);
+            }
+            else
+            {
+                return $this->sendError("Products not listed, please try again", 422);
+            } 
+        }
+        catch (Exception $ex) {
+            return $this->sendError($ex->getMessage(), 400);
+        } 
+    }
 }

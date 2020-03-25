@@ -62,7 +62,7 @@
     {
         $('.filter_count').html('');
         
-        $('#custom_advance_search_fields input,select,textarea').each(function()
+        $('#custom_advance_search_fields').find('input,select,textarea').each(function()
         {
             if(typeof $(this).val() != undefined && !$(this).hasClass('clear_except'))
             {

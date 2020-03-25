@@ -24,8 +24,8 @@ class PurchaseOrderRevisesController extends Controller {
                 1 => 'created_at',
             ];
             $params  = array(
-                'order_column' => $columns[$request->order[0]['column']],
-                'order_dir' => $request->order[0]['dir'],
+                'order_column'    => $columns[$request->order[0]['column']],
+                'order_dir'       => $request->order[0]['dir'],
                 'purchaseOrderId' => $request->purchase_order_id,
             );
 
@@ -44,10 +44,10 @@ class PurchaseOrderRevisesController extends Controller {
             }
 
             $jsonData = [
-                "draw" => intval($request->draw), // For every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw.
-                "recordsTotal" => $revisions->total(), // Total number of records
+                "draw"            => intval($request->draw), // For every request/draw by clientside , they send a number as a parameter, when they recieve a response/data they first check the draw number, so we are sending same number in draw.
+                "recordsTotal"    => $revisions->total(), // Total number of records
                 "recordsFiltered" => $revisions->total(),
-                "data" => $data // Total data array
+                "data"            => $data // Total data array
             ];
             return response()->json($jsonData);
         }
@@ -75,8 +75,9 @@ class PurchaseOrderRevisesController extends Controller {
     public
             function store(\App\Http\Requests\Api\PO\StoreReviseRequest $request) {
         try {
-            $purchaseOrder = PurchaseOrder::find($request->po_id);
 
+            //Here Trigger will execute after completion
+            $purchaseOrder = PurchaseOrder::find($request->po_id);
             if (!empty($purchaseOrder)) {
                 $purchaseOrder->po_cancel_date = null;
                 $purchaseOrder->po_updated_at  = \Carbon\Carbon::now();
@@ -89,11 +90,11 @@ class PurchaseOrderRevisesController extends Controller {
                 }
                 $revisesObj = new PurchaseOrderRevises;
                 $data       = [
-                    'purchase_order_id' => $purchaseOrder['id'],
+                    'purchase_order_id'              => $purchaseOrder['id'],
                     'purchase_order_number_sequence' => $purchaseOrder['po_number'],
-                    'purchase_order_content' => $purchaseOrder->toArray(),
-                    'created_by' => $request->user()->id,
-                    'modified_by' => $request->user()->id,
+                    'purchase_order_content'         => $purchaseOrder->toArray(),
+                    'created_by'                     => $request->user()->id,
+                    'modified_by'                    => $request->user()->id,
                 ];
                 if ($revisesObj->saveRevises($data)) {
 

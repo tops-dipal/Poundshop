@@ -649,7 +649,6 @@ class MagentoProDetailUpdController extends Controller {
                 $AttributeCodeArray[$avalue['id']] = $key;
             }
         }
-
         $upload_path = 'uploads/inventory_images/magento/';
         if (!empty($toBeUpdateProducts)) {
             foreach ($toBeUpdateProducts as $value) {

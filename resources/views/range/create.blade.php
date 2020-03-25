@@ -24,7 +24,7 @@
             <div class="form-group row">
                 <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.range_management.cat_name')<span class="asterisk">*</span></label>
                 <div class="col-lg-8">
-                    <input type="text" class="form-control" id="" placeholder="" name="category_name[]">
+                    <input type="text" class="form-control" id="category_name_0" placeholder="Category Name" name="category_name[]">
                     <div class="row mt-3">
                         <div class="col-lg-6">
                             <label class="fancy-radio">
@@ -44,7 +44,7 @@
                             <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.supplier.retro_from')</label>
                             <div class="col-lg-8">
                                 <div class="d-flex input-select-group">
-                                    <input type="number" name="seasonal_range_fromdate[]" value="" class="form-control seasonal_show" min="1" max="31">
+                                    <input type="number" name="seasonal_range_fromdate[]" value="" class="form-control seasonal_show" min="1" max="31" id="seasonal_range_fromdate_0">
                                     <select name="seasonal_range_frommonth[]" class="form-control seasonal_show">
                                         @php
                                         $monthArr=array("1"=>'Jan',"2"=>'Feb',"3"=>'March',"4"=>'April',"5"=>'May',"6"=>'June',"7"=>'July',"8"=>'August',"9"=>'Sep',"10"=>'Oct',"11"=>'Nov',"12"=>'Dec');
@@ -62,7 +62,7 @@
                             <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.supplier.retro_to')</label>
                             <div class="col-lg-8">
                                 <div class="d-flex input-select-group">
-                                    <input type="number" name="seasonal_range_todate[]" value="" class="form-control seasonal_show" min="1" max="31">
+                                    <input type="number" name="seasonal_range_todate[]" id="seasonal_range_todate_0" value="" class="form-control seasonal_show" min="1" max="31">
                                     <select name="seasonal_range_tomonth[]" class="form-control seasonal_show">
                                         @php
                                         $monthArr=array("1"=>'Jan',"2"=>'Feb',"3"=>'March',"4"=>'April',"5"=>'May',"6"=>'June',"7"=>'July',"8"=>'August',"9"=>'Sep',"10"=>'Oct',"11"=>'Nov',"12"=>'Dec');
@@ -76,7 +76,13 @@
                         </div>
                     </div>
                 </div>
-            </div>                            
+            </div> 
+            <div class="form-group row">
+                <label for="inputPassword" class="col-lg-4 col-form-label">@lang('messages.range_management.day_stock')<span class="asterisk">*</span></label>
+                <div class="col-lg-8">
+                    <input type="text" class="form-control" id="stock_hold_days_0" placeholder="Stock Holding Days" name="stock_hold_days[]">
+                </div>
+            </div>                           
             <div class="addMoreCategory"></div>
             <div class="row">                                
                 <div class="col-lg-12 text-right">

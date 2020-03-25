@@ -31,7 +31,29 @@ class WareHouse extends Model
         $warehousesOb->orderBy($params['order_column'],$params['order_dir']);
         if (!empty($params['search'])) 
         {
-           $warehousesOb->where('name','like',"%".$params['search']."%");           
+           $warehousesOb->where('name','like',"%".$params['search']."%"); 
+           $warehousesOb->orWhere('contact_person','like',"%".$params['search']."%"); 
+           $warehousesOb->orWhere('phone_no','like',"%".$params['search']."%"); 
+            if(strcasecmp($params['search'],"Warehouse")==0 || strcasecmp($params['search'],"Office")==0 || strcasecmp($params['search'],"HQ")==0 || strcasecmp($params['search'],"Shop")==0)
+           {
+                if(strcasecmp($params['search'],"Warehouse")==0)
+                {
+                    $category=1;
+                }
+                else if(strcasecmp($params['search'],"Office")==0)
+                {
+                    $category=2;
+                }
+                else if(strcasecmp($params['search'],"HQ")==0)
+                {
+                    $category=3;
+                }
+                else if(strcasecmp($params['search'],"Shop")==0)
+                {
+                    $category=4;
+                }
+                $warehousesOb->orWhere('type','like',"%".$category."%");
+           }          
         }
         return $warehousesOb->paginate($perPage);
     }

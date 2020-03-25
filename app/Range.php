@@ -126,5 +126,15 @@ class Range extends Model
         
     }
 
+    public static function getAllRange(){
+        $object=self::select('*');
+        $object->orderBy('category_name','ASC');
+        return $object->get()->makeHidden(['parent', 'children']);
+    }
+
+    public static function getAllRangeWithMappedCategory(){
+        return Range::with('magentoCategories')->orderBy('category_name', 'asc')->get()->makeHidden(['parent', 'children']);
+    }
+
     
 }

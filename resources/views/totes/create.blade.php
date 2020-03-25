@@ -1,10 +1,10 @@
 @extends('layouts.app')
 @section('content')
-@section('title',__('messages.totes.totes_add'))
+@section('title',__('messages.storage.replen'))
 
 <div class="content-card custom-scroll">
    <div class="content-card-header">
-        <h3 class="page-title">@lang('messages.totes.totes_add')</h3>		
+        <h3 class="page-title">@lang('messages.storage.replen')</h3>		
         <div class="right-items">
             <a href="{{route('totes.index')}}" class="btn btn-gray btn-header px-4" title="@lang('messages.modules.button_cancel')">@lang('messages.modules.button_cancel')</a>
             <button class="btn btn-blue btn-header px-4"  title="@lang('messages.modules.button_save')" form="create-totes-form">@lang('messages.modules.button_save')</button>
@@ -52,7 +52,7 @@
                                 </div>
                                 <div class="col-lg-6">
                                     <div class="form-group row">
-                                        <label for="inputPassword" class="col-lg-6 col-form-label">@lang('messages.table_label.max_vol')<small> (@lang('messages.totes.meter3'))</small><span class="asterisk">*</span></label>
+                                        <label for="inputPassword" class="col-lg-6 col-form-label">@lang('messages.table_label.max_vol')<small> (@lang('messages.totes.meter')<sup style="font-12">3</sup>)</small><span class="asterisk">*</span></label>
                                         <div class="col-lg-6">
                                             <input  type="text" class="form-control" id="max_volume" placeholder="" name="max_volume" disabled="" onkeypress="return fun_AllowOnlyAmountAndDot(this.id);">
                                         </div>
