@@ -16,7 +16,7 @@
         "gumlet/php-image-resize": "1.9.*",
         "guzzlehttp/guzzle": "^6.4",
         "intervention/image": "^2.5",
-        "laravel/framework": "6.0",
+        "laravel/framework": "6.20.26",
         "laravel/passport": "^8.0",
         "laravel/tinker": "^1.0",
         "mavinoo/laravel-batch": "^2.1",
